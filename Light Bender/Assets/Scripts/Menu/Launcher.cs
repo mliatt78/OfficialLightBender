@@ -116,6 +116,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             Destroy(trans.gameObject);
         }
+        
         for (int i = 0; i < roomList.Count; i++)
         {
             if (roomList[i].RemovedFromList)
