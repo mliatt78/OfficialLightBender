@@ -1,47 +1,65 @@
-﻿using UnityEditor;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
-[RequireComponent(typeof(PlayerMotor))]
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    private float speed = 3f;
+    [SerializeField] GameObject cameraHolder;
     
-    [SerializeField]
-    private float mousesensitivityX = 3f;
+    [SerializeField] float mouseSensivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
+
+    float verticalLookRotation;
+    bool grounded;
+    Vector3 smoothMoveVelocity;
+    Vector3 moveAmount; 
+    Rigidbody rb;
     
-    [SerializeField]
-    private float mousesensitivityY = 3f;
 
-    private PlayerMotor motor;
-
-    private void Start()
+    void Awake()
     {
-        motor = GetComponent<PlayerMotor>();
+        rb = GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    void Update()
     {
-        float xMove = Input.GetAxisRaw("Horizontal");
-        float zMove = Input.GetAxisRaw("Vertical");
+        Look();
+        Move();
+        Jump();
+    }
 
-        Vector3 moveHorizontal = transform.right * xMove;
-        Vector3 moveVertical = transform.forward * zMove;
+    void Move()
+    {
+        Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
 
-        Vector3 velocity = (moveHorizontal + moveVertical).normalized * speed;
+        moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed),
+            ref smoothMoveVelocity, smoothTime);
+    }
+    void Look()
+    {
+        transform.Rotate(Vector3.up * (Input.GetAxisRaw("Mouse X") * mouseSensivity));
 
-        motor.Move(velocity);
-
-        float yRot = Input.GetAxisRaw("Mouse X");
-
-        Vector3 rotation = new Vector3(0, yRot, 0) * mousesensitivityX ;
-
-        motor.Rotate(rotation);
+        verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSensivity;
+        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90);
         
-        float xRot = Input.GetAxisRaw("Mouse Y");
+        cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
+    }
 
-        Vector3 cameraRotation = new Vector3(xRot, 0, 0) * mousesensitivityY ;
+    void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && grounded)
+        {
+            rb.AddForce(transform.up * jumpForce);
+        }
+    }
+    public void SetGroundedState(bool _grounded)
+    {
+        grounded = _grounded;
+    }
 
-        motor.RotateCamera(cameraRotation);
+    private void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
     }
 }

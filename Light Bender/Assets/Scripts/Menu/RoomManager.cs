@@ -15,7 +15,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             Destroy(gameObject); // il ne peut y en avoir qu'une ici
             return;
         }
-        DontDestroyOnLoad(gameObject); // il y en a plus qu'une ici
+        DontDestroyOnLoad(gameObject); // une seule room manager, donc on destroy pas
         Instance = this;
     }
 
@@ -28,7 +28,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnDisable()
     {
         base.OnDisable();
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     void OnSceneLoaded(Scene scene,LoadSceneMode loadSceneMode)
