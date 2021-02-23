@@ -17,18 +17,20 @@ public class PlayerManager : MonoBehaviour
     {
         if (Phv.IsMine)
         {
-            CreateConstroller();
+            CreateController();
         }
     }
-
+    
     // Update is called once per frame
     void Update()
     {
         
     }
 
-    void CreateConstroller() // gestion des mouvements du joueur
+    void CreateController() // gestion des mouvements du joueur
     {
-        PhotonNetwork.Instantiate(Path.Combine("PhotobPrefabs", "PlayerController"),Vector3.zero,Quaternion.identity);
+        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"),Vector3.zero,Quaternion.identity);
     }
+    
+    
 }
