@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,17 +14,32 @@ public class PlayerController : MonoBehaviour
     float verticalLookRotation;
     bool grounded;
     Vector3 smoothMoveVelocity;
-    Vector3 moveAmount; 
+    Vector3 moveAmount;
     Rigidbody rb;
+
+    PhotonView Phv;
     
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        Phv = GetComponent<PhotonView>();
     }
 
+    void Start()
+    {
+        if (!Phv.IsMine)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(rb);
+        }
+    }
+    
     void Update()
     {
+        if (!Phv.IsMine)
+            return;
+        
         Look();
         Move();
         Jump();
@@ -60,6 +76,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!Phv.IsMine)
+            return;
+        
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
     }
 }
