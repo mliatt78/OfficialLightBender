@@ -6,12 +6,15 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    private PhotonView Phv;
+     PhotonView Phv;
+
+     GameObject controller;
 
     void Awake()
     {
         Phv = GetComponent<PhotonView>();
     }
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -20,17 +23,19 @@ public class PlayerManager : MonoBehaviour
             CreateController();
         }
     }
-    
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     void CreateController() // gestion des mouvements du joueur
-    {
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"),Vector3.zero,Quaternion.identity);
+    { 
+        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"),spawnpoint.position,spawnpoint.rotation,0,new object[] { Phv.ViewID });
     }
+
+    public void Die()
+    {
+        PhotonNetwork.Destroy(controller);
+        CreateController();
+    }
+    
     
     
 }

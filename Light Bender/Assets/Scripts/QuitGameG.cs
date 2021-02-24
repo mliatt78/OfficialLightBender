@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class QuitGamer : MonoBehaviour
+public class QuitGameG : MonoBehaviour
 {
    public void QuitGame ()
    {
