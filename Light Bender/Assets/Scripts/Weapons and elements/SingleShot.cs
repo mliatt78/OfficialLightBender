@@ -8,6 +8,10 @@ public class SingleShot : GUN
    
    [SerializeField] Camera cam;
 
+   public  ParticleSystem particleSystem;
+   
+   
+
     PhotonView Pv;
     void Awake()
     {
@@ -27,7 +31,7 @@ public class SingleShot : GUN
       {
         hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)iteminfo).damage);
         Pv.RPC("RPC_Shoot",RpcTarget.All,hit.point,hit.normal);
-        
+        particleSystem.Play();
       }
    }
 
