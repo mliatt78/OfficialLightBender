@@ -1508,7 +1508,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 533780214}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2035,8 +2035,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 452047791}
   - {fileID: 1945941647}
+  - {fileID: 452047791}
   - {fileID: 1789277476}
   m_Father: {fileID: 621660825}
   m_RootOrder: 7
@@ -6795,8 +6795,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -18, y: 0}
-  m_SizeDelta: {x: -2184, y: -808}
+  m_AnchoredPosition: {x: -6.5998535, y: 0}
+  m_SizeDelta: {x: -2206.833, y: -808}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1724592191
 MonoBehaviour:
@@ -7545,12 +7545,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 533780214}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 9, y: -105}
-  m_SizeDelta: {x: 1537.1941, y: 631.04535}
+  m_AnchoredPosition: {x: 25.5, y: -34}
+  m_SizeDelta: {x: 1570.1755, y: 488.97223}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1945941648
 MonoBehaviour:
@@ -7590,7 +7590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8867924, g: 0.6118063, b: 0.09620863, a: 0}
+  m_Color: {r: 0.9607844, g: 0.32941177, b: 0.20000002, a: 0}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -8063,7 +8063,7 @@ PrefabInstance:
     - target: {fileID: 7970826751804686906, guid: 66ea5489a25130546b99b371a2a4ac0b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7970826751804686906, guid: 66ea5489a25130546b99b371a2a4ac0b,
         type: 3}
