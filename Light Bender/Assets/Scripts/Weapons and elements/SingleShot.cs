@@ -5,13 +5,15 @@ using UnityEngine;
 
 public class SingleShot : GUN
 {
-   
+   public float firerate = 15; 
    [SerializeField] Camera cam;
 
-   public  ParticleSystem particleSystem;
-   
-   
+   private float nexttimetofire = 0;
 
+   public new ParticleSystem particleSystem;
+
+   public float impactforce = 60;
+   
     PhotonView Pv;
     void Awake()
     {
@@ -27,9 +29,14 @@ public class SingleShot : GUN
    {
       Ray rayon = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
       rayon.origin = cam.transform.position;
-      if (Physics.Raycast(rayon, out RaycastHit hit))
+      if (Physics.Raycast(rayon, out RaycastHit hit) && Time.time >= nexttimetofire  )
       {
-        hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)iteminfo).damage);
+         nexttimetofire = Time.time + 1f/firerate;
+         hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)iteminfo).damage);
+        if (hit.rigidbody != null)
+        {
+           hit.rigidbody.AddForce(-hit.normal * impactforce);
+        }
         Pv.RPC("RPC_Shoot",RpcTarget.All,hit.point,hit.normal);
         particleSystem.Play();
       }
@@ -41,8 +48,8 @@ public class SingleShot : GUN
       Collider[] bimp = Physics.OverlapSphere(hitPosition, 0.3f);
       if (bimp.Length != 0)
       {
-         GameObject buletimpact  =  Instantiate(bulletImpactprefab, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal,Vector3.up) * bulletImpactprefab.transform.rotation);
-         Destroy(buletimpact, 10f);
+         GameObject buletimpact  =  Instantiate(bulletImpactPrefab, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal,Vector3.up) * bulletImpactPrefab.transform.rotation);
+         Destroy(buletimpact, 2f);
          buletimpact.transform.SetParent(bimp[0].transform);
       }
    }

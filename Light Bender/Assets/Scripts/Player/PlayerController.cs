@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
            
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             items[itemIndex].Use();
         }
