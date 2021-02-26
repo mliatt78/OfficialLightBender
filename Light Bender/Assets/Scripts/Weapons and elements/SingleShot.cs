@@ -29,17 +29,21 @@ public class SingleShot : GUN
    {
       Ray rayon = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
       rayon.origin = cam.transform.position;
-      if (Physics.Raycast(rayon, out RaycastHit hit) && Time.time >= nexttimetofire  )
+      if (Time.time >= nexttimetofire)
       {
+         particleSystem.Play();
          nexttimetofire = Time.time + 1f/firerate;
-         hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)iteminfo).damage);
-        if (hit.rigidbody != null)
-        {
-           hit.rigidbody.AddForce(-hit.normal * impactforce);
-        }
-        Pv.RPC("RPC_Shoot",RpcTarget.All,hit.point,hit.normal);
-        particleSystem.Play();
+         if (Physics.Raycast(rayon, out RaycastHit hit)  )
+         {
+            hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)iteminfo).damage);
+            if (hit.rigidbody != null)
+            {
+               hit.rigidbody.AddForce(-hit.normal * impactforce);
+            }
+            Pv.RPC("RPC_Shoot",RpcTarget.All,hit.point,hit.normal);
+         }
       }
+      
    }
 
    [PunRPC]

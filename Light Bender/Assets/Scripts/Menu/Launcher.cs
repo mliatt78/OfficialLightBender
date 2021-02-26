@@ -14,7 +14,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField]  TMP_InputField roomNameInputField;
     [SerializeField] TMP_Text errorText;
     [SerializeField] TMP_Text RoomNameText;
-    [SerializeField] Transform roomListContent;
+    [SerializeField] Transform roomListContentR;
+    [SerializeField] Transform roomListContentB;
     [SerializeField] GameObject roomListItemPrefab;
     [SerializeField] Transform playerListContent;
     [SerializeField] GameObject PlayerListItemPrefab;
@@ -59,6 +60,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+       
         MenuManager.Instance.OpenMenu("room");
         RoomNameText.text = PhotonNetwork.CurrentRoom.Name; // donne le nom de la room actuelle avec celle tape precedemment
 
@@ -112,16 +114,21 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        foreach (Transform trans in roomListContent)
+        foreach (Transform trans in roomListContentB)
         {
             Destroy(trans.gameObject); // clear la liste a chaque fois qu'on update
+        }
+        foreach (Transform trans in roomListContentR)
+        {
+            Destroy(trans.gameObject); 
         }
         
         for (int i = 0; i < roomList.Count; i++) // quand tu quittes la room on enleve le joueur
         {
             if (roomList[i].RemovedFromList)
                 continue;
-            Instantiate(roomListItemPrefab,roomListContent).GetComponent<RoomListItem>().Setup(roomList[i]);
+            Instantiate(roomListItemPrefab,roomListContentB).GetComponent<RoomListItem>().Setup(roomList[i]);
+            Instantiate(roomListItemPrefab,roomListContentR).GetComponent<RoomListItem>().Setup(roomList[i]);
         }
     }
 
