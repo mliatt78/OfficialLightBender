@@ -14,12 +14,11 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField]  TMP_InputField roomNameInputField;
     [SerializeField] TMP_Text errorText;
     [SerializeField] TMP_Text RoomNameText;
-    [SerializeField] Transform roomListContentR;
-    [SerializeField] Transform roomListContentB;
+    [SerializeField]  Transform roomListContent;
     [SerializeField] GameObject roomListItemPrefab;
     [SerializeField] Transform playerListContent;
     [SerializeField] GameObject PlayerListItemPrefab;
-    [SerializeField]  GameObject StartGamebutton;
+    [SerializeField] GameObject StartGamebutton;
 
     private void Awake()
     {
@@ -60,10 +59,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-       
         MenuManager.Instance.OpenMenu("room");
         RoomNameText.text = PhotonNetwork.CurrentRoom.Name; // donne le nom de la room actuelle avec celle tape precedemment
-
         Player[] players = PhotonNetwork.PlayerList; // liste des joueurs
 
         foreach (Transform child in playerListContent)
@@ -73,7 +70,6 @@ public class Launcher : MonoBehaviourPunCallbacks
             {
                 Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().Setup(players[i]); // setup des joueurs
             }
-
             StartGamebutton.SetActive(PhotonNetwork.IsMasterClient); // instancie le bouton start uniquement pour le master du jeu
         }
     }
@@ -114,21 +110,16 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        foreach (Transform trans in roomListContentB)
+        foreach (Transform trans in roomListContent)
         {
             Destroy(trans.gameObject); // clear la liste a chaque fois qu'on update
         }
-        foreach (Transform trans in roomListContentR)
-        {
-            Destroy(trans.gameObject); 
-        }
-        
+
         for (int i = 0; i < roomList.Count; i++) // quand tu quittes la room on enleve le joueur
         {
             if (roomList[i].RemovedFromList)
                 continue;
-            Instantiate(roomListItemPrefab,roomListContentB).GetComponent<RoomListItem>().Setup(roomList[i]);
-            Instantiate(roomListItemPrefab,roomListContentR).GetComponent<RoomListItem>().Setup(roomList[i]);
+            Instantiate(roomListItemPrefab,roomListContent).GetComponent<RoomListItem>().Setup(roomList[i]);
         }
     }
 
