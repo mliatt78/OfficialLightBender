@@ -166,7 +166,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         grounded = _grounded; 
     }
 
-    private void FixedUpdate()
+     void FixedUpdate()
     {
         if (!Phv.IsMine)
             return;
