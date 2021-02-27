@@ -10,7 +10,7 @@ public class SingleShot : GUN
 
    private float nexttimetofire = 0;
 
-   public new ParticleSystem particleSystem;
+   public  ParticleSystem particleSystem;
 
    public float impactforce = 60;
    

@@ -57,27 +57,30 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("Loading");
     }
 
-    public override void OnJoinedRoom()
-    {
-        MenuManager.Instance.OpenMenu("room");
-        RoomNameText.text = PhotonNetwork.CurrentRoom.Name; // donne le nom de la room actuelle avec celle tape precedemment
-        Player[] players = PhotonNetwork.PlayerList; // liste des joueurs
-
-        foreach (Transform child in playerListContent)
-        {
-            Destroy(child.gameObject);
-            for (int i = 0; i < players.Length; i++)
-            {
-                Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().Setup(players[i]); // setup des joueurs
-            }
-            StartGamebutton.SetActive(PhotonNetwork.IsMasterClient); // instancie le bouton start uniquement pour le master du jeu
-        }
-    }
-
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         StartGamebutton.SetActive(PhotonNetwork.IsMasterClient); // switch de master quand le precedent est parti
     }
+    public override void OnJoinedRoom()
+    {
+        MenuManager.Instance.OpenMenu("room");
+        RoomNameText.text = PhotonNetwork.CurrentRoom.Name; // donne le nom de la room actuelle avec celle tape precedemment
+        
+        Player[] players = PhotonNetwork.PlayerList; // liste des joueurs
+
+        foreach(Transform child in playerListContent)
+        {
+            Destroy(child.gameObject);
+        }
+        for(int i = 0; i < players.Length; i++)
+        {
+            Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().Setup(players[i]);
+        }
+
+        StartGamebutton.SetActive(PhotonNetwork.IsMasterClient);
+    }
+
+    
 
     public override void OnCreateRoomFailed(short returnCode,string message)
     {
@@ -100,7 +103,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.JoinRoom(info.Name);
         MenuManager.Instance.OpenMenu("loading");
-        
     }
 
     public override void OnLeftRoom()
