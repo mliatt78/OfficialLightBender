@@ -10053,6 +10053,10 @@ MonoBehaviour:
   bulletImpactPrefab: {fileID: 100000, guid: baa7bc3f5a09228449b60e046bcab0ab, type: 3}
   firerate: 2
   cam: {fileID: 9047757630953155633}
+  ignoreLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  gunTransform: {fileID: 7016261530258757784}
   particleSystem: {fileID: 7672147507598628105}
   impactforce: 60
 --- !u!114 &6337781179485981868
@@ -10160,6 +10164,10 @@ MonoBehaviour:
   bulletImpactPrefab: {fileID: 100000, guid: baa7bc3f5a09228449b60e046bcab0ab, type: 3}
   firerate: 10
   cam: {fileID: 9047757630953155633}
+  ignoreLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  gunTransform: {fileID: 3131585495345268874}
   particleSystem: {fileID: 5310958452808387994}
   impactforce: 60
 --- !u!114 &8514225576705595186
@@ -10200,7 +10208,8 @@ GameObject:
   - component: {fileID: 3715862645806771721}
   - component: {fileID: 8492958557406192558}
   - component: {fileID: 5354123522234995039}
-  m_Layer: 0
+  - component: {fileID: 6525589854373004730}
+  m_Layer: 9
   m_Name: PlayerController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10249,7 +10258,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 2b023ae8ba3aabd49ab8983ba3640bc1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10341,6 +10350,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 5354123522234995039}
+  - {fileID: 6525589854373004730}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -10360,6 +10370,19 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &6525589854373004730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7527948539888103487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f5624206a74c44caf9dc4ea453c3e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
 --- !u!1 &7858183205371975812
 GameObject:
   m_ObjectHideFlags: 0

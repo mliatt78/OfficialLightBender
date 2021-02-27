@@ -3,11 +3,13 @@ using System.IO;
 using Photon.Pun;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MonoBehaviourPunCallbacks
 {
      PhotonView Phv;
-
-     GameObject controller;
+     public static GameObject localPlayerInstance;
+    // GameObject controller;
+     
+    /* int team;*/
 
     void Awake()
     {
@@ -19,21 +21,42 @@ public class PlayerManager : MonoBehaviour
     {
         if (Phv.IsMine)
         {
-            CreateController();
+            localPlayerInstance = gameObject;
         }
+        //now dont destroy!!
+        DontDestroyOnLoad(gameObject);
+        /* if (Phv.IsMine)
+        {
+            CreateController();
+        }*/
     }
 
     void CreateController() // gestion des mouvements du joueur
     { 
-        Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"),spawnpoint.position,spawnpoint.rotation,0,new object[] { Phv.ViewID });
+      /*  Transform spawnpoint = SpawnManager.instance.GetSpawnpoint(team);
+        Debug.Log($"Team number {team} is being instantiated");
+        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"),spawnpoint.position,spawnpoint.rotation,0,new object[] { Phv.ViewID });*/
+    
     }
 
-    public void Die()
+   /* public void Die()
     {
         PhotonNetwork.Destroy(controller);
-        CreateController();
-    }
+        PlayerController.health = 1;
+       
+    }*/
+   /* public void SetTeam(int Team)
+    {
+        if (Team == 0 || Team == 1)
+        {
+            team = Team;
+        }
+        else
+        {
+            Debug.Log("PLayerManager: Team number is not valid");
+        }
+    
+    }*/
     
     
     

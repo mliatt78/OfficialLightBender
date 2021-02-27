@@ -7,6 +7,8 @@ public class SingleShot : GUN
 {
    public float firerate = 15; 
    [SerializeField] Camera cam;
+   public LayerMask ignoreLayerMask;
+   public Transform gunTransform;
 
    private float nexttimetofire = 0;
 
@@ -27,13 +29,13 @@ public class SingleShot : GUN
 
    void Shoot()
    {
-      Ray rayon = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+     /* Ray rayon = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
       rayon.origin = cam.transform.position;
       if (Time.time >= nexttimetofire)
       {
          particleSystem.Play();
          nexttimetofire = Time.time + 1f/firerate;
-         if (Physics.Raycast(rayon, out RaycastHit hit)  )
+         if (Physics.Raycast(rayon, out RaycastHit hit))                //if (Physics.Raycast(rayon, out RaycastHit hit),100f,~ignoreLayerMask)
          {
             hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)iteminfo).damage);
             if (hit.rigidbody != null)
@@ -41,20 +43,44 @@ public class SingleShot : GUN
                hit.rigidbody.AddForce(-hit.normal * impactforce);
             }
             Pv.RPC("RPC_Shoot",RpcTarget.All,hit.point,hit.normal);
-         }
-      }
+         }*/
       
+            Pv.RPC("RPC_Shoot",RpcTarget.All);
    }
 
    [PunRPC]
-   void RPC_Shoot(Vector3 hitPosition,Vector3 hitNormal)
+   void RPC_Shoot()
    {
-      Collider[] bimp = Physics.OverlapSphere(hitPosition, 0.3f);
-      if (bimp.Length != 0)
+      
+     /* Ray rayon = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+      rayon.origin = cam.transform.position;*/
+     Ray rayon = new Ray(gunTransform.position, gunTransform.forward);
+      if (Time.time >= nexttimetofire)
       {
-         GameObject buletimpact  =  Instantiate(bulletImpactPrefab, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal,Vector3.up) * bulletImpactPrefab.transform.rotation);
-         Destroy(buletimpact, 2f);
-         buletimpact.transform.SetParent(bimp[0].transform);
+         particleSystem.Play();
+         nexttimetofire = Time.time + 1f / firerate;
+         if (Physics.Raycast(rayon, out RaycastHit hit)
+         ) //if (Physics.Raycast(rayon, out RaycastHit hit),100f,~ignoreLayerMask)
+         {
+            Collider[] bimp = Physics.OverlapSphere(hit.point, 0.3f);
+            if (bimp.Length != 0)
+            {
+               GameObject buletimpact = Instantiate(bulletImpactPrefab, hit.point + hit.normal * 0.001f,
+                  Quaternion.LookRotation(hit.normal, Vector3.up) * bulletImpactPrefab.transform.rotation);
+               Destroy(buletimpact, 2f);
+               buletimpact.transform.SetParent(bimp[0].transform);
+            }
+            hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
+            if (hit.rigidbody != null)
+            {
+               hit.rigidbody.AddForce(-hit.normal * impactforce);
+            }
+            var enemyhealth = hit.collider.GetComponent<HEALTH>();
+            if (enemyhealth)
+            {
+               enemyhealth.TakeDamage(((GunInfo) iteminfo).damage);
+            }
+         }
       }
    }
 }

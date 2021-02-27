@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
-    [SerializeField] private GameObject graphics;
+    [SerializeField] GameObject graphics;
 
     void Awake()
     {
