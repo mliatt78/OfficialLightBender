@@ -4,19 +4,32 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-   public static SpawnManager Instance;
+   public static SpawnManager instance;
    
-   SpawnPoint[] spawnpoints;
+   GameObject[] redTeamSpawns;
+   GameObject[] blueTeamSpawns;
 
    void Awake()
    {
-      Instance = this;
-      spawnpoints = GetComponentsInChildren<SpawnPoint>();
+      instance = this;
+      redTeamSpawns = GameObject.FindGameObjectsWithTag("RedS");
+      blueTeamSpawns = GameObject.FindGameObjectsWithTag("BlueS");
    }
-   public Transform GetSpawnpoint()
+ /*  public Transform GetSpawnpoint(int team)
    {
-      return spawnpoints[Random.Range(0, spawnpoints.Length)].transform;
+      return team == 0 ? GetBlueSpawnpoint() : GetRedSpawnpoint();
+   }*/
+   public Transform GetRedSpawnpoint()
+   {
+      return redTeamSpawns[Random.Range(0, redTeamSpawns.Length)].transform;
    }
-   
-   
+   public Transform GetBlueSpawnpoint()
+   {
+      return blueTeamSpawns[Random.Range(0, blueTeamSpawns.Length)].transform;
+   }
+   public Transform GetTeamSpawn(int teamNumber)
+   {
+      return teamNumber == 0 ? GetBlueSpawnpoint() : GetRedSpawnpoint();
+   }
+
 }

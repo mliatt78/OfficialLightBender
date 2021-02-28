@@ -129,4 +129,23 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Instantiate(PlayerListItemPrefab,playerListContent).GetComponent<PlayerListItem>().Setup(newPlayer); // instancie un  nouveau player
     }
+
+
+    public void JoinTeam(int team)
+    {
+
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Team"))
+        {
+
+            PhotonNetwork.LocalPlayer.CustomProperties["Team"] = team;
+        }
+        else
+        {
+            ExitGames.Client.Photon.Hashtable playerProps = new ExitGames.Client.Photon.Hashtable
+            {
+                {"Team", team}
+            };
+            PhotonNetwork.SetPlayerCustomProperties(playerProps);
+        }
+    }
 }
