@@ -8,7 +8,7 @@ public class HEALTH : MonoBehaviourPunCallbacks, IPunObservable,IDamageable
 {
     public float health = 100;
     Renderer[] visuals;
-    private int team = 1;
+    int team = 0;
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) // recupere la health
     {
@@ -51,6 +51,7 @@ public class HEALTH : MonoBehaviourPunCallbacks, IPunObservable,IDamageable
     void Start()
     {
         visuals = GetComponentsInChildren<Renderer>();
+        team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
     }
     void Update()
     {
