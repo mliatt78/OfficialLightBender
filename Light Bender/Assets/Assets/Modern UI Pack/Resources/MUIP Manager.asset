@@ -33,7 +33,7 @@ MonoBehaviour:
   dropdownThemeType: 0
   dropdownAnimationType: 1
   dropdownFont: {fileID: 11400000, guid: 4bd810f1cbcb0f446a8f5a31453e243f, type: 2}
-  dropdownFontSize: 25
+  dropdownFontSize: 30
   dropdownColor: {r: 0.21568628, g: 0.29411766, b: 0.37254903, a: 1}
   dropdownTextColor: {r: 1, g: 1, b: 1, a: 1}
   dropdownIconColor: {r: 1, g: 1, b: 1, a: 1}
