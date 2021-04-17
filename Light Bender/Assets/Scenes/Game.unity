@@ -1380,7 +1380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3db92c56c84f8764c92b30130e871071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redPlayerPrefab: {fileID: 7527948539888103487, guid: 0f46bb61d69963f4b975c7b0d9adb890,
+  redPlayerPrefab: {fileID: 7527948539888103487, guid: b62da30d6b788a0498919564ee7a191a,
     type: 3}
   bluePlayerPrefab: {fileID: 7527948539888103487, guid: fdfd99da85548774ca0316c5fc409ee0,
     type: 3}
@@ -1626,7 +1626,7 @@ PrefabInstance:
     - target: {fileID: 3845404299061006888, guid: bdcbcc269299ee145a4d08c6527673f0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -113.7
       objectReference: {fileID: 0}
     - target: {fileID: 3845404299061006888, guid: bdcbcc269299ee145a4d08c6527673f0,
         type: 3}
@@ -1636,7 +1636,7 @@ PrefabInstance:
     - target: {fileID: 3845404299061006888, guid: bdcbcc269299ee145a4d08c6527673f0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 99.1
       objectReference: {fileID: 0}
     - target: {fileID: 3845404299061006888, guid: bdcbcc269299ee145a4d08c6527673f0,
         type: 3}
