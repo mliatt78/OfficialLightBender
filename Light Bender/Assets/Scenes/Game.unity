@@ -1380,9 +1380,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3db92c56c84f8764c92b30130e871071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redPlayerPrefab: {fileID: 7527948539888103487, guid: b62da30d6b788a0498919564ee7a191a,
+  redPlayerPrefab: {fileID: 7316499710202688552, guid: ad10294dffc0d624299eb3662f3288de,
     type: 3}
-  bluePlayerPrefab: {fileID: 7527948539888103487, guid: fdfd99da85548774ca0316c5fc409ee0,
+  bluePlayerPrefab: {fileID: 7316499710202688552, guid: ad10294dffc0d624299eb3662f3288de,
     type: 3}
 --- !u!4 &1067247006
 Transform:
@@ -1516,6 +1516,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: RedS
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472372248142614399, guid: fab4dbfc05e4c634492756dce14fa471,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fab4dbfc05e4c634492756dce14fa471, type: 3}
