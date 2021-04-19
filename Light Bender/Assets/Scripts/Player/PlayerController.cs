@@ -24,9 +24,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
     
     Rigidbody rb;
 
-    PhotonView Phv;
+    public static PhotonView Phv;
     
     Animator animator;
+
+     //TwoBoneIKConstraint boneisk;
 
     
 
@@ -34,7 +36,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
     float currentHealth = maxHealth;*/
 
     PlayerManager playerManager;
-    
     
 
     void Awake()
