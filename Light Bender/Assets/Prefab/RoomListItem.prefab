@@ -75,7 +75,7 @@ MonoBehaviour:
   normalText: {fileID: 4278699760898776365}
   soundSource: {fileID: 0}
   rippleParent: {fileID: 5668339542036507268}
-  useCustomContent: 0
+  useCustomContent: 1
   enableButtonSounds: 0
   useHoverSound: 1
   useClickSound: 1
@@ -86,7 +86,7 @@ MonoBehaviour:
   startColor: {r: 1, g: 1, b: 1, a: 0.15686275}
   transitionColor: {r: 1, g: 1, b: 1, a: 0}
   renderOnTop: 0
-  centered: 0
+  centered: 1
 --- !u!114 &721377195790550250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 649199268560154374}
   - component: {fileID: 4278699760898776365}
   m_Layer: 5
-  m_Name: Text
+  m_Name: TextMenuName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
