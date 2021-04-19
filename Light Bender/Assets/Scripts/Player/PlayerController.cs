@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.Animations.Rigging;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -23,12 +24,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
     
     Rigidbody rb;
 
-    PhotonView Phv;
+    public static PhotonView Phv;
+    
+    Animator animator;
+
+     //TwoBoneIKConstraint boneisk;
+
+    
 
    /* const float maxHealth = 100f;
     float currentHealth = maxHealth;*/
 
     PlayerManager playerManager;
+    
 
     void Awake()
     {
@@ -39,15 +47,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        
         if (Phv.IsMine)
         {
             EquipItem(0);
+            animator = GetComponent<Animator>();
         }
         else
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
+        
+        
     }
     
     void Update()
@@ -97,6 +109,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
             items[itemIndex].Use();
         }
 
+        if (Input.GetKeyDown("1"))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        if (Input.GetKeyDown("2"))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        
+
         /*if (transform.position.y < -10f)
         {
             Die();
@@ -109,6 +134,68 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed),
             ref smoothMoveVelocity, smoothTime);
+        
+        bool isWalking = animator.GetBool("IsWalking");
+        bool pressedwalk = Input.GetKey("w");
+        
+        bool isRunning = animator.GetBool("IsRunning");
+        bool pressedrun = Input.GetKey(KeyCode.LeftShift);
+        
+        bool isLeft = animator.GetBool("IsLeftWalk");
+        bool isRight = animator.GetBool("IsRightWalk");
+        bool pressedleft = Input.GetKey("a");;
+        bool pressedright = Input.GetKey("d");;
+        
+        bool isDance = animator.GetBool("IsDance");
+        bool presseddance = Input.GetKey("z");;
+        
+        // walk
+        if (!isWalking && pressedwalk)
+        {
+            animator.SetBool("IsWalking",true);
+        }
+        if (isWalking && !pressedwalk)
+        {
+            animator.SetBool("IsWalking",false);
+        }
+        // run
+        if(!isRunning && pressedrun)
+        {
+            animator.SetBool("IsRunning",true);
+        }
+        if (isRunning && !pressedrun)
+        {
+            animator.SetBool("IsRunning",false);
+        }
+        // left
+        if(!isLeft && pressedleft)
+        {
+            animator.SetBool("IsLeftWalk",true);
+        }
+        if (isLeft && !pressedleft)
+        {
+            animator.SetBool("IsLeftWalk",false);
+        }
+        // right
+        if(!isRight && pressedright)
+        {
+            animator.SetBool("IsRightWalk",true);
+        }
+        if (isRight && !pressedright)
+        {
+            animator.SetBool("IsRightWalk",false);
+        }
+        
+        //dance
+        if(!isDance && presseddance)
+        {
+            animator.SetBool("IsDance",true);
+        }
+        if (isDance && !presseddance)
+        {
+            animator.SetBool("IsDance",false);
+        }
+        
     }
     void Look()
     {
@@ -150,6 +237,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
             hash.Add("itemindex", itemIndex);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
+
+        
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)

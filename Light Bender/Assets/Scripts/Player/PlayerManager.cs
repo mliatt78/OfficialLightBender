@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
-     PhotonView Phv;
+     public static PhotonView Phv;
      public static GameObject localPlayerInstance;
     // GameObject controller;
      
