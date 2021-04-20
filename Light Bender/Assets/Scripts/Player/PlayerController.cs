@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine.Animations.Rigging;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -24,19 +23,15 @@ public class PlayerController : MonoBehaviourPunCallbacks
     
     Rigidbody rb;
 
-    public static PhotonView Phv;
-    
-    Animator animator;
-
-     //TwoBoneIKConstraint boneisk;
-
-    
-
-   /* const float maxHealth = 100f;
-    float currentHealth = maxHealth;*/
+    PhotonView Phv;
 
     PlayerManager playerManager;
     
+    Animator animator;
+    
+   /* const float maxHealth = 100f;
+    float currentHealth = maxHealth;*/
+   
 
     void Awake()
     {
@@ -47,7 +42,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        
         if (Phv.IsMine)
         {
             EquipItem(0);
@@ -58,8 +52,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
-        
-        
     }
     
     void Update()
@@ -109,6 +101,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
             items[itemIndex].Use();
         }
 
+        /*if (transform.position.y < -10f)
+        {
+            Die();
+        }*/
         if (Input.GetKeyDown("1"))
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -120,12 +116,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
-        
-
-        /*if (transform.position.y < -10f)
-        {
-            Die();
-        }*/
     }
 
     void Move()
@@ -195,7 +185,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             animator.SetBool("IsDance",false);
         }
-        
     }
     void Look()
     {
@@ -237,8 +226,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
             hash.Add("itemindex", itemIndex);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
-
-        
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
