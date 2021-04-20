@@ -6,6 +6,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
@@ -28,8 +29,12 @@ public class Launcher : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start() // tu te connectes au jeu
     {
-        Debug.Log("Connecting to Master");
-        PhotonNetwork.ConnectUsingSettings();
+      /*  Debug.Log("2");
+        if (!PhotonNetwork.IsConnected)
+        {*/
+            Debug.Log("Connecting to Master");
+            PhotonNetwork.ConnectUsingSettings();
+       // }
     }
 
     
@@ -90,6 +95,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
+        
         PhotonNetwork.LoadLevel(1) ; // index de la scene
     }
 
@@ -129,8 +135,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Instantiate(PlayerListItemPrefab,playerListContent).GetComponent<PlayerListItem>().Setup(newPlayer); // instancie un  nouveau player
     }
-
-
+    
+    
     public void JoinTeam(int team)
     {
 
@@ -148,4 +154,5 @@ public class Launcher : MonoBehaviourPunCallbacks
             PhotonNetwork.SetPlayerCustomProperties(playerProps);
         }
     }
+    
 }

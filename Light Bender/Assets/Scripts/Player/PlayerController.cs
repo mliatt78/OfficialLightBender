@@ -25,10 +25,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     PhotonView Phv;
 
+    PlayerManager playerManager;
+    
+    Animator animator;
+    
    /* const float maxHealth = 100f;
     float currentHealth = maxHealth;*/
-
-    PlayerManager playerManager;
+   
 
     void Awake()
     {
@@ -42,6 +45,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (Phv.IsMine)
         {
             EquipItem(0);
+            animator = GetComponent<Animator>();
         }
         else
         {
@@ -101,6 +105,17 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             Die();
         }*/
+        if (Input.GetKeyDown("1"))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        if (Input.GetKeyDown("2"))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     void Move()
@@ -109,6 +124,67 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed),
             ref smoothMoveVelocity, smoothTime);
+        
+        bool isWalking = animator.GetBool("IsWalking");
+        bool pressedwalk = Input.GetKey("w");
+        
+        bool isRunning = animator.GetBool("IsRunning");
+        bool pressedrun = Input.GetKey(KeyCode.LeftShift);
+        
+        bool isLeft = animator.GetBool("IsLeftWalk");
+        bool isRight = animator.GetBool("IsRightWalk");
+        bool pressedleft = Input.GetKey("a");;
+        bool pressedright = Input.GetKey("d");;
+        
+        bool isDance = animator.GetBool("IsDance");
+        bool presseddance = Input.GetKey("z");;
+        
+        // walk
+        if (!isWalking && pressedwalk)
+        {
+            animator.SetBool("IsWalking",true);
+        }
+        if (isWalking && !pressedwalk)
+        {
+            animator.SetBool("IsWalking",false);
+        }
+        // run
+        if(!isRunning && pressedrun)
+        {
+            animator.SetBool("IsRunning",true);
+        }
+        if (isRunning && !pressedrun)
+        {
+            animator.SetBool("IsRunning",false);
+        }
+        // left
+        if(!isLeft && pressedleft)
+        {
+            animator.SetBool("IsLeftWalk",true);
+        }
+        if (isLeft && !pressedleft)
+        {
+            animator.SetBool("IsLeftWalk",false);
+        }
+        // right
+        if(!isRight && pressedright)
+        {
+            animator.SetBool("IsRightWalk",true);
+        }
+        if (isRight && !pressedright)
+        {
+            animator.SetBool("IsRightWalk",false);
+        }
+        
+        //dance
+        if(!isDance && presseddance)
+        {
+            animator.SetBool("IsDance",true);
+        }
+        if (isDance && !presseddance)
+        {
+            animator.SetBool("IsDance",false);
+        }
     }
     void Look()
     {
