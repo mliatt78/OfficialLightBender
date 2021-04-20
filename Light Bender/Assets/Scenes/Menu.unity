@@ -446,9 +446,9 @@ MonoBehaviour:
   prefixField: -1
   observableSearch: 2
   Synchronization: 3
-  OwnershipTransfer: 2
+  OwnershipTransfer: 0
   ObservedComponents: []
-  viewIdField: 1018
+  viewIdField: 999
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &173207052

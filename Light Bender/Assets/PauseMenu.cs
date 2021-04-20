@@ -59,7 +59,7 @@ public class PauseMenu : MonoBehaviourPunCallbacks
    }
    public override void OnLeftRoom()
    {
-       SceneManager.LoadScene(2);
+       SceneManager.LoadScene(0);
        base.OnLeftRoom();
        
 
