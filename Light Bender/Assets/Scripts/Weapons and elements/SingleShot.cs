@@ -9,6 +9,7 @@ public class SingleShot : GUN
    [SerializeField] Camera cam;
    public LayerMask ignoreLayerMask;
    public Transform gunTransform;
+   public AudioSource audio;
 
    private float nexttimetofire = 0;
 
@@ -60,6 +61,7 @@ public class SingleShot : GUN
       if (Time.time >= nexttimetofire)
       {
          particleSystem.Play();
+         audio.Play();
          nexttimetofire = Time.time + 1f / firerate;
          if (Physics.Raycast(rayon, out RaycastHit hit, 100f, ~ignoreLayerMask))
         // if (Physics.Raycast(rayon, out RaycastHit hit),100f,~ignoreLayerMask)
