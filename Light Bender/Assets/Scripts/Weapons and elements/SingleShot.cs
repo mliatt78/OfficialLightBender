@@ -79,8 +79,8 @@ public class SingleShot : GUN
                hit.rigidbody.AddForce(-hit.normal * impactforce);
             }
            var enemyhealth = hit.collider.GetComponent<HEALTH>();
-            Debug.Log(enemyhealth);
-            Debug.Log(hit.collider.name);
+          //  Debug.Log(enemyhealth);
+           // Debug.Log(hit.collider.name);
             if (enemyhealth)
             {
                enemyhealth.TakeDamage(((GunInfo) iteminfo).damage);
