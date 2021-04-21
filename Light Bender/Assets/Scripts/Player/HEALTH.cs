@@ -25,6 +25,7 @@ public class HEALTH : MonoBehaviourPunCallbacks, IPunObservable,IDamageable
     public void TakeDamage(float damage)
     {
         health -= damage;
+        Debug.Log(health);
     }
 
     IEnumerator Respawn()
@@ -57,9 +58,12 @@ public class HEALTH : MonoBehaviourPunCallbacks, IPunObservable,IDamageable
     {
         if (health <= 0)
         {
+            Debug.Log("mort");
             if (photonView.IsMine)
             {
-                StartCoroutine(Respawn());
+                
+                Debug.Log("mort2");
+               StartCoroutine(Respawn());
             }
         }
     }
