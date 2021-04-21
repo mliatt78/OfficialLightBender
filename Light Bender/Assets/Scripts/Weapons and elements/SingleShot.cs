@@ -16,19 +16,19 @@ public class SingleShot : GUN
 
    public float impactforce = 60;
    
-    PhotonView Pv;
+    PhotonView Phv;
     void Awake()
     {
-       Pv = GetComponent<PhotonView>();
+       Phv = GetComponent<PhotonView>();
        
     }
    public override void Use()
    {
-      Shoot();
+      Phv.RPC("RPC_Shoot",RpcTarget.All);
    }
 
-   void Shoot()
-   {
+   //void Shoot()
+  // {
      /* Ray rayon = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
       rayon.origin = cam.transform.position;
       if (Time.time >= nexttimetofire)
@@ -45,8 +45,8 @@ public class SingleShot : GUN
             Pv.RPC("RPC_Shoot",RpcTarget.All,hit.point,hit.normal);
          }*/
       
-            Pv.RPC("RPC_Shoot",RpcTarget.All);
-   }
+           // Phv.RPC("RPC_Shoot",RpcTarget.All);
+  // }
 
    [PunRPC]
    void RPC_Shoot()
@@ -54,14 +54,17 @@ public class SingleShot : GUN
       
      /* Ray rayon = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
       rayon.origin = cam.transform.position;*/
+     //if (!Phv.IsMine)
+      //  return;
      Ray rayon = new Ray(gunTransform.position, gunTransform.forward);
       if (Time.time >= nexttimetofire)
       {
          particleSystem.Play();
          nexttimetofire = Time.time + 1f / firerate;
-         if (Physics.Raycast(rayon, out RaycastHit hit)
-         ) //if (Physics.Raycast(rayon, out RaycastHit hit),100f,~ignoreLayerMask)
+         if (Physics.Raycast(rayon, out RaycastHit hit, 100f, ~ignoreLayerMask))
+        // if (Physics.Raycast(rayon, out RaycastHit hit),100f,~ignoreLayerMask)
          {
+           
             Collider[] bimp = Physics.OverlapSphere(hit.point, 0.3f);
             if (bimp.Length != 0)
             {
@@ -70,15 +73,18 @@ public class SingleShot : GUN
                Destroy(buletimpact, 2f);
                buletimpact.transform.SetParent(bimp[0].transform);
             }
-            hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
+            // hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
             if (hit.rigidbody != null)
             {
                hit.rigidbody.AddForce(-hit.normal * impactforce);
             }
-            var enemyhealth = hit.collider.GetComponent<HEALTH>();
+           var enemyhealth = hit.collider.GetComponent<HEALTH>();
+            Debug.Log(enemyhealth);
+            Debug.Log(hit.collider.name);
             if (enemyhealth)
             {
                enemyhealth.TakeDamage(((GunInfo) iteminfo).damage);
+               Debug.Log("hit");
             }
          }
       }
