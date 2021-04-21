@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/contentModel.xml
+/projectSettingsUpdater.xml
+/.idea.Player.iml
+# Datasource local storage ignored files
+/../../../../../../../../../../../../../:\Users\Philippe\Documents\GitHub\OfficialLightBender\Light Bender\Assets\Scripts\Player\.idea\.idea.Player.dir\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/

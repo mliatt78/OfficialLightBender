@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public GameObject redPlayerPrefab;
     public GameObject bluePlayerPrefab;
+    public GameObject BotPrefab;
     
     public static GameManager instance;
 
@@ -40,6 +41,24 @@ public class GameManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position, spawn.rotation);
                 Debug.Log("RED");
             }
+        }
+        // Instantiate the bots (Only for the master)
+        if (PhotonNetwork.IsMasterClient)
+        {
+            int redbots = 5;
+            int bluebots = 5;
+            foreach (var players in PhotonNetwork.PlayerList)
+            {
+                if ((int) players.CustomProperties["Team"] == 0)
+                {
+                    bluebots--;
+                }
+                else
+                {
+                    redbots--;
+                }
+            }
+            
         }
         
     }
