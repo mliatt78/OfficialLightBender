@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using Photon.Pun;
 using UnityEngine;
 
-public class HEALTH : MonoBehaviourPunCallbacks, IPunObservable,IDamageable
+public class HEALTH : MonoBehaviourPunCallbacks,IPunObservable
 {
     public float health = 100;
     Renderer[] visuals;
@@ -22,25 +22,26 @@ public class HEALTH : MonoBehaviourPunCallbacks, IPunObservable,IDamageable
         }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamages(float damage)
     {
         health -= damage;
-        Debug.Log(health);
     }
 
     IEnumerator Respawn()
     {
         SetRenderers(false);
-        Debug.Log("2");
         health = 100;
-        Debug.Log("1");
-        GetComponent<PlayerController>().enabled = false;
-        Debug.Log("mort 23 ");
+        PlayerController player = GetComponent<PlayerController>();
+        player.enabled = false;
+        // scores
+        int otherTeam = (player.GetTeam() + 1) % 2;
+        PlayerManager.scores[otherTeam] += 1;
+        // end scores
         Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
         transform.position = spawn.position;
         transform.rotation = spawn.rotation;
+        yield return new WaitForSeconds(1);     
         GetComponent<PlayerController>().enabled = true;
-        yield return new WaitForSeconds(1);        
         SetRenderers(true);
     }
 
@@ -61,12 +62,9 @@ public class HEALTH : MonoBehaviourPunCallbacks, IPunObservable,IDamageable
     {
         if (health <= 0)
         {
-            Debug.Log("mort");
             if (photonView.IsMine)
             {
-                
-                Debug.Log("mort2");
-               StartCoroutine(Respawn());
+                StartCoroutine(Respawn());
             }
         }
     }

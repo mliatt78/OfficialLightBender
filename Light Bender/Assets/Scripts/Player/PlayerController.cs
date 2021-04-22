@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
+using UnityEditor;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-public class PlayerController : MonoBehaviourPunCallbacks
+public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 {
     [SerializeField] GameObject cameraHolder;
     
@@ -13,11 +15,15 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     [SerializeField]  Item[] items;
 
+
      int itemIndex;
      int previousItemIndex = -1;
-     
+
+ 
+    int team;
     float verticalLookRotation;
     bool grounded;
+    bool HasOre;
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
     
@@ -25,16 +31,30 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     PhotonView Phv;
 
+    private Animator animator;
+
+    /* const float maxHealth = 100f;
+     float currentHealth = maxHealth;*/
+
     PlayerManager playerManager;
-    
+
     Animator animator;
     
-   /* const float maxHealth = 100f;
-    float currentHealth = maxHealth;*/
+    public TextMeshProUGUI blueScoreText;
+    public TextMeshProUGUI redScoreText;
+    
+    Renderer[] visuals;
+    int team = 0;
+    public const float maxHealth = 100f;
+    public float currentHealth = maxHealth;
+
+
+
    
 
     void Awake()
     {
+        team = GameManager.teamOfNewPlayer;
         rb = GetComponent<Rigidbody>();
         Phv = GetComponent<PhotonView>();
         //playerManager = PhotonView.Find((int)Phv.InstantiationData[0]).GetComponent<PlayerManager>();
@@ -46,12 +66,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             EquipItem(0);
             animator = GetComponent<Animator>();
+            
+            PlayerManager.players.Add(this);
         }
         else
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
+        visuals = GetComponentsInChildren<Renderer>();
+        team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
     }
     
     void Update()
@@ -241,6 +265,21 @@ public class PlayerController : MonoBehaviourPunCallbacks
         grounded = _grounded; 
     }
 
+    public void SetHasOre(bool _hasOre)
+    {
+        HasOre = _hasOre;
+    }
+
+    public bool GetHasOre()
+    {
+        return HasOre;
+    }
+
+    public int GetTeam()
+    {
+        return team;
+    }
+
      void FixedUpdate()
     {
         if (!Phv.IsMine)
@@ -248,7 +287,79 @@ public class PlayerController : MonoBehaviourPunCallbacks
         
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
     }
+     
+     public void TakeDamage(float damage) // juste sur le shooter
+     {
+         Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage);
+     }
+    
+     IEnumerator Respawn()
+     {
+         SetRenderers(false);
+         currentHealth = 100;
+         GetComponent<PlayerController>().enabled = false;
+         Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
+         transform.position = spawn.position;
+         transform.rotation = spawn.rotation;
+         GetComponent<PlayerController>().enabled = true;
+         yield return new WaitForSeconds(1);        
+         SetRenderers(true);
+     }
 
+     void SetRenderers(bool state)
+     {
+         foreach (var renderer in visuals)
+         {
+             renderer.enabled = state;
+         }
+     }
+    
+     [PunRPC]
+     void RPC_TakeDamage(float damage)
+     {
+         if (!Phv.IsMine)
+             return;
+
+         currentHealth -= damage;
+
+         if (currentHealth <= 0)
+         {
+             StartCoroutine(Respawn());
+         }
+     }
+}
+
+
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    /* public void TakeDamage(float damage) // juste sur le shooter
     {
         Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage);
@@ -269,4 +380,4 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         playerManager.Die();
     }*/
-}
+

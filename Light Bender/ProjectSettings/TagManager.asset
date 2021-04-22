@@ -6,6 +6,8 @@ TagManager:
   tags:
   - BlueS
   - RedS
+  - Zone1
+  - Zone2
   layers:
   - Default
   - TransparentFX
@@ -20,7 +22,7 @@ TagManager:
   - Personnage
   - Weapon Red
   - Weapon Blue
-  - 
+  - Map
   - 
   - 
   - 

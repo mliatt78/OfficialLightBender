@@ -1571,15 +1571,14 @@ MonoBehaviour:
   bulletImpactPrefab: {fileID: 1723818010802918, guid: cf5aacd810ed5d044a1dc012538fa468,
     type: 3}
   firerate: 10
-  cam: {fileID: 0}
+  cam: {fileID: 7725335144722012642}
   ignoreLayerMask:
     serializedVersion: 2
-    m_Bits: 8704
+    m_Bits: 512
   gunTransform: {fileID: 2628569650800534551}
+  audio: {fileID: 3617053977539808134}
   particleSystem: {fileID: 9089762977055935643}
   impactforce: 60
-  nbballes: 30
-  audioSource: {fileID: 3617053977539808134}
 --- !u!114 &91738403240460241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7651,15 +7650,14 @@ MonoBehaviour:
   itemGameObject: {fileID: 3049628817943840148}
   bulletImpactPrefab: {fileID: 100000, guid: baa7bc3f5a09228449b60e046bcab0ab, type: 3}
   firerate: 2
-  cam: {fileID: 0}
+  cam: {fileID: 7725335144722012642}
   ignoreLayerMask:
     serializedVersion: 2
-    m_Bits: 8704
+    m_Bits: 512
   gunTransform: {fileID: 8575731142849662963}
+  audio: {fileID: 8909639123763123545}
   particleSystem: {fileID: 2113291363358717672}
   impactforce: 60
-  nbballes: 15
-  audioSource: {fileID: 8909639123763123545}
 --- !u!114 &5984360101888035531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7788,15 +7786,18 @@ GameObject:
   m_Component:
   - component: {fileID: 7981149384514563730}
   - component: {fileID: 4044955672610911464}
-  - component: {fileID: 3400101937459809981}
   - component: {fileID: 7906576035142789250}
   - component: {fileID: 4812907613941872380}
   - component: {fileID: -8640442587161200721}
   - component: {fileID: 5631733737691088860}
+  - component: {fileID: 5284132064080082320}
   - component: {fileID: 1950788945730073686}
   - component: {fileID: 7482682730635467916}
+  - component: {fileID: 2793916446432632326}
+  - component: {fileID: 4213214316216728068}
+  - component: {fileID: -1909875079498981522}
   m_Layer: 9
-  m_Name: Perso Bleu
+  m_Name: Bot bleu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7810,7 +7811,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7316499710202688552}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.254, y: -0.028, z: -1.132}
+  m_LocalPosition: {x: -1.245788, y: -0.028, z: -1.132}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2767838148437454204}
@@ -7840,28 +7841,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &3400101937459809981
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7316499710202688552}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80fdf1334df338f45a2904c3a361139e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraHolder: {fileID: 1728960968149508185}
-  mouseSensivity: 3
-  sprintSpeed: 6
-  walkSpeed: 3
-  jumpForce: 300
-  smoothTime: 0.15
-  items:
-  - {fileID: 3404314541941351947}
-  - {fileID: 7473042220427253011}
-  currentHealth: 100
 --- !u!114 &7906576035142789250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7879,10 +7858,11 @@ MonoBehaviour:
   prefixField: -1
   observableSearch: 2
   Synchronization: 3
-  OwnershipTransfer: 2
+  OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 4812907613941872380}
   - {fileID: -8640442587161200721}
+  - {fileID: 5284132064080082320}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -7951,6 +7931,19 @@ MonoBehaviour:
   - rig: {fileID: 3522671235427162277}
     active: 1
   m_Effectors: []
+--- !u!114 &5284132064080082320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7316499710202688552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f5624206a74c44caf9dc4ea453c3e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
 --- !u!54 &1950788945730073686
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7977,10 +7970,70 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.46
+  m_Radius: 0.23
   m_Height: 1.81
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!136 &2793916446432632326
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7316499710202688552}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.28
+  m_Height: 0
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4213214316216728068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7316499710202688552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 204ae8a8402fd174e96359bece34b89a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: -1909875079498981522}
+  player: {fileID: 7981149384514563730}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 8192
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 256
+  walkPointRange: 2
+  timeBetweenAttacks: 0.25
+  sightRange: 5
+  attackRange: 3
+--- !u!195 &-1909875079498981522
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7316499710202688552}
+  m_Enabled: 1
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &7371553617762899827
 GameObject:
   m_ObjectHideFlags: 0
@@ -8258,7 +8311,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7578788102167508235}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.046, y: -0.12, z: -0.313}
+  m_LocalPosition: {x: 0.046, y: -0.12, z: -0.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 83361443569205335}
