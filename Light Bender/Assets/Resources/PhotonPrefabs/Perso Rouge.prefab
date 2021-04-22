@@ -1576,9 +1576,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   gunTransform: {fileID: 2628569650800534551}
-  audio: {fileID: 3617053977539808134}
   particleSystem: {fileID: 9089762977055935643}
   impactforce: 60
+  nbballes: 30
+  audioSource: {fileID: 3617053977539808134}
 --- !u!114 &91738403240460241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7655,9 +7656,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   gunTransform: {fileID: 8575731142849662963}
-  audio: {fileID: 8909639123763123545}
   particleSystem: {fileID: 2113291363358717672}
   impactforce: 60
+  nbballes: 15
+  audioSource: {fileID: 8909639123763123545}
 --- !u!114 &5984360101888035531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7791,10 +7793,8 @@ GameObject:
   - component: {fileID: 4812907613941872380}
   - component: {fileID: -8640442587161200721}
   - component: {fileID: 5631733737691088860}
-  - component: {fileID: 5284132064080082320}
   - component: {fileID: 1950788945730073686}
   - component: {fileID: 7482682730635467916}
-  - component: {fileID: 2793916446432632326}
   m_Layer: 8
   m_Name: Perso Rouge
   m_TagString: Untagged
@@ -7861,6 +7861,7 @@ MonoBehaviour:
   items:
   - {fileID: 3404314541941351947}
   - {fileID: 7473042220427253011}
+  currentHealth: 100
 --- !u!114 &7906576035142789250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7882,7 +7883,6 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 4812907613941872380}
   - {fileID: -8640442587161200721}
-  - {fileID: 5284132064080082320}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -7951,19 +7951,6 @@ MonoBehaviour:
   - rig: {fileID: 3522671235427162277}
     active: 1
   m_Effectors: []
---- !u!114 &5284132064080082320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7316499710202688552}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24f5624206a74c44caf9dc4ea453c3e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 100
 --- !u!54 &1950788945730073686
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7994,20 +7981,6 @@ CapsuleCollider:
   m_Height: 1.81
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!136 &2793916446432632326
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7316499710202688552}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.28
-  m_Height: 0
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7371553617762899827
 GameObject:
   m_ObjectHideFlags: 0
@@ -13883,15 +13856,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1766401d10a80043ac8e421b25df96e, type: 3}
---- !u!4 &8595757714105781109 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d1766401d10a80043ac8e421b25df96e,
-    type: 3}
-  m_PrefabInstance: {fileID: 8124772334690380958}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8935586644516999631 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d1766401d10a80043ac8e421b25df96e,
+    type: 3}
+  m_PrefabInstance: {fileID: 8124772334690380958}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8595757714105781109 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d1766401d10a80043ac8e421b25df96e,
     type: 3}
   m_PrefabInstance: {fileID: 8124772334690380958}
   m_PrefabAsset: {fileID: 0}
