@@ -1,0 +1,9 @@
+newmtl HOLOGRAPHIC_MAT
+map_Ka mat0_c.jpg
+map_Kd mat0_c.jpg
+newmtl PLASMA_RIFLE_MAT
+map_Ka mat1_c.jpg
+map_Kd mat1_c.jpg
+newmtl lambert1
+map_Ka mat2_c.jpg
+map_Kd mat2_c.jpg
