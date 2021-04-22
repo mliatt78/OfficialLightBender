@@ -141,9 +141,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         bool pressedrun = Input.GetKey(KeyCode.LeftShift);
         
         bool isLeft = animator.GetBool("IsLeftWalk");
-        bool isRight = animator.GetBool("IsRightWalk");
-        bool pressedleft = Input.GetKey("a");;
         bool pressedright = Input.GetKey("d");;
+        bool isRight = animator.GetBool("IsRightWalk");
+        bool pressedleft = Input.GetKey("a");	
         
         bool isDance = animator.GetBool("IsDance");
         bool presseddance = Input.GetKey("z");;
