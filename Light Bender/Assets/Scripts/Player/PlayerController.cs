@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
+using UnityEditor;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -15,9 +17,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
      int itemIndex;
      int previousItemIndex = -1;
-     
+
+    
+    int team;
     float verticalLookRotation;
     bool grounded;
+    bool HasOre;
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
     
@@ -29,12 +34,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
     
     Animator animator;
     
+    public TextMeshProUGUI blueScoreText;
+    public TextMeshProUGUI redScoreText;
+    
    /* const float maxHealth = 100f;
     float currentHealth = maxHealth;*/
    
 
     void Awake()
     {
+        team = GameManager.teamOfNewPlayer;
         rb = GetComponent<Rigidbody>();
         Phv = GetComponent<PhotonView>();
         //playerManager = PhotonView.Find((int)Phv.InstantiationData[0]).GetComponent<PlayerManager>();
@@ -46,6 +55,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             EquipItem(0);
             animator = GetComponent<Animator>();
+            
+            PlayerManager.players.Add(this);
         }
         else
         {
@@ -239,6 +250,21 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public void SetGroundedState(bool _grounded)
     {
         grounded = _grounded; 
+    }
+
+    public void SetHasOre(bool _hasOre)
+    {
+        HasOre = _hasOre;
+    }
+
+    public bool GetHasOre()
+    {
+        return HasOre;
+    }
+
+    public int GetTeam()
+    {
+        return team;
     }
 
      void FixedUpdate()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraShakeSimpleScript : MonoBehaviour {
 
-	private bool isRunning = false;
+	private bool isRunning;
 	private Animation anim;
 
 	void Start () {

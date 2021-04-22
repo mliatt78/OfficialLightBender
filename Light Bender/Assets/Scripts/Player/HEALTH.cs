@@ -25,19 +25,23 @@ public class HEALTH : MonoBehaviourPunCallbacks, IPunObservable,IDamageable
     public void TakeDamage(float damage)
     {
         health -= damage;
-        Debug.Log(health);
     }
 
     IEnumerator Respawn()
     {
         SetRenderers(false);
         health = 100;
-        GetComponent<PlayerController>().enabled = false;
+        PlayerController player = GetComponent<PlayerController>();
+        player.enabled = false;
+        // scores
+        int otherTeam = (player.GetTeam() + 1) % 2;
+        PlayerManager.scores[otherTeam] += 1;
+        // end scores
         Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
         transform.position = spawn.position;
         transform.rotation = spawn.rotation;
+        yield return new WaitForSeconds(1);     
         GetComponent<PlayerController>().enabled = true;
-        yield return new WaitForSeconds(1);        
         SetRenderers(true);
     }
 
