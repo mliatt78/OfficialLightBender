@@ -1576,9 +1576,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   gunTransform: {fileID: 2628569650800534551}
-  audio: {fileID: 3617053977539808134}
   particleSystem: {fileID: 9089762977055935643}
   impactforce: 60
+  nbballes: 30
+  audioSource: {fileID: 3617053977539808134}
 --- !u!114 &91738403240460241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7655,9 +7656,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   gunTransform: {fileID: 8575731142849662963}
-  audio: {fileID: 8909639123763123545}
   particleSystem: {fileID: 2113291363358717672}
   impactforce: 60
+  nbballes: 15
+  audioSource: {fileID: 8909639123763123545}
 --- !u!114 &5984360101888035531
 MonoBehaviour:
   m_ObjectHideFlags: 0
