@@ -1116,6 +1116,8 @@ MonoBehaviour:
     type: 3}
   bluePlayerPrefab: {fileID: 7316499710202688552, guid: 1ede8e05b8ed5cc49b247edcc16a02ee,
     type: 3}
+  RedBot: {fileID: 1255047953}
+  BlueBot: {fileID: 1255047953}
 --- !u!4 &1067247006
 Transform:
   m_ObjectHideFlags: 0
@@ -1395,6 +1397,12 @@ PrefabInstance:
 --- !u!4 &1255047952 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4385565219401010673, guid: fab4dbfc05e4c634492756dce14fa471,
+    type: 3}
+  m_PrefabInstance: {fileID: 1255047951}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1255047953 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 316669579696376284, guid: fab4dbfc05e4c634492756dce14fa471,
     type: 3}
   m_PrefabInstance: {fileID: 1255047951}
   m_PrefabAsset: {fileID: 0}
