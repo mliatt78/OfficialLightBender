@@ -955,7 +955,7 @@ GameObject:
   m_Component:
   - component: {fileID: 834232722}
   - component: {fileID: 834232721}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SpawnManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1305,6 +1305,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 834232722}
     m_Modifications:
+    - target: {fileID: 316669579696376284, guid: fab4dbfc05e4c634492756dce14fa471,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 2280690615365894156, guid: fab4dbfc05e4c634492756dce14fa471,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 4385565219401010673, guid: fab4dbfc05e4c634492756dce14fa471,
         type: 3}
       propertyPath: m_RootOrder
@@ -1364,6 +1374,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SpawnPoint (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5877341085638633606, guid: fab4dbfc05e4c634492756dce14fa471,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5877341085638633606, guid: fab4dbfc05e4c634492756dce14fa471,
         type: 3}
@@ -1874,6 +1889,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 834232722}
     m_Modifications:
+    - target: {fileID: 316669579696376284, guid: fab4dbfc05e4c634492756dce14fa471,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 2280690615365894156, guid: fab4dbfc05e4c634492756dce14fa471,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 4385565219401010673, guid: fab4dbfc05e4c634492756dce14fa471,
         type: 3}
       propertyPath: m_RootOrder
@@ -1933,6 +1958,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SpawnPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 5877341085638633606, guid: fab4dbfc05e4c634492756dce14fa471,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5877341085638633606, guid: fab4dbfc05e4c634492756dce14fa471,
         type: 3}
