@@ -16,75 +16,69 @@ public class SingleShot : GUN
 
    public float impactforce = 60;
    
-    PhotonView Phv;
+    PhotonView Pv;
+
+    public int nbballes;
+
+    private int nbinit;
+
+    public AudioSource audioSource;
+
+    public void Start()
+    {
+       nbinit = nbballes;
+    }
     void Awake()
     {
-       Phv = GetComponent<PhotonView>();
+       Pv = GetComponent<PhotonView>();
        
     }
    public override void Use()
    {
-      Phv.RPC("RPC_Shoot",RpcTarget.All);
+      Shoot();
    }
 
-   //void Shoot()
-  // {
-     /* Ray rayon = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
-      rayon.origin = cam.transform.position;
-      if (Time.time >= nexttimetofire)
-      {
-         particleSystem.Play();
-         nexttimetofire = Time.time + 1f/firerate;
-         if (Physics.Raycast(rayon, out RaycastHit hit))                //if (Physics.Raycast(rayon, out RaycastHit hit),100f,~ignoreLayerMask)
-         {
-            hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)iteminfo).damage);
-            if (hit.rigidbody != null)
-            {
-               hit.rigidbody.AddForce(-hit.normal * impactforce);
-            }
-            Pv.RPC("RPC_Shoot",RpcTarget.All,hit.point,hit.normal);
-         }*/
-      
-           // Phv.RPC("RPC_Shoot",RpcTarget.All);
-  // }
+   void Shoot()
+   {
+      Pv.RPC("RPC_Shoot",RpcTarget.All);
+   }
+
+   IEnumerator Reload()
+   {
+      yield return new WaitForSeconds(4.5f);
+      nbballes = nbinit;
+   }
 
    [PunRPC]
    void RPC_Shoot()
    {
-      
-     /* Ray rayon = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
-      rayon.origin = cam.transform.position;*/
-     //if (!Phv.IsMine)
-      //  return;
-     Ray rayon = new Ray(gunTransform.position, gunTransform.forward);
-      if (Time.time >= nexttimetofire)
+      Ray rayon = new Ray(gunTransform.position, gunTransform.forward);
+      if (nbballes <= 0)
+         StartCoroutine(Reload());
+      else
       {
-         particleSystem.Play();
-         nexttimetofire = Time.time + 1f / firerate;
-         if (Physics.Raycast(rayon, out RaycastHit hit, 100f, ~ignoreLayerMask))
-        // if (Physics.Raycast(rayon, out RaycastHit hit),100f,~ignoreLayerMask)
+         if (Time.time >= nexttimetofire)
          {
-           
-            Collider[] bimp = Physics.OverlapSphere(hit.point, 0.3f);
-            if (bimp.Length != 0)
+            nbballes -= 1;
+            particleSystem.Play();
+            audioSource.Play();
+            nexttimetofire = Time.time + 1f / firerate;
+            if (Physics.Raycast(rayon, out RaycastHit hit, 100f, ~ignoreLayerMask))
             {
-               GameObject buletimpact = Instantiate(bulletImpactPrefab, hit.point + hit.normal * 0.001f,
-                  Quaternion.LookRotation(hit.normal, Vector3.up) * bulletImpactPrefab.transform.rotation);
-               Destroy(buletimpact, 2f);
-               buletimpact.transform.SetParent(bimp[0].transform);
-            }
-            // hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
-            if (hit.rigidbody != null)
-            {
-               hit.rigidbody.AddForce(-hit.normal * impactforce);
-            }
-           var enemyhealth = hit.collider.GetComponent<HEALTH>();
-            Debug.Log(enemyhealth);
-            Debug.Log(hit.collider.name);
-            if (enemyhealth)
-            {
-               enemyhealth.TakeDamage(((GunInfo) iteminfo).damage);
-               Debug.Log("hit");
+               Collider[] bimp = Physics.OverlapSphere(hit.point, 0.3f);
+               if (bimp.Length != 0)
+               {
+                  GameObject buletimpact = Instantiate(bulletImpactPrefab, hit.point + hit.normal * 0.001f,
+                     Quaternion.LookRotation(hit.normal, Vector3.up) * bulletImpactPrefab.transform.rotation);
+                  Destroy(buletimpact, 2f);
+                  buletimpact.transform.SetParent(bimp[0].transform);
+               }
+               hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
+               Debug.Log(((GunInfo) iteminfo).damage + " DOMMAGES");
+               if (hit.rigidbody != null)
+               {
+                  hit.rigidbody.AddForce(-hit.normal * impactforce);
+               }
             }
          }
       }

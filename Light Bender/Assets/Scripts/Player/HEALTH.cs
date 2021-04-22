@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using Photon.Pun;
 using UnityEngine;
 
-public class HEALTH : MonoBehaviourPunCallbacks, IPunObservable,IDamageable
+public class HEALTH : MonoBehaviourPunCallbacks,IPunObservable
 {
     public float health = 100;
     Renderer[] visuals;
@@ -22,7 +22,7 @@ public class HEALTH : MonoBehaviourPunCallbacks, IPunObservable,IDamageable
         }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamages(float damage)
     {
         health -= damage;
     }
@@ -62,12 +62,9 @@ public class HEALTH : MonoBehaviourPunCallbacks, IPunObservable,IDamageable
     {
         if (health <= 0)
         {
-            Debug.Log("mort");
             if (photonView.IsMine)
             {
-                
-                Debug.Log("mort2");
-               StartCoroutine(Respawn());
+                StartCoroutine(Respawn());
             }
         }
     }
