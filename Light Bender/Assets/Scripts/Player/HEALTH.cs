@@ -31,8 +31,11 @@ public class HEALTH : MonoBehaviourPunCallbacks, IPunObservable,IDamageable
     IEnumerator Respawn()
     {
         SetRenderers(false);
+        Debug.Log("2");
         health = 100;
+        Debug.Log("1");
         GetComponent<PlayerController>().enabled = false;
+        Debug.Log("mort 23 ");
         Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
         transform.position = spawn.position;
         transform.rotation = spawn.rotation;

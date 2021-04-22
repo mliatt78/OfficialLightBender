@@ -1114,7 +1114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   redPlayerPrefab: {fileID: 7316499710202688552, guid: ad10294dffc0d624299eb3662f3288de,
     type: 3}
-  bluePlayerPrefab: {fileID: 7316499710202688552, guid: ad10294dffc0d624299eb3662f3288de,
+  bluePlayerPrefab: {fileID: 7316499710202688552, guid: 1ede8e05b8ed5cc49b247edcc16a02ee,
     type: 3}
 --- !u!4 &1067247006
 Transform:
@@ -1318,7 +1318,7 @@ PrefabInstance:
     - target: {fileID: 4385565219401010673, guid: fab4dbfc05e4c634492756dce14fa471,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5
+      value: 2.94
       objectReference: {fileID: 0}
     - target: {fileID: 4385565219401010673, guid: fab4dbfc05e4c634492756dce14fa471,
         type: 3}
@@ -1574,6 +1574,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845404299061006888, guid: bdcbcc269299ee145a4d08c6527673f0,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845404299061006888, guid: bdcbcc269299ee145a4d08c6527673f0,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845404299061006888, guid: bdcbcc269299ee145a4d08c6527673f0,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 3845404299061006888, guid: bdcbcc269299ee145a4d08c6527673f0,
         type: 3}
@@ -1887,7 +1902,7 @@ PrefabInstance:
     - target: {fileID: 4385565219401010673, guid: fab4dbfc05e4c634492756dce14fa471,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.6
+      value: 3.1
       objectReference: {fileID: 0}
     - target: {fileID: 4385565219401010673, guid: fab4dbfc05e4c634492756dce14fa471,
         type: 3}
