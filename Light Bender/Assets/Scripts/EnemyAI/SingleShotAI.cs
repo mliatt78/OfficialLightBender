@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class SingleShot : GUN
+public class SingleShotAI : GUN
 {
    public float firerate = 15; 
    [SerializeField] Camera cam;
@@ -22,7 +22,7 @@ public class SingleShot : GUN
 
     private int nbinit;
 
-    public AudioSource audioSource;
+   
 
     public void Start()
     {
@@ -61,7 +61,6 @@ public class SingleShot : GUN
          {
             nbballes -= 1;
             particleSystem.Play();
-            audioSource.Play();
             nexttimetofire = Time.time + 1f / firerate;
             if (Physics.Raycast(rayon, out RaycastHit hit, 100f, ~ignoreLayerMask))
             {

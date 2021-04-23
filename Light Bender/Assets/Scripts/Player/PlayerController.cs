@@ -297,6 +297,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
      {
          SetRenderers(false);
          currentHealth = 100;
+         _progressBarPro.SetValue(100f,100f);
          GetComponent<PlayerController>().enabled = false;
          Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
          transform.position = spawn.position;

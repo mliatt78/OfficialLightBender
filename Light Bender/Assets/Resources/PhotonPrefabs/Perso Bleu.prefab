@@ -865,6 +865,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
+  - {fileID: 7037075341665008258}
+  - {fileID: 2548537743964762572}
   - {fileID: 2672298116138628404}
   m_Father: {fileID: 7981149384514563730}
   m_RootOrder: 5
@@ -891,7 +893,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -1543,12 +1545,12 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2672298116138628404}
-  m_RootOrder: 1
+  m_Father: {fileID: 3081724567904015945}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 266, y: 465.00012}
+  m_AnchoredPosition: {x: 266, y: -24.999878}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1827469486535029671
@@ -2524,12 +2526,12 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2672298116138628404}
-  m_RootOrder: 0
+  m_Father: {fileID: 3081724567904015945}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -111, y: 465.00012}
+  m_AnchoredPosition: {x: -111, y: -24.999878}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1621440914148952323
@@ -2825,17 +2827,15 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2548537743964762572}
-  - {fileID: 7037075341665008258}
   - {fileID: 1294745465126537532}
   m_Father: {fileID: 3081724567904015945}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 910, y: 490}
   m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &6226707309052024484
 GameObject:
   m_ObjectHideFlags: 0
@@ -13926,6 +13926,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HorizontalBox
       objectReference: {fileID: 0}
+    - target: {fileID: 114347608465689060, guid: 372bfc8f1fe466348b6af042ac419fef,
+        type: 3}
+      propertyPath: m_Text
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 114703003054215834, guid: 372bfc8f1fe466348b6af042ac419fef,
         type: 3}
       propertyPath: m_value
@@ -13949,7 +13954,7 @@ PrefabInstance:
     - target: {fileID: 224390036622991088, guid: 372bfc8f1fe466348b6af042ac419fef,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224390036622991088, guid: 372bfc8f1fe466348b6af042ac419fef,
         type: 3}
