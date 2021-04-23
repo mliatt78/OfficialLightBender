@@ -1116,6 +1116,8 @@ MonoBehaviour:
     type: 3}
   bluePlayerPrefab: {fileID: 7316499710202688552, guid: 1ede8e05b8ed5cc49b247edcc16a02ee,
     type: 3}
+  RedBot: {fileID: 7316499710202688552, guid: b5903a71b7dce9e4dba9424799c3e15a, type: 3}
+  BlueBot: {fileID: 7316499710202688552, guid: e735355ce89a52d4582cf56d62f9b65b, type: 3}
 --- !u!4 &1067247006
 Transform:
   m_ObjectHideFlags: 0

@@ -1,0 +1,13 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/contentModel.xml
+/projectSettingsUpdater.xml
+/.idea.GameManager.iml
+/modules.xml
+# Datasource local storage ignored files
+/../../../../../../../../../../../../../:\Users\nonol\Desktop\PROJET DE S2\OfficialLightBenderArnaud\Light Bender\Assets\Scripts\GameManager\.idea\.idea.GameManager.dir\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/

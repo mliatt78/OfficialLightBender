@@ -12,11 +12,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public GameObject redPlayerPrefab;
     public GameObject bluePlayerPrefab;
+    public GameObject RedBot;
+    public GameObject BlueBot;
     
     public static GameManager instance;
 
     
-    private void Start()
+  private void Start()
 
     {
         //check that we dont have a local instance before we instantiate the prefab
@@ -40,6 +42,38 @@ public class GameManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position, spawn.rotation);
                 Debug.Log("RED");
             }
+        }
+        // Instantiate the bots (Only for the master)
+        if (PhotonNetwork.IsMasterClient)
+        {
+            int redbots = 5;
+            int bluebots = 5;
+            foreach (var players in PhotonNetwork.PlayerList)
+            {
+                if ((int) players.CustomProperties["Team"] == 0)
+                {
+                    bluebots--;
+                }
+                else
+                {
+                    redbots--;
+                }
+            }
+
+            for (int i = bluebots; i > 0; i--)
+             {
+                 //get a spawn for the correct team
+                 Transform spawn = SpawnManager.instance.GetTeamSpawn(0);
+                 PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", BlueBot.name), spawn.position, spawn.rotation);
+             }
+             
+             for (int i = redbots; i > 0; i--)
+             {
+                 //get a spawn for the correct team
+                 Transform spawn = SpawnManager.instance.GetTeamSpawn(1);
+                 PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", RedBot.name), spawn.position, spawn.rotation);
+             }
+            
         }
         
     }
