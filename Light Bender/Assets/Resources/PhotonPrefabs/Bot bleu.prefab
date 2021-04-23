@@ -1441,8 +1441,8 @@ GameObject:
   - component: {fileID: 401965876681342131}
   - component: {fileID: 7022910272520088840}
   m_Layer: 0
-  m_Name: BOT BLEU
-  m_TagString: Untagged
+  m_Name: Bot bleu
+  m_TagString: BlueS
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1532,6 +1532,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 8789493170690796789}
+  walkpoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  enemies: []
+  enemyTeam: RedS
+  currentHealth: 100
 --- !u!114 &6858619280209558647
 MonoBehaviour:
   m_ObjectHideFlags: 0
