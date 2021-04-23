@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 {
@@ -12,12 +13,17 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     [SerializeField] float mouseSensivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
 
     [SerializeField]  Item[] items;
+    
+    [SerializeField] ProgressBarPro _progressBarPro;
+    
+    [SerializeField] GameObject health;
 
     int itemIndex;
     int previousItemIndex = -1;
      
     float verticalLookRotation;
     bool grounded;
+    bool HasOre;
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
     
@@ -31,6 +37,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
      float currentHealth = maxHealth;*/
 
     PlayerManager playerManager;
+    
+    public TextMeshProUGUI blueScoreText;
+    public TextMeshProUGUI redScoreText;
     
     Renderer[] visuals;
     int team = 0;
@@ -53,6 +62,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         {
             EquipItem(0);
             animator = GetComponent<Animator>();
+            health.SetActive(true);
         }
         else
         {
@@ -249,6 +259,26 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     {
         grounded = _grounded; 
     }
+    
+    public void SetHasOre(bool _hasOre)
+    {
+        HasOre = _hasOre;
+    }
+
+    public bool GetHasOre()
+    {
+        return HasOre;
+    }
+
+    public void SetTeam(int team)
+    {
+        this.team = team;
+    }
+
+    public int GetTeam()
+    {
+        return team;
+    }
 
      void FixedUpdate()
     {
@@ -291,6 +321,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
              return;
 
          currentHealth -= damage;
+         _progressBarPro.SetValue(currentHealth,100f);
 
          if (currentHealth <= 0)
          {

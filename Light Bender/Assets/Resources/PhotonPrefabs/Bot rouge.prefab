@@ -7792,7 +7792,6 @@ GameObject:
   - component: {fileID: 4812907613941872380}
   - component: {fileID: -8640442587161200721}
   - component: {fileID: 5631733737691088860}
-  - component: {fileID: 5284132064080082320}
   - component: {fileID: 1950788945730073686}
   - component: {fileID: 4213214316216728068}
   - component: {fileID: -1909875079498981522}
@@ -7862,7 +7861,6 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 4812907613941872380}
   - {fileID: -8640442587161200721}
-  - {fileID: 5284132064080082320}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -7898,22 +7896,22 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: IsWalking
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: IsRunning
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: IsLeftWalk
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: IsRightWalk
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: IsDance
   m_SynchronizeLayers:
-  - SynchronizeType: 1
+  - SynchronizeType: 0
     LayerIndex: 0
 --- !u!114 &5631733737691088860
 MonoBehaviour:
@@ -7931,19 +7929,6 @@ MonoBehaviour:
   - rig: {fileID: 3522671235427162277}
     active: 1
   m_Effectors: []
---- !u!114 &5284132064080082320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7316499710202688552}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24f5624206a74c44caf9dc4ea453c3e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 100
 --- !u!54 &1950788945730073686
 Rigidbody:
   m_ObjectHideFlags: 0
