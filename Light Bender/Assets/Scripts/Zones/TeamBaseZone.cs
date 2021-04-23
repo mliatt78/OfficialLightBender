@@ -28,7 +28,7 @@ namespace Zones
             CheckIfPlayersHaveOre();
         }
 
-        void CheckIfPlayersHaveOre()
+       void CheckIfPlayersHaveOre()
         {
             for (int i = 0; i < playersNear.Count; i++)
             {

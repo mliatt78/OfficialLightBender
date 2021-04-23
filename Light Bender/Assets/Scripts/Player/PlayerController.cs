@@ -13,6 +13,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     [SerializeField] float mouseSensivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
 
     [SerializeField]  Item[] items;
+    
+    [SerializeField] ProgressBarPro _progressBarPro;
+    
+    [SerializeField] GameObject health;
 
     int itemIndex;
     int previousItemIndex = -1;
@@ -58,6 +62,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         {
             EquipItem(0);
             animator = GetComponent<Animator>();
+            health.SetActive(true);
         }
         else
         {
@@ -316,6 +321,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
              return;
 
          currentHealth -= damage;
+         _progressBarPro.SetValue(currentHealth,100f);
 
          if (currentHealth <= 0)
          {
