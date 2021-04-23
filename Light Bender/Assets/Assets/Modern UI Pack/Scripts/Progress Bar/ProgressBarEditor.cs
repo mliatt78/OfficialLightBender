@@ -4,6 +4,7 @@ using UnityEditor;
 
 namespace Michsky.UI.ModernUIPack
 {
+    [ExecuteAlways]
     [CustomEditor(typeof(ProgressBar))]
     [System.Serializable]
     public class ProgressBarEditor : Editor

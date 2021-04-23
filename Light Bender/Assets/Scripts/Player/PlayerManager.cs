@@ -29,10 +29,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
         //now dont destroy!!
         DontDestroyOnLoad(gameObject);
-        /* if (Phv.IsMine)
-        {
-            CreateController();
-        }*/
     }
     
     
@@ -44,33 +40,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             players[i].redScoreText.text = scores[1].ToString();
         }
     }
-
-    void CreateController() // gestion des mouvements du joueur
-    { 
-      /*  Transform spawnpoint = SpawnManager.instance.GetSpawnpoint(team);
-        Debug.Log($"Team number {team} is being instantiated");
-        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"),spawnpoint.position,spawnpoint.rotation,0,new object[] { Phv.ViewID });*/
     
-    }
-
-   /* public void Die()
-    {
-        PhotonNetwork.Destroy(controller);
-        PlayerController.health = 1;
-       
-    }*/
-   /* public void SetTeam(int Team)
-    {
-        if (Team == 0 || Team == 1)
-        {
-            team = Team;
-        }
-        else
-        {
-            Debug.Log("PLayerManager: Team number is not valid");
-        }
-    
-    }*/
     
     
     
