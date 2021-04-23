@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using System.IO;
 using Photon.Pun;
 using UnityEngine;
@@ -8,6 +9,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks
      public static PhotonView Phv;
      public static GameObject localPlayerInstance;
     // GameObject controller;
+    
+    public static List<PlayerController> players = new List<PlayerController>();
+    public static int[] scores = {0,0};
      
     /* int team;*/
 
@@ -29,6 +33,16 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             CreateController();
         }*/
+    }
+    
+    
+    public static void UpdateScores()
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].blueScoreText.text = scores[0].ToString();
+            players[i].redScoreText.text = scores[1].ToString();
+        }
     }
 
     void CreateController() // gestion des mouvements du joueur

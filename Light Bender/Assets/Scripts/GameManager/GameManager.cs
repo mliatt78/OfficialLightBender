@@ -29,19 +29,21 @@ public class GameManager : MonoBehaviourPunCallbacks
             int team = (int) PhotonNetwork.LocalPlayer.CustomProperties["Team"];
             Debug.Log($"Team number {team} is being instantiated");
             //instantiate the blue player if team is 0 and red if it is not
+            GameObject player;
             if (team == 0)
             {
                 //get a spawn for the correct team
                 Transform spawn = SpawnManager.instance.GetTeamSpawn(0);
-                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bluePlayerPrefab.name), spawn.position, spawn.rotation);
+                player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bluePlayerPrefab.name), spawn.position, spawn.rotation);
             }
             else
             {
                 //now for the red team
                 Transform spawn = SpawnManager.instance.GetTeamSpawn(1);
-                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position, spawn.rotation);
-                Debug.Log("RED");
+                player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position, spawn.rotation);
             }
+            player.GetComponent<PlayerController>().SetTeam(team);
+            PlayerManager.players.Add(player.GetComponent<PlayerController>());
         }
         // Instantiate the bots (Only for the master)
         if (PhotonNetwork.IsMasterClient)
