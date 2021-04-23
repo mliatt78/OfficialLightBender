@@ -1,0 +1,15 @@
+# Wavefront MTL file
+# Creator: Ultimate Unwrap3D Pro v3.06
+# Time: Fri Jul 18 20:52:34 2008
+# num_materials: 1
+
+newmtl mat_2
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+d 1.000000
+illum 2
+Ns 1.000000
+map_Kd bones.jpg
+
+# num_materials: 1
