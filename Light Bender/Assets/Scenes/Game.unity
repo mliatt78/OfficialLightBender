@@ -2009,6 +2009,26 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 1346578419635776402, guid: bdcbcc269299ee145a4d08c6527673f0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1346578419635776402, guid: bdcbcc269299ee145a4d08c6527673f0,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2606768767593106742, guid: bdcbcc269299ee145a4d08c6527673f0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2606768767593106742, guid: bdcbcc269299ee145a4d08c6527673f0,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2943810741613629253, guid: bdcbcc269299ee145a4d08c6527673f0,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -2104,6 +2124,16 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 5257188173604424992, guid: bdcbcc269299ee145a4d08c6527673f0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5257188173604424992, guid: bdcbcc269299ee145a4d08c6527673f0,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6909860847134597571, guid: bdcbcc269299ee145a4d08c6527673f0,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -2118,6 +2148,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Cave
+      objectReference: {fileID: 0}
+    - target: {fileID: 9091455130445403881, guid: bdcbcc269299ee145a4d08c6527673f0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9091455130445403881, guid: bdcbcc269299ee145a4d08c6527673f0,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bdcbcc269299ee145a4d08c6527673f0, type: 3}
