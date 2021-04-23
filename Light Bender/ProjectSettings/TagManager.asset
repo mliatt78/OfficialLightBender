@@ -6,6 +6,7 @@ TagManager:
   tags:
   - BlueS
   - RedS
+  - CHECKPOINT
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Personnage
   - Weapon Red
   - Weapon Blue
-  - Floor
+  - Map
   - 
   - 
   - 
