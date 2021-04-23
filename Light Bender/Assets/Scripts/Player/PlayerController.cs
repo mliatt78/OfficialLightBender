@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 {
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
      
     float verticalLookRotation;
     bool grounded;
+    bool HasOre;
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
     
@@ -31,6 +33,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
      float currentHealth = maxHealth;*/
 
     PlayerManager playerManager;
+    
+    public TextMeshProUGUI blueScoreText;
+    public TextMeshProUGUI redScoreText;
     
     Renderer[] visuals;
     int team = 0;
@@ -248,6 +253,26 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     public void SetGroundedState(bool _grounded)
     {
         grounded = _grounded; 
+    }
+    
+    public void SetHasOre(bool _hasOre)
+    {
+        HasOre = _hasOre;
+    }
+
+    public bool GetHasOre()
+    {
+        return HasOre;
+    }
+
+    public void SetTeam(int team)
+    {
+        this.team = team;
+    }
+
+    public int GetTeam()
+    {
+        return team;
     }
 
      void FixedUpdate()
