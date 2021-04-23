@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -9,65 +10,45 @@ namespace EnemyAI
     {
         public NavMeshAgent agent;
 
-        public Transform player;
+        Transform checkpoint;
 
-        public LayerMask whatIsGround, whatIsPlayer;
+        private bool ToCheck = false;
 
-        //Patroling
-        [NonSerialized]
-        public Vector3 walkPoint;
-        [NonSerialized]
-        bool walkPointSet;
-        public float walkPointRange;
-
-        //Attacking
-        public float timeBetweenAttacks;
-        [NonSerialized]
-        bool alreadyAttacked;
-
-        //States
-        public float sightRange, attackRange;
-        [NonSerialized]
-        public bool playerInSightRange, playerInAttackRange;
-
-        private void Awake()
+        private bool alreadyset = false;
+        void Awake()
         {
-            player = GetComponent<Transform>();// GameObject.Find("PlayerObj").transform;
+            checkpoint = GameObject.FindWithTag("CHECKPOINT").transform;
             agent = GetComponent<NavMeshAgent>();
+            RaycastHit rch;
+            if (Physics.Raycast(checkpoint.position, checkpoint.up, out rch, 100))
+            {
+                checkpoint = rch.transform;
+            }
         }
-
-        private void Update()
+            
+        void Start()
         {
-            //Check for sight and attack range
-            playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-            playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
-
-            if (!playerInSightRange && !playerInAttackRange) Patroling();
+            agent.SetDestination(checkpoint.position);
         }
-
-        private void Patroling()
+        void Update()
         {
-            if (!walkPointSet) SearchWalkPoint();
-
-            if (walkPointSet)
-                agent.SetDestination(walkPoint);
-
-            Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
-            //Walkpoint reached
-            if (distanceToWalkPoint.magnitude < 1f)
-                walkPointSet = false;
+            Debug.Log(agent.destination+" "+agent.pathStatus+" "+checkpoint.position); 
+            if (!ToCheck)
+            {
+                Vector3 DistanceTillCheckpoint = transform.position - checkpoint.position;
+                if (DistanceTillCheckpoint.magnitude < 1f)
+                {
+                    Debug.Log("Checkpoint atteint");
+                    ToCheck = true;
+                }
+            }
         }
-        private void SearchWalkPoint()
+        
+        IEnumerator wait()
         {
-            //Calculate random point in range
-            float randomZ = Random.Range(-walkPointRange, walkPointRange);
-            float randomX = Random.Range(-walkPointRange, walkPointRange);
 
-            walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+            yield return new WaitForSeconds(5);
 
-            if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
-                walkPointSet = true;
         }
     }
 }
