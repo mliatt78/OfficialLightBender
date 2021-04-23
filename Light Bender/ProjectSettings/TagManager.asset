@@ -6,6 +6,7 @@ TagManager:
   tags:
   - BlueS
   - RedS
+  - CHECKPOINT
   layers:
   - Default
   - TransparentFX

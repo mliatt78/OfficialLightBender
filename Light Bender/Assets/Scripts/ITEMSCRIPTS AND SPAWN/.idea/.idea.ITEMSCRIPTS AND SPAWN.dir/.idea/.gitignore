@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/projectSettingsUpdater.xml
+/contentModel.xml
+/.idea.ITEMSCRIPTS AND SPAWN.iml
+/modules.xml
+# Datasource local storage ignored files
+/../../../../../../../../../../../../../:\Users\Philippe\Documents\GitHub\OfficialLightBender\Light Bender\Assets\Scripts\ITEMSCRIPTS AND SPAWN\.idea\.idea.ITEMSCRIPTS AND SPAWN.dir\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
