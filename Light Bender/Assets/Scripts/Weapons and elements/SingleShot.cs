@@ -74,6 +74,7 @@ public class SingleShot : GUN
                   buletimpact.transform.SetParent(bimp[0].transform);
                }
                hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
+               
                Debug.Log(((GunInfo) iteminfo).damage + " DOMMAGES");
                if (hit.rigidbody != null)
                {

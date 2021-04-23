@@ -8,6 +8,7 @@ public class PauseMenu : MonoBehaviourPunCallbacks
 {
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
+    public AudioSource audioSource;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -37,6 +38,11 @@ public class PauseMenu : MonoBehaviourPunCallbacks
         GameIsPaused = true;
     }
 
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
    /* public void DisconnectPlayer()
     {
         PhotonNetwork.LeaveRoom();
@@ -63,6 +69,11 @@ public class PauseMenu : MonoBehaviourPunCallbacks
        base.OnLeftRoom();
        
 
+   }
+
+   public void PlayButtonSound()
+   {
+       audioSource.Play();
    }
 
     
