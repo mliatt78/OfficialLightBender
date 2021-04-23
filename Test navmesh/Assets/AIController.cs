@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -14,7 +13,6 @@ namespace EnemyAI
 
         private bool ToCheck = false;
 
-        private bool alreadyset = false;
         void Awake()
         {
             checkpoint = GameObject.FindWithTag("CHECKPOINT").transform;
@@ -44,11 +42,5 @@ namespace EnemyAI
             }
         }
         
-        IEnumerator wait()
-        {
-
-            yield return new WaitForSeconds(5);
-
-        }
     }
 }
