@@ -1441,7 +1441,7 @@ GameObject:
   - component: {fileID: 401965876681342131}
   - component: {fileID: 7022910272520088840}
   m_Layer: 0
-  m_Name: BOT BLEU
+  m_Name: Bot bleu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
