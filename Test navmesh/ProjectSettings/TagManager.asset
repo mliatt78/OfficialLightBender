@@ -4,8 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - BlueS
-  - RedS
   - CHECKPOINT
   layers:
   - Default
@@ -16,12 +14,12 @@ TagManager:
   - UI
   - 
   - 
-  - RedL
-  - BlueL
-  - Personnage
-  - Weapon Red
-  - Weapon Blue
-  - Map
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

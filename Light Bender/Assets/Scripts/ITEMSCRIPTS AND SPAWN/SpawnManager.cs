@@ -6,8 +6,8 @@ public class SpawnManager : MonoBehaviour
 {
    public static SpawnManager instance;
    
-   GameObject[] redTeamSpawns;
-   GameObject[] blueTeamSpawns;
+   public GameObject[] redTeamSpawns;
+   public GameObject[] blueTeamSpawns;
 
    void Awake()
    {
