@@ -12,13 +12,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public GameObject redPlayerPrefab;
     public GameObject bluePlayerPrefab;
-
     public GameObject RedBot;
     public GameObject BlueBot;
 
     int RS = 0;
     int BS = 0;
-
     
     public static GameManager instance;
 
@@ -67,11 +65,9 @@ public class GameManager : MonoBehaviourPunCallbacks
             int team = (int) PhotonNetwork.LocalPlayer.CustomProperties["Team"];
             Debug.Log($"Team number {team} is being instantiated");
             //instantiate the blue player if team is 0 and red if it is not
-            GameObject player;
             if (team == 0)
             {
                 //get a spawn for the correct team
-
                 Transform spawn = SpawnManager.instance.blueTeamSpawns[BS].transform;
                 PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bluePlayerPrefab.name), spawn.position, spawn.rotation);
                 BS++;
@@ -79,15 +75,11 @@ public class GameManager : MonoBehaviourPunCallbacks
             else
             {
                 //now for the red team
-
                 Transform spawn = SpawnManager.instance.redTeamSpawns[RS].transform;
                 PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position, spawn.rotation);
                 Debug.Log("RED");
                 RS++;
-
             }
-            player.GetComponent<PlayerController>().SetTeam(team);
-            PlayerManager.players.Add(player.GetComponent<PlayerController>());
         }
 
     }

@@ -1,0 +1,15 @@
+# Wavefront MTL file
+# Creator: Ultimate Unwrap3D Pro v3.10
+# Time: Mon Dec 29 22:54:00 2008
+# num_materials: 1
+
+newmtl cavelarge
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+d 1.000000
+illum 2
+Ns 1.000000
+map_Kd cavelarge.jpg
+
+# num_materials: 1

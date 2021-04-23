@@ -20,6 +20,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] Transform playerListContent;
     [SerializeField] GameObject PlayerListItemPrefab;
     [SerializeField] GameObject StartGamebutton;
+    public AudioSource AudioSource;
 
     private void Awake()
     {
@@ -153,6 +154,11 @@ public class Launcher : MonoBehaviourPunCallbacks
             };
             PhotonNetwork.SetPlayerCustomProperties(playerProps);
         }
+    }
+
+    public void PlaySoundButton()
+    {
+        AudioSource.Play();
     }
     
 }
