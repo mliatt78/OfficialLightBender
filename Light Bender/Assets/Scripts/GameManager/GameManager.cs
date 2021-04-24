@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public GameObject redPlayerPrefab;
     public GameObject bluePlayerPrefab;
+    
     public GameObject RedBot;
     public GameObject BlueBot;
 
@@ -29,8 +30,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                int redbots = 0;
-                int bluebots = 1;
+                int redbots = 5;
+                int bluebots = 5;
                 foreach (var players in PhotonNetwork.PlayerList)
                 {
                     if ((int) players.CustomProperties["Team"] == 0)

@@ -1,0 +1,18 @@
+newmtl 01_platform
+map_Ka mat0_c.jpg
+map_Kd mat0_c.jpg
+newmtl 02_pipes
+map_Ka mat1_c.jpg
+map_Kd mat1_c.jpg
+newmtl 03_door
+map_Ka mat2_c.jpg
+map_Kd mat2_c.jpg
+newmtl 04_back side
+map_Ka mat3_c.jpg
+map_Kd mat3_c.jpg
+newmtl 05_front side
+map_Ka mat4_c.jpg
+map_Kd mat4_c.jpg
+newmtl 06_parts
+map_Ka mat5_c.jpg
+map_Kd mat5_c.jpg

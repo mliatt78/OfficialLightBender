@@ -1,54 +1,192 @@
 ﻿using System;
 using System.Collections;
+using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Timeline;
 using Random = UnityEngine.Random;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace EnemyAI
 {
-    public class AIController : MonoBehaviour
+    public class AIController : MonoBehaviourPunCallbacks,IDamageable
     {
         public NavMeshAgent agent;
+        public GameObject[] walkpoints;
+        private int nbWalkpoints = 4;
 
-        Transform checkpoint;
-
-        private bool ToCheck = false;
-
-        private bool alreadyset = false;
+        public GameObject[] enemies;
+        public string enemyTeam;
+        
+        public const float maxHealth = 100f;
+        public float currentHealth = maxHealth;
+        
+        [NonSerialized] private bool alreadyAttacked;
+        [NonSerialized] private int framesUntilAttack = 60;
+        
+        //Armes
+        [SerializeField]  Item[] items;
+        PhotonView Phv;
+        Renderer[] visuals;
+        public int team;
+        int itemIndex;
+        int previousItemIndex = -1;
+        
         void Awake()
         {
-            checkpoint = GameObject.FindWithTag("CHECKPOINT").transform;
+            walkpoints = GameObject.FindGameObjectsWithTag("CHECKPOINT");
+            enemies = GameObject.FindGameObjectsWithTag(enemyTeam);
             agent = GetComponent<NavMeshAgent>();
-            RaycastHit rch;
-            if (Physics.Raycast(checkpoint.position, checkpoint.up, out rch, 100))
-            {
-                checkpoint = rch.transform;
-            }
+            Phv = GetComponent<PhotonView>();
         }
             
         void Start()
         {
-            agent.SetDestination(checkpoint.position);
+            if (Phv.IsMine)
+            {
+                EquipItem(0);
+            }
+            NextWalkPoint();
+            visuals = GetComponentsInChildren<Renderer>();
+            team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
         }
+        
         void Update()
         {
-            Debug.Log(agent.destination+" "+agent.pathStatus+" "+checkpoint.position); 
-            if (!ToCheck)
+            Vector3 DistanceTillCheckpoint = transform.position - agent.destination;
+            if (DistanceTillCheckpoint.magnitude < 3f)
             {
-                Vector3 DistanceTillCheckpoint = transform.position - checkpoint.position;
-                if (DistanceTillCheckpoint.magnitude < 1f)
+                NextWalkPoint();
+            }
+
+            (bool InSight, GameObject target) = GetTarget();
+            if (InSight)
+            {
+                Attack(target);
+            }
+        }
+
+        (bool, GameObject) GetTarget()
+        {
+            float distanceToNearest = 5f;
+            GameObject Nearest = null;
+            foreach (var player in enemies)
+            {
+                Vector3 distance = player.transform.position - agent.destination;
+                if (distance.magnitude < distanceToNearest)
                 {
-                    Debug.Log("Checkpoint atteint");
-                    ToCheck = true;
+                    Nearest = player;
+                    distanceToNearest = distance.magnitude;
                 }
+            }
+
+            return (Nearest != null, Nearest);
+        }
+
+        void NextWalkPoint()
+        {
+            int i = Random.Range(0, nbWalkpoints);
+            agent.SetDestination(walkpoints[i].transform.position);
+            
+            // RaycastHit rch;
+            // if (Physics.Raycast(walkpoint.position, walkpoint.up, out rch, 100))
+            // {
+            //     agent.SetDestination(rch.transform.position);
+            // }
+        }
+        
+        /// <summary>
+        /// Attack
+        ///
+        /// </summary>
+        /// <param name="enemy"></param>
+        /// 
+        void Attack(GameObject enemy)
+        {
+            if (alreadyAttacked)
+            {
+                framesUntilAttack--;
+            }
+            else
+            {
+                transform.LookAt(enemy.transform);
+                items[0].Use();
             }
         }
         
-        IEnumerator wait()
+        void EquipItem(int _index)
         {
+            if (_index == previousItemIndex)
+                return;
+        
+            itemIndex = _index;
 
-            yield return new WaitForSeconds(5);
+            items[itemIndex].itemGameObject.SetActive(true);
 
+            if (previousItemIndex != -1)
+            {
+                items[previousItemIndex].itemGameObject.SetActive(false);
+            }
+
+            previousItemIndex = itemIndex;
+        
+            if (Phv.IsMine)
+            {
+                Hashtable hash = new Hashtable();
+                hash.Add("itemindex", itemIndex);
+                PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+            }
+        }
+        
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+            if (!Phv.IsMine && targetPlayer == Phv.Owner)
+            {
+                EquipItem((int) changedProps["itemindex"]);
+            }
+        }
+
+        
+        void SetRenderers(bool state)
+        {
+            foreach (var renderer in visuals)
+            {
+                renderer.enabled = state;
+            }
+        }
+        
+        IEnumerator Respawn()
+        {
+            SetRenderers(false);
+            currentHealth = 100;
+            PlayerManager.scores[(team+1)%2] += 1;
+            GetComponent<AIController>().enabled = false;
+            Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
+            transform.position = spawn.position;
+            transform.rotation = spawn.rotation;
+            GetComponent<AIController>().enabled = true;
+            yield return new WaitForSeconds(1);        
+            SetRenderers(true);
+        }
+
+        public void TakeDamage(float damage)
+        {
+            Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage);
+        }
+        
+        [PunRPC]
+        void RPC_TakeDamage(float damage)
+        {
+            if (!Phv.IsMine)
+                return;
+
+            currentHealth -= damage;
+
+            if (currentHealth <= 0)
+            {
+                StartCoroutine(Respawn());
+            }
         }
     }
 }
