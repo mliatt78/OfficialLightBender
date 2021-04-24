@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Riffle
   m_EditorClassIdentifier: 
   itemName: Riffle
-  damage: 100
+  damage: 10
+  nbinit: 30

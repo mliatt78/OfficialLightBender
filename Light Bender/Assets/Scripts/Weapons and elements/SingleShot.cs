@@ -17,21 +17,24 @@ public class SingleShot : GUN
    public float impactforce = 60;
    
     PhotonView Pv;
+    
+    [SerializeField]  ProgressBarPro munitionsSlider;
 
-    public int nbballes;
+    public int nbinit { get; set; }
 
-    private int nbinit;
 
+    public int nbballes { get; set; }
+   
     public AudioSource audioSource;
 
-    public void Start()
-    {
-       nbinit = nbballes;
-    }
+    
     void Awake()
     {
        Pv = GetComponent<PhotonView>();
-       
+       nbinit = ((GunInfo) iteminfo).nbinit;
+       nbballes = nbinit;
+       Debug.Log(nbinit + "--" + nbballes);
+
     }
    public override void Use()
    {
@@ -42,11 +45,13 @@ public class SingleShot : GUN
    {
       Pv.RPC("RPC_Shoot",RpcTarget.All);
    }
+   
 
-   IEnumerator Reload()
+  public IEnumerator Reload()
    {
-      yield return new WaitForSeconds(4.5f);
+      yield return new WaitForSeconds(2f);
       nbballes = nbinit;
+      munitionsSlider.SetValue(nbballes,nbinit);
    }
 
    [PunRPC]
@@ -54,7 +59,7 @@ public class SingleShot : GUN
    {
       Ray rayon = new Ray(gunTransform.position, gunTransform.forward);
       if (nbballes <= 0)
-         StartCoroutine(Reload());
+         return;
       else
       {
          if (Time.time >= nexttimetofire)
@@ -63,8 +68,11 @@ public class SingleShot : GUN
             particleSystem.Play();
             audioSource.Play();
             nexttimetofire = Time.time + 1f / firerate;
+            //Debug.Log(nbballes + "///" + nbinit);
             if (Physics.Raycast(rayon, out RaycastHit hit, 100f, ~ignoreLayerMask))
             {
+               munitionsSlider.SetValue(nbballes, nbinit);
+               // Debug.Log(nbballes + " Update " + nbinit);
                Collider[] bimp = Physics.OverlapSphere(hit.point, 0.3f);
                if (bimp.Length != 0)
                {
@@ -73,8 +81,9 @@ public class SingleShot : GUN
                   Destroy(buletimpact, 2f);
                   buletimpact.transform.SetParent(bimp[0].transform);
                }
+
                hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
-               
+
                Debug.Log(((GunInfo) iteminfo).damage + " DOMMAGES");
                if (hit.rigidbody != null)
                {

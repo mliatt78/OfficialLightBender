@@ -39,7 +39,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             players[i].blueScoreText.text = scores[0].ToString();
             players[i].redScoreText.text = scores[1].ToString();
-            Debug.Log(scores[0] + " // "+scores[1]);
+            Debug.Log("Score : " + scores[0] + " -- "+scores[1]);
         }
     }
     

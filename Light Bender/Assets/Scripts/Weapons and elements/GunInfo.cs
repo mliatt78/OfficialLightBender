@@ -7,4 +7,8 @@ using UnityEngine;
 public class GunInfo : ItemInfo
 {
     public float damage;
+    
+    public int nbinit; 
+    
+
 }
