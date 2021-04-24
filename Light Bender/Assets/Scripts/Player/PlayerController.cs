@@ -334,6 +334,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
          currentHealth = 100;
          PlayerManager.scores[(team+1)%2] += 1;
          PlayerManager.UpdateScores();
+         if (GetHasOre())
+         {
+             Debug.Log(name+" died and lost the ore.");
+             SetHasOre(false);
+         }
+         
          _progressBarPro.SetValue(100f,100f);
          GetComponent<PlayerController>().enabled = false;
          Transform spawn = SpawnManager.instance.GetTeamSpawn(team);

@@ -160,7 +160,7 @@ namespace EnemyAI
             SetRenderers(false);
             currentHealth = 100;
             PlayerManager.scores[(team+1)%2] += 1;
-            Debug.Log((team+1)%2 + " modulo");
+            //Debug.Log((team+1)%2);
             PlayerManager.UpdateScores();
             GetComponent<AIController>().enabled = false;
             Transform spawn = SpawnManager.instance.GetTeamSpawn(team);

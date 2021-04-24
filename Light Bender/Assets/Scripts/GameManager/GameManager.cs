@@ -7,6 +7,7 @@ using Photon.Realtime;
 using Photon.Pun.UtilityScripts;
 using UnityEngine.UI;
 using System.IO;
+using Random = System.Random;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -23,6 +24,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] int redbots;
     [SerializeField] int bluebots;
+
+    public static Random rand = new Random();
     
 
     
