@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections;
+using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Timeline;
 using Random = UnityEngine.Random;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace EnemyAI
 {
-    public class AIController : MonoBehaviour
+    public class AIController : MonoBehaviourPunCallbacks,IDamageable
     {
         public NavMeshAgent agent;
         public GameObject[] walkpoints;
@@ -21,16 +24,32 @@ namespace EnemyAI
         
         [NonSerialized] private bool alreadyAttacked;
         [NonSerialized] private int framesUntilAttack = 60;
+        
+        //Armes
+        [SerializeField]  Item[] items;
+        PhotonView Phv;
+        Renderer[] visuals;
+        public int team;
+        int itemIndex;
+        int previousItemIndex = -1;
+        
         void Awake()
         {
             walkpoints = GameObject.FindGameObjectsWithTag("CHECKPOINT");
             enemies = GameObject.FindGameObjectsWithTag(enemyTeam);
             agent = GetComponent<NavMeshAgent>();
+            Phv = GetComponent<PhotonView>();
         }
             
         void Start()
         {
+            if (Phv.IsMine)
+            {
+                EquipItem(0);
+            }
             NextWalkPoint();
+            visuals = GetComponentsInChildren<Renderer>();
+            team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
         }
         
         void Update()
@@ -76,7 +95,13 @@ namespace EnemyAI
             //     agent.SetDestination(rch.transform.position);
             // }
         }
-
+        
+        /// <summary>
+        /// Attack
+        ///
+        /// </summary>
+        /// <param name="enemy"></param>
+        /// 
         void Attack(GameObject enemy)
         {
             if (alreadyAttacked)
@@ -86,7 +111,81 @@ namespace EnemyAI
             else
             {
                 transform.LookAt(enemy.transform);
-                // insert shooting code here
+                items[0].Use();
+            }
+        }
+        
+        void EquipItem(int _index)
+        {
+            if (_index == previousItemIndex)
+                return;
+        
+            itemIndex = _index;
+
+            items[itemIndex].itemGameObject.SetActive(true);
+
+            if (previousItemIndex != -1)
+            {
+                items[previousItemIndex].itemGameObject.SetActive(false);
+            }
+
+            previousItemIndex = itemIndex;
+        
+            if (Phv.IsMine)
+            {
+                Hashtable hash = new Hashtable();
+                hash.Add("itemindex", itemIndex);
+                PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+            }
+        }
+        
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+            if (!Phv.IsMine && targetPlayer == Phv.Owner)
+            {
+                EquipItem((int) changedProps["itemindex"]);
+            }
+        }
+
+        
+        void SetRenderers(bool state)
+        {
+            foreach (var renderer in visuals)
+            {
+                renderer.enabled = state;
+            }
+        }
+        
+        IEnumerator Respawn()
+        {
+            SetRenderers(false);
+            currentHealth = 100;
+            PlayerManager.scores[(team+1)%2] += 1;
+            GetComponent<AIController>().enabled = false;
+            Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
+            transform.position = spawn.position;
+            transform.rotation = spawn.rotation;
+            GetComponent<AIController>().enabled = true;
+            yield return new WaitForSeconds(1);        
+            SetRenderers(true);
+        }
+
+        public void TakeDamage(float damage)
+        {
+            Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage);
+        }
+        
+        [PunRPC]
+        void RPC_TakeDamage(float damage)
+        {
+            if (!Phv.IsMine)
+                return;
+
+            currentHealth -= damage;
+
+            if (currentHealth <= 0)
+            {
+                StartCoroutine(Respawn());
             }
         }
     }
