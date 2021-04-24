@@ -34,10 +34,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     
     public static void UpdateScores()
     {
+        Debug.Log(players.Count);
         for (int i = 0; i < players.Count; i++)
         {
             players[i].blueScoreText.text = scores[0].ToString();
             players[i].redScoreText.text = scores[1].ToString();
+            Debug.Log(scores[0] + " // "+scores[1]);
         }
     }
     
