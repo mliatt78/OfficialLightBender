@@ -84,7 +84,7 @@ public class SingleShot : GUN
 
                hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
 
-               Debug.Log(((GunInfo) iteminfo).damage + " DOMMAGES");
+               //Debug.Log(((GunInfo) iteminfo).damage + " DOMMAGES");
                if (hit.rigidbody != null)
                {
                   hit.rigidbody.AddForce(-hit.normal * impactforce);
