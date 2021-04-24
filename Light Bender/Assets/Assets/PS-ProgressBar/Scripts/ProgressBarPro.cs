@@ -3,7 +3,7 @@ using System.Collections;
 using PlayfulSystems;
 using PlayfulSystems.ProgressBar;
 
-[ExecuteInEditMode]
+[ExecuteAlways]
 public class ProgressBarPro : MonoBehaviour {
 
     public enum AnimationType { FixedTimeForChange, ChangeSpeed }
