@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class SingleShotAI : GUN
 {
-   public float firerate = 15; 
-   [SerializeField] Camera cam;
+   public float firerate;
    public LayerMask ignoreLayerMask;
    public Transform gunTransform;
 
