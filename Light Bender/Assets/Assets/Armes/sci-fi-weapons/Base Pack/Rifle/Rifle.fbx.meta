@@ -3,7 +3,12 @@ guid: d1766401d10a80043ac8e421b25df96e
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: UVs
+    second: {fileID: 2100000, guid: 3650ebaa95c995a4686e0244d63f64b4, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
