@@ -1338,7 +1338,6 @@ MonoBehaviour:
   bulletImpactPrefab: {fileID: 1723818010802918, guid: cf5aacd810ed5d044a1dc012538fa468,
     type: 3}
   firerate: 8
-  cam: {fileID: 8414070513526763099}
   ignoreLayerMask:
     serializedVersion: 2
     m_Bits: 512
@@ -1736,7 +1735,7 @@ MonoBehaviour:
   prefixField: -1
   observableSearch: 2
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 2
   ObservedComponents:
   - {fileID: 401965876681342131}
   - {fileID: 7022910272520088840}
@@ -2576,7 +2575,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1156518263545039649
 Transform:
   m_ObjectHideFlags: 0
