@@ -177,7 +177,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         bool pressedright = Input.GetKey("d");;
         
         bool isDance = animator.GetBool("IsDance");
-        bool presseddance = Input.GetKey("z");;
+        bool presseddance = Input.GetKey("l");;
         
         // walk
         if (!isWalking && pressedwalk)
