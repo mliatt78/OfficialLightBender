@@ -142,7 +142,7 @@ namespace EnemyAI
         {
             if (!Phv.IsMine && targetPlayer == Phv.Owner)
             {
-                EquipItem((int) changedProps["itemindex"]);
+                EquipItem(0);
             }
         }
 
