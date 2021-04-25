@@ -49,7 +49,6 @@ namespace EnemyAI
             }
             NextWalkPoint();
             visuals = GetComponentsInChildren<Renderer>();
-            team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
         }
         
         void Update()
@@ -161,6 +160,8 @@ namespace EnemyAI
             SetRenderers(false);
             currentHealth = 100;
             PlayerManager.scores[(team+1)%2] += 1;
+            //Debug.Log((team+1)%2);
+            PlayerManager.UpdateScores();
             GetComponent<AIController>().enabled = false;
             Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
             transform.position = spawn.position;

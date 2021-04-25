@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     
     [SerializeField] ProgressBarPro _progressBarPro;
     
+    [SerializeField]  ProgressBarPro munitionsSlider;
+
+    [SerializeField]  GameObject munitionObject;
+    
     [SerializeField] GameObject health;
 
     int itemIndex;
@@ -46,6 +50,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     public const float maxHealth = 100f;
     public float currentHealth = maxHealth;
 
+    private SingleShot singleshot;
+
 
    
 
@@ -63,14 +69,24 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             EquipItem(0);
             animator = GetComponent<Animator>();
             health.SetActive(true);
+            munitionObject.SetActive(true);
+            
+            if (items[itemIndex] is SingleShot)
+            {
+                singleshot = (SingleShot) items[itemIndex];
+                Debug.Log("Name " + items[itemIndex].name);
+                Debug.Log(singleshot.nbballes + " :::: " + singleshot.nbinit);
+            }
+            
+            visuals = GetComponentsInChildren<Renderer>();
+            team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
         }
         else
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
-        visuals = GetComponentsInChildren<Renderer>();
-        team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
+        
     }
     
     void Update()
@@ -134,6 +150,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+        }
+
+        if (Input.GetKeyDown("r"))
+        {
+            StartCoroutine(singleshot.Reload());
         }
     }
 
@@ -237,6 +258,20 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             items[previousItemIndex].itemGameObject.SetActive(false);
         }
 
+        
+        if (items[itemIndex] is SingleShot)
+        {
+            singleshot = (SingleShot) items[itemIndex];
+            munitionsSlider.SetValue(singleshot.nbballes, singleshot.nbinit);
+        }
+        else
+        {
+            Debug.LogError("ERROR");
+        }
+            
+            
+        //Debug.Log(singleshot.nbballes + "*/*/*/*/" + singleshot.nbinit);
+
         previousItemIndex = itemIndex;
         
         if (Phv.IsMine)
@@ -298,6 +333,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
          SetRenderers(false);
          currentHealth = 100;
          PlayerManager.scores[(team+1)%2] += 1;
+         PlayerManager.UpdateScores();
+         if (GetHasOre())
+         {
+             Debug.Log(name+" died and lost the ore.");
+             SetHasOre(false);
+         }
+         
          _progressBarPro.SetValue(100f,100f);
          GetComponent<PlayerController>().enabled = false;
          Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
@@ -324,7 +366,6 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
          currentHealth -= damage;
          _progressBarPro.SetValue(currentHealth,100f);
-
          if (currentHealth <= 0)
          {
              StartCoroutine(Respawn());

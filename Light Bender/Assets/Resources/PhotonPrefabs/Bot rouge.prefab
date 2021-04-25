@@ -180,7 +180,7 @@ MonoBehaviour:
   currentHealth: 100
   items:
   - {fileID: 6620249896316005263}
-  team: 0
+  team: 1
 --- !u!114 &3037740464917218685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,7 +198,7 @@ MonoBehaviour:
   prefixField: -1
   observableSearch: 2
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 2
   ObservedComponents:
   - {fileID: -6021776315511035460}
   - {fileID: -2809419923293485203}
@@ -219,7 +219,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &-6021776315511035460
 MonoBehaviour:
@@ -380,7 +380,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1685830087697194525
 Transform:
   m_ObjectHideFlags: 0
@@ -6887,7 +6887,6 @@ MonoBehaviour:
   bulletImpactPrefab: {fileID: 1723818010802918, guid: cf5aacd810ed5d044a1dc012538fa468,
     type: 3}
   firerate: 8
-  cam: {fileID: 8434634526904216164}
   ignoreLayerMask:
     serializedVersion: 2
     m_Bits: 256

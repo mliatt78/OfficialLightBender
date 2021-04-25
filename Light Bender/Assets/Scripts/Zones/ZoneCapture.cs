@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Transactions;
 using TMPro;
 using UnityEngine;
 using Random = System.Random;
@@ -20,7 +21,7 @@ namespace Zones
         public float Radius = 5;
         public bool playerNear;
 
-        public Random rand;
+        public Random rand = new Random();
 
 
 
@@ -48,8 +49,9 @@ namespace Zones
                 {
                     int TeamWhoCaptured = GetTeamMaxPlayers();
                     controlled = TeamWhoCaptured;
-                    int randInt = rand.Next(playersTeam[TeamWhoCaptured].Count);
+                    int randInt = new Random().Next(playersTeam[TeamWhoCaptured].Count);
                     (playersTeam[TeamWhoCaptured])[randInt].SetHasOre(true);
+                    Debug.Log((playersTeam[TeamWhoCaptured])[randInt].name + " has got an ore.");
                     // should add a visual way to see that the player holds the ore
                     timeValue += maxValue;
                     // should not reset but rather tend to neutral
@@ -123,33 +125,32 @@ namespace Zones
         
         public void AddPlayerNear(PlayerController player)
         {
-            if (player.gameObject.CompareTag("Player"))
+            //if (player.gameObject.CompareTag("Player"))
+            if (!playersNear.Contains(player))
             {
-                if (!playersNear.Contains(player))
-                {
-                    Debug.Log("Successfully added a new player near");
-                    playersNear.Add(player);
-                    playersTeam[player.GetTeam()].Add(player);
-                    DisplayTimeForPlayers(timeValue);
-                    // show timer
-                }
-
-                SetPlayerNear(true);
+                Debug.Log("Successfully added a new player near");
+                player.transform.Find("Canvas").transform.Find("Timer").GetComponent<TextMeshProUGUI>().gameObject.SetActive(true);
+                playersNear.Add(player);
+                playersTeam[player.GetTeam()].Add(player);
+                DisplayTimeForPlayers(timeValue);
+                // show timer
             }
+
+            SetPlayerNear(true);
         }
 
         public void RemovePlayerNear(PlayerController player)
         {
-            if (player.gameObject.CompareTag("Player"))
+            //if (player.gameObject.CompareTag("Player"))
+            TextMeshProUGUI timer = player.transform.Find("Canvas").transform.Find("Timer").GetComponent<TextMeshProUGUI>();
+            timer.text = "";
+            timer.gameObject.SetActive(false);
+            // hide timer
+            playersNear.Remove(player);
+            playersTeam[player.GetTeam()].Remove(player);
+            if (playersNear.Count == 0)
             {
-                player.transform.Find("Canvas").GetComponentsInChildren<TextMeshProUGUI>()[0].text = "";
-                // hide timer
-                playersNear.Remove(player);
-                playersTeam[player.GetTeam()].Remove(player);
-                if (playersNear.Count == 0)
-                {
-                    SetPlayerNear(false);
-                }
+                SetPlayerNear(false);
             }
         }
 
