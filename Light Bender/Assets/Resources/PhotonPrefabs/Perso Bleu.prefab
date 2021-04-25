@@ -8463,22 +8463,22 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: IsWalking
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: IsRunning
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: IsLeftWalk
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: IsRightWalk
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: IsDance
   m_SynchronizeLayers:
-  - SynchronizeType: 1
+  - SynchronizeType: 0
     LayerIndex: 0
 --- !u!114 &5631733737691088860
 MonoBehaviour:

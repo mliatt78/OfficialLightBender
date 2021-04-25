@@ -116,8 +116,8 @@ Animator:
   m_GameObject: {fileID: 202613296942019824}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 0092bb67d3a599540a6f864b81103b7f, type: 3}
-  m_Controller: {fileID: 9100000, guid: 0d2a48b33654fda40a6448208d98b666, type: 2}
-  m_CullingMode: 1
+  m_Controller: {fileID: 9100000, guid: 46599974b3dbfe046b7b7bfee75f86b7, type: 2}
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -240,7 +240,7 @@ MonoBehaviour:
     SynchronizeType: 0
     Name: IsWalking
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: IsRunning
   - Type: 4
     SynchronizeType: 0
@@ -252,7 +252,7 @@ MonoBehaviour:
     SynchronizeType: 0
     Name: IsDance
   m_SynchronizeLayers:
-  - SynchronizeType: 0
+  - SynchronizeType: 1
     LayerIndex: 0
 --- !u!114 &-2809419923293485203
 MonoBehaviour:
