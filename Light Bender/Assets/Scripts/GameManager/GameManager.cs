@@ -7,20 +7,26 @@ using Photon.Realtime;
 using Photon.Pun.UtilityScripts;
 using UnityEngine.UI;
 using System.IO;
+using Random = System.Random;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public GameObject redPlayerPrefab;
     public GameObject bluePlayerPrefab;
-
+    
     public GameObject RedBot;
     public GameObject BlueBot;
 
     int RS = 0;
     int BS = 0;
-
     
     public static GameManager instance;
+
+    [SerializeField] int redbots;
+    [SerializeField] int bluebots;
+
+    public static Random rand = new Random();
+    
 
     
   private void Start()
@@ -31,8 +37,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                int redbots = 0;
-                int bluebots = 1;
+                int redbots = 5;
+                int bluebots = 5;
                 foreach (var players in PhotonNetwork.PlayerList)
                 {
                     if ((int) players.CustomProperties["Team"] == 0)
@@ -71,23 +77,22 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (team == 0)
             {
                 //get a spawn for the correct team
-
                 Transform spawn = SpawnManager.instance.blueTeamSpawns[BS].transform;
-                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bluePlayerPrefab.name), spawn.position, spawn.rotation);
+                player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bluePlayerPrefab.name), spawn.position, spawn.rotation);
                 BS++;
             }
             else
             {
                 //now for the red team
-
                 Transform spawn = SpawnManager.instance.redTeamSpawns[RS].transform;
-                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position, spawn.rotation);
-                Debug.Log("RED");
+                player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position, spawn.rotation);
                 RS++;
-
             }
-            player.GetComponent<PlayerController>().SetTeam(team);
-            PlayerManager.players.Add(player.GetComponent<PlayerController>());
+
+            PlayerController playerController = player.GetComponent<PlayerController>();
+            playerController.SetTeam(team);
+            PlayerManager.players.Add(playerController);
+
         }
 
     }
