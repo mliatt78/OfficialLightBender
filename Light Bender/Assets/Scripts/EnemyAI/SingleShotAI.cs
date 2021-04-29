@@ -11,7 +11,7 @@ public class SingleShotAI : GUN
 
    private float nexttimetofire = 0;
 
-   public  ParticleSystem particleSystem;
+   public ParticleSystem particleSystem;
 
    public float impactforce = 60;
    
@@ -73,7 +73,7 @@ public class SingleShotAI : GUN
                }
                hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
                
-               Debug.Log(((GunInfo) iteminfo).damage + " DOMMAGES");
+               //Debug.Log(((GunInfo) iteminfo).damage + " DAMAGE");
                if (hit.rigidbody != null)
                {
                   hit.rigidbody.AddForce(-hit.normal * impactforce);
