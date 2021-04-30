@@ -24,8 +24,6 @@ namespace Zones
         public float Radius = 5;
         public bool playerNear;
 
-        public Random rand = new Random();
-
 
 
 
@@ -56,7 +54,7 @@ namespace Zones
                         { // timer Capture at 0, then timer Ore
                             if (Timers[TeamTryingControl][1] == 0)
                             { // timer Ore at 0
-                                int randInt = new Random().Next(playersTeam[TeamTryingControl].Count);
+                                int randInt = GameManager.rand.Next(playersTeam[TeamTryingControl].Count);
                                 (playersTeam[TeamTryingControl])[randInt].AddOre(1);
                                 int ores = playersTeam[TeamTryingControl][randInt].GetOresHolded();
                                 if (ores == 1)
@@ -116,7 +114,7 @@ namespace Zones
                             { // zone was neutral and will be controlled by capturing team
                                 controlled = TeamTryingControl;
                                 
-                                int randInt = new Random().Next(playersTeam[TeamTryingControl].Count);
+                                int randInt = GameManager.rand.Next(playersTeam[TeamTryingControl].Count);
                                 (playersTeam[TeamTryingControl])[randInt].AddOre(1);
                                 Debug.Log((playersTeam[TeamTryingControl])[randInt].name + " has got an ore.");
                             }

@@ -17,15 +17,19 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject RedBot;
     public GameObject BlueBot;
 
-    int RS = 0;
-    int BS = 0;
+    int RS;
+    int BS;
     
     public static GameManager instance;
+    
+    public static Random rand = new Random();
+    [SerializeField] GameObject map;
+
 
     [SerializeField] int redbots;
     [SerializeField] int bluebots;
 
-    public static Random rand = new Random();
+    
     
 
     
@@ -37,21 +41,21 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                int redbots = 5;
-                int bluebots = 5;
+                int redbotsCount = redbots;
+                int bluebotsCount = bluebots;
                 foreach (var players in PhotonNetwork.PlayerList)
                 {
                     if ((int) players.CustomProperties["Team"] == 0)
                     {
-                        bluebots--;
+                        bluebotsCount--;
                     }
                     else
                     {
-                        redbots--;
+                        redbotsCount--;
                     }
                 }
 
-                for (int i = bluebots; i > 0; i--)
+                for (int i = bluebotsCount; i > 0; i--)
                 {
                     //get a spawn for the correct team
                     Transform spawn = SpawnManager.instance.blueTeamSpawns[BS].transform;
@@ -59,7 +63,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                     BS++;
                 }
              
-                for (int i = redbots; i > 0; i--)
+                for (int i = redbotsCount; i > 0; i--)
                 {
                     //get a spawn for the correct team
                     Transform spawn = SpawnManager.instance.redTeamSpawns[RS].transform;
@@ -99,5 +103,27 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         instance = this;
+    }
+
+    public void ChangeMaterialOfMap(Material material)
+    {
+        Renderer[] renderers = map.GetComponentsInChildren<Renderer>();
+        // gets components in children is recursive, so it will give us
+        // the renderers of the walls, the floors, ...
+
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            //renderers[i].material = material;
+            renderers[i].material.color = Color.green;
+        }
+        // change all renderers' material
+    }
+    public void ChangeColorOfMap(Color color)
+    {
+        Renderer[] renderers = map.GetComponentsInChildren<Renderer>();
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            renderers[i].material.color = color;
+        }
     }
 }
