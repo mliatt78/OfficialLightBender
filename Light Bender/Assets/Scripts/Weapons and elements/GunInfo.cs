@@ -7,6 +7,7 @@ using UnityEngine;
 public class GunInfo : ItemInfo
 {
     public float damage;
+    public float secondsToReload;
     
     public int nbinit; 
     

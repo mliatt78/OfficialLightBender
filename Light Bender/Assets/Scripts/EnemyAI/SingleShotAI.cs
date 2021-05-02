@@ -18,19 +18,22 @@ public class SingleShotAI : GUN
     PhotonView Pv;
 
     public int nbballes;
+    public float secondsToReload;
+    public float BotWaitReloadTime;
 
     private int nbinit;
 
-   
-
-    public void Start()
-    {
-       nbinit = nbballes;
-    }
+    
     void Awake()
     {
        Pv = GetComponent<PhotonView>();
-       
+       GunInfo gunProperties = (GunInfo) iteminfo;
+       nbinit = gunProperties.nbinit;
+       nbballes = nbinit;
+       secondsToReload = gunProperties.secondsToReload;
+
+       BotWaitReloadTime = 2; 
+       // bots have to wait the time to reload the gun + 2 seconds to reload
     }
    public override void Use()
    {
@@ -42,9 +45,9 @@ public class SingleShotAI : GUN
       Pv.RPC("RPC_Shoot",RpcTarget.All);
    }
 
-   IEnumerator Reload()
+   IEnumerator Reload(float seconds_To_Reload)
    {
-      yield return new WaitForSeconds(4.5f);
+      yield return new WaitForSeconds(seconds_To_Reload);
       nbballes = nbinit;
    }
 
@@ -53,7 +56,7 @@ public class SingleShotAI : GUN
    {
       Ray rayon = new Ray(gunTransform.position, gunTransform.forward);
       if (nbballes <= 0)
-         StartCoroutine(Reload());
+         StartCoroutine(Reload(secondsToReload+BotWaitReloadTime));
       else
       {
          if (Time.time >= nexttimetofire)
@@ -66,10 +69,10 @@ public class SingleShotAI : GUN
                Collider[] bimp = Physics.OverlapSphere(hit.point, 0.3f);
                if (bimp.Length != 0)
                {
-                  GameObject buletimpact = Instantiate(bulletImpactPrefab, hit.point + hit.normal * 0.001f,
+                  GameObject bulletImpact = Instantiate(bulletImpactPrefab, hit.point + hit.normal * 0.001f,
                      Quaternion.LookRotation(hit.normal, Vector3.up) * bulletImpactPrefab.transform.rotation);
-                  Destroy(buletimpact, 2f);
-                  buletimpact.transform.SetParent(bimp[0].transform);
+                  Destroy(bulletImpact, 2f);
+                  bulletImpact.transform.SetParent(bimp[0].transform);
                }
                hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
                
