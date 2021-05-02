@@ -1345,6 +1345,8 @@ MonoBehaviour:
   particleSystem: {fileID: 6088783805766338481}
   impactforce: 60
   nbballes: 25
+  secondsToReload: 0
+  BotWaitReloadTime: 2
 --- !u!1 &5079211351236664064
 GameObject:
   m_ObjectHideFlags: 0

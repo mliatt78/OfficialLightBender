@@ -25,7 +25,6 @@
       <Path>Library</Path>
       <Path>Light Bender_Data</Path>
       <Path>MonoBleedingEdge</Path>
-      <Path>Temp</Path>
       <Path>obj</Path>
     </explicitExcludes>
   </component>

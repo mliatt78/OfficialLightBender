@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     int itemIndex;
     int previousItemIndex = -1;
 
-    int oresHolded = 0;
+    int oresHolded;
     public bool hasOre => oresHolded != 0;
      
     float verticalLookRotation;
@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     public TextMeshProUGUI redScoreText;
     
     Renderer[] visuals;
-    int team = 0;
+    int team;
     public const float maxHealth = 100f;
     public float currentHealth = maxHealth;
 
@@ -93,9 +93,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     
     void Update()
     {
-        if (!Phv.IsMine)
+        if (!Phv.IsMine || PauseMenu.GameIsPaused)
             return;
-        
+
         Look();
         Move();
         Jump();
@@ -322,7 +322,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
      void FixedUpdate()
     {
-        if (!Phv.IsMine)
+        if (!Phv.IsMine || PauseMenu.GameIsPaused)
             return;
         
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);

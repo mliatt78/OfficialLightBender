@@ -21,6 +21,7 @@ public class SingleShot : GUN
     [SerializeField]  ProgressBarPro munitionsSlider;
 
     public int nbinit { get; set; }
+    public float secondsToReload { get; set; }
 
 
     public int nbballes { get; set; }
@@ -31,10 +32,12 @@ public class SingleShot : GUN
     void Awake()
     {
        Pv = GetComponent<PhotonView>();
-       nbinit = ((GunInfo) iteminfo).nbinit;
+       GunInfo weaponProperties = (GunInfo) iteminfo;
+       nbinit = weaponProperties.nbinit;
        nbballes = nbinit;
-       Debug.Log(nbinit + "--" + nbballes);
+       secondsToReload = weaponProperties.secondsToReload;
 
+       //Debug.Log(nbinit + "--" + nbballes);
     }
    public override void Use()
    {
@@ -47,9 +50,9 @@ public class SingleShot : GUN
    }
    
 
-  public IEnumerator Reload()
+  public IEnumerator Reload(float secondsToWait)
    {
-      yield return new WaitForSeconds(2f);
+      yield return new WaitForSeconds(secondsToWait);
       nbballes = nbinit;
       munitionsSlider.SetValue(nbballes,nbinit);
    }
