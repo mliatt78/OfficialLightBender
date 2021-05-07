@@ -43,9 +43,9 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 int redbotsCount = redbots;
                 int bluebotsCount = bluebots;
-                foreach (var players in PhotonNetwork.PlayerList)
+                foreach (var currentPlayer in PhotonNetwork.PlayerList)
                 {
-                    if ((int) players.CustomProperties["Team"] == 0)
+                    if ((int) currentPlayer.CustomProperties["Team"] == 0)
                     {
                         bluebotsCount--;
                     }
@@ -92,10 +92,11 @@ public class GameManager : MonoBehaviourPunCallbacks
                 player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position, spawn.rotation);
                 RS++;
             }
-
+            
             PlayerController playerController = player.GetComponent<PlayerController>();
             playerController.SetTeam(team);
-            PlayerManager.players.Add(playerController);
+            
+            //PlayerManager.players.Add(playerController);
 
         }
 

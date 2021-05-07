@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
-using System.IO;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
@@ -42,8 +42,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             Debug.Log("Score : " + scores[0] + " -- "+scores[1]);
         }
     }
+
     
-    
-    
-    
+
+
+
+
 }

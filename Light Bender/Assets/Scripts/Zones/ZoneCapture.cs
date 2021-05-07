@@ -300,6 +300,10 @@ namespace Zones
                 playersTeam[player.GetTeam()].Add(player);
                 // add to bluePlayers or redPlayers
                 
+                
+                Debug.Log("players Count as of now : "+PlayerManager.players.Count);
+                Debug.Log("playersNear Count as of now : "+playersNear.Count);
+                
                 DisplayTimeForPlayers(bluePlayers,redPlayers);
                 // show timer
             }
