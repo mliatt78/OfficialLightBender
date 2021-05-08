@@ -43,9 +43,18 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
     }
 
-    
-
-
-
+    public static PlayerController GetLocalPlayer()
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (players[i].IsLocal)
+            {
+                return players[i];
+            }
+        }
+        
+        Debug.LogError("GetLocalPLayer: No Local Player recognized!");
+        return null;
+    }
 
 }

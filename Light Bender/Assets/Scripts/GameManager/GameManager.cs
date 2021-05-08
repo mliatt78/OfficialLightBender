@@ -95,7 +95,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             
             PlayerController playerController = player.GetComponent<PlayerController>();
             playerController.SetTeam(team);
-            
+            playerController.isLocal = true;
+
             //PlayerManager.players.Add(playerController);
 
         }

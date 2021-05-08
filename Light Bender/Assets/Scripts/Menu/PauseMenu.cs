@@ -58,7 +58,7 @@ public class PauseMenu : MonoBehaviourPunCallbacks
         // SceneManager.LoadScene(0);
     }*/
    
-   public void LeaveRoom()
+   public void LeaveRoom() // local player leaves
    {
        PhotonNetwork.Destroy(RoomManager.Instance.photonView);
        PhotonNetwork.LeaveRoom();
@@ -66,9 +66,8 @@ public class PauseMenu : MonoBehaviourPunCallbacks
    public override void OnLeftRoom()
    {
        SceneManager.LoadScene(0);
+       //PlayerManager.players.Remove(PlayerManager.GetLocalPlayer());
        base.OnLeftRoom();
-       
-
    }
 
    public void PlayButtonSound()

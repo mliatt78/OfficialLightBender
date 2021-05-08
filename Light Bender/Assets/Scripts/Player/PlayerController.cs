@@ -27,6 +27,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
     int oresHolded;
     public bool hasOre => oresHolded != 0;
+
+    public bool IsLocal => isLocal;
+
+    public bool isLocal;
      
     float verticalLookRotation;
     bool grounded;
@@ -358,8 +362,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     {
         return team;
     }
-
-     void FixedUpdate()
+    
+    void FixedUpdate()
     {
         if (!Phv.IsMine || PauseMenu.GameIsPaused || PlayerOnlyLook)
             return;

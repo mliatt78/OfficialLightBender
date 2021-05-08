@@ -8404,6 +8404,7 @@ MonoBehaviour:
   munitionsSlider: {fileID: 7800652883027205043}
   munitionObject: {fileID: 8512814894333804659}
   health: {fileID: 6176230217681043126}
+  isLocal: 0
   blueScoreText: {fileID: 7125306167137377844}
   redScoreText: {fileID: 7669746290670977083}
   currentHealth: 100
