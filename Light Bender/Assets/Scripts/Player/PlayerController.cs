@@ -27,6 +27,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
     int oresHolded;
     public bool hasOre => oresHolded != 0;
+
+    public bool IsLocal => isLocal;
+
+    public bool isLocal;
      
     float verticalLookRotation;
     bool grounded;
@@ -49,19 +53,38 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     
     Renderer[] visuals;
     int team;
+
+    bool PlayerOnlyLook;
+    
     public const float maxHealth = 100f;
     public float currentHealth = maxHealth;
 
     private SingleShot singleshot;
-
-
-   
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         Phv = GetComponent<PhotonView>();
         //playerManager = PhotonView.Find((int)Phv.InstantiationData[0]).GetComponent<PlayerManager>();
+
+        if (!PlayerManager.players.Contains(this))
+        {
+            PlayerManager.players.Add(this);
+        }
+        // playerController is instantiated on each machine in the room. 
+        // by doing this, it will locally, on each machine in the room 
+        // (PhotonNetwork.Instantiate() creates the object for all machines)
+        // add the object to the players. 
+        
+        // just have to test it out, but it SHOULD work
+        
+        
+        // DEBUG
+        /*Debug.Log("Displaying PlayerManager.players on machine of player "+name+":");
+        for (int i = 0; i < PlayerManager.players.Count; i++)
+        {
+            Debug.Log("PLayer Name:" + PlayerManager.players[i].name);
+        }*/
     }
 
     void Start()
@@ -97,8 +120,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             return;
 
         Look();
-        Move();
-        Jump();
+        if (!PlayerOnlyLook)
+        {
+            Move();
+            Jump();
+        }
 
         for (int i = 0; i < items.Length; i++)
         {
@@ -156,7 +182,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
         if (Input.GetKeyDown("r"))
         {
-            StartCoroutine(singleshot.Reload());
+            StartCoroutine(singleshot.Reload(singleshot.secondsToReload));
         }
     }
 
@@ -292,11 +318,19 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         }
     }
 
+    public void ResetAnimator()
+    {
+        animator.SetBool("isWalking",false);
+        animator.SetBool("IsRunning",false);
+        animator.SetBool("IsLeftWalk",false);
+        animator.SetBool("IsRightWalk",false);
+        animator.SetBool("IsDance",false);
+    }
+
     public void SetGroundedState(bool _grounded)
     {
         grounded = _grounded; 
     }
-    
     public void AddOre(int oresToAdd)
     {
         oresHolded += oresToAdd;
@@ -309,6 +343,15 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     {
         oresHolded = 0;
     }
+    public bool GetOnlyLook()
+    {
+        return PlayerOnlyLook;
+    }
+    public void SetOnlyLook(bool OnlyLook)
+    {
+        PlayerOnlyLook = OnlyLook;
+        ResetAnimator();
+    }
     
     public void SetTeam(int team)
     {
@@ -319,10 +362,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     {
         return team;
     }
-
-     void FixedUpdate()
+    
+    void FixedUpdate()
     {
-        if (!Phv.IsMine || PauseMenu.GameIsPaused)
+        if (!Phv.IsMine || PauseMenu.GameIsPaused || PlayerOnlyLook)
             return;
         
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);

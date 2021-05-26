@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
-using System.IO;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
@@ -42,8 +42,19 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             Debug.Log("Score : " + scores[0] + " -- "+scores[1]);
         }
     }
-    
-    
-    
-    
+
+    public static PlayerController GetLocalPlayer()
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (players[i].IsLocal)
+            {
+                return players[i];
+            }
+        }
+        
+        Debug.LogError("GetLocalPLayer: No Local Player recognized!");
+        return null;
+    }
+
 }
