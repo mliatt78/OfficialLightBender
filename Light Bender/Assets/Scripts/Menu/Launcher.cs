@@ -30,9 +30,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start() // tu te connectes au jeu
     {
-      /*  Debug.Log("2");
-        if (!PhotonNetwork.IsConnected)
-        {*/
+    
+       // if (!PhotonNetwork.IsConnected)
+       // {
             Debug.Log("Connecting to Master");
             PhotonNetwork.ConnectUsingSettings();
        // }
@@ -85,7 +85,6 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         StartGamebutton.SetActive(PhotonNetwork.IsMasterClient);
     }
-
     
 
     public override void OnCreateRoomFailed(short returnCode,string message)
@@ -96,10 +95,10 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
-        
+        Debug.Log("Start Game");
         PhotonNetwork.LoadLevel(1) ; // index de la scene
+        
     }
-
     public void LeaveRoom() // leave room
     {
         PhotonNetwork.LeaveRoom();

@@ -89,12 +89,15 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
     void Start()
     {
+        Debug.Log("Starting");
         if (Phv.IsMine)
         {
+            Debug.Log("Phv is mine");
             EquipItem(0);
             animator = GetComponent<Animator>();
             health.SetActive(true);
             munitionObject.SetActive(true);
+            PauseMenu.isleft = true;
             
             if (items[itemIndex] is SingleShot)
             {
@@ -105,9 +108,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             
             visuals = GetComponentsInChildren<Renderer>();
             team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
+            Debug.Log("Instantiation is finished");
         }
         else
         {
+            Debug.Log("Destroy component");
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
@@ -116,12 +121,16 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     
     void Update()
     {
+        
+        Debug.Log(PauseMenu.GameIsPaused + "  <>  " + Phv.IsMine );
         if (!Phv.IsMine || PauseMenu.GameIsPaused)
             return;
+
 
         Look();
         if (!PlayerOnlyLook)
         {
+            Debug.Log("updated movement");
             Move();
             Jump();
         }
@@ -140,6 +149,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             if (itemIndex >= items.Length - 1)
             {
                 EquipItem(0);
+                Debug.Log("Equip item");
             }
             else
             {
@@ -188,6 +198,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
     void Move()
     {
+        Debug.Log("Movement activated");
         Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
 
         moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed),
@@ -206,11 +217,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         
         bool isDance = animator.GetBool("IsDance");
         bool presseddance = Input.GetKey("l");;
+        Debug.Log("Movement");
         
         // walk
         if (!isWalking && pressedwalk)
         {
             animator.SetBool("IsWalking",true);
+            Debug.Log("Walking");
         }
         if (isWalking && !pressedwalk)
         {
