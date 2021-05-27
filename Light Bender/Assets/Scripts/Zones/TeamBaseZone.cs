@@ -17,10 +17,12 @@ namespace Zones
         // Update is called once per frame
         void Update()
         {
-            CheckIfPlayersInZone();
-            CheckIfPlayersLeave();
-
-            CheckIfPlayersHaveOre();
+            if (!PauseMenu.isleft)
+            {
+                CheckIfPlayersInZone();
+                CheckIfPlayersLeave();
+                CheckIfPlayersHaveOre();
+            }
         }
 
        void CheckIfPlayersHaveOre()
@@ -39,6 +41,7 @@ namespace Zones
 
         void CheckIfPlayersInZone()
         {
+            
             for (int i = 0; i < PlayerManager.players.Count; i++)
             {
                 float dist = Vector3.Distance(PlayerManager.players[i].transform.position, transform.position);
@@ -81,5 +84,5 @@ namespace Zones
         
     }
 }
-    
+
 

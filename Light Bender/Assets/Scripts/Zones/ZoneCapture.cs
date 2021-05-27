@@ -30,15 +30,18 @@ namespace Zones
         // Update is called once per frame
         void Update()
         {
+           
             if (this == null)
             {
                 Debug.LogError("Cannot update time on a timer with no zones assigned !");
             }
 
-            CheckIfPlayersInZone();
-            CheckIfPlayersLeave();
-            
-            if (playerNear)
+            if (!PauseMenu.isleft)
+            {
+                CheckIfPlayersInZone();
+                CheckIfPlayersLeave();
+            }
+            if (playerNear && !PauseMenu.isleft)
             {
                 (int TeamTryingControl, int playersTryControl) = GetTeamAndPlayersTryControl(bluePlayers, redPlayers);
                 Debug.Log("number of playersTryControl: "+playersTryControl);
