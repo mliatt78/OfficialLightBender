@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -29,11 +30,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] int redbots;
     [SerializeField] int bluebots;
 
+    public static int BlueLayer = LayerMask.NameToLayer("BlueL");
+    public static int RedLayer = LayerMask.NameToLayer("RedL");
     
-    
+    public bool isFocused;
 
-    
-  private void Start()
+    private void Start()
 
     {
         //check that we dont have a local instance before we instantiate the prefab
@@ -127,5 +129,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             renderers[i].material.color = color;
         }
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        isFocused = hasFocus;
+        // not sure if having a bool indicating if we're focused on the window
+        // serves any purpose, but it's there anyway.
+
+        AudioListener.pause = !isFocused;
+        // if focused, then no pause, and vice-versa
     }
 }

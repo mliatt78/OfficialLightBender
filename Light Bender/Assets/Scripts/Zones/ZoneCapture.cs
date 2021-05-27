@@ -11,8 +11,8 @@ namespace Zones
     {
         [SerializeField] private int controlled = -1; // 0 for blue, 1 for red, -1 for nobody
         private List<PlayerController> playersNear = new List<PlayerController>();
-        private List<PlayerController> bluePlayers = new List<PlayerController>();
-        private List<PlayerController> redPlayers = new List<PlayerController>();
+        private List<PlayerController> bluePlayersNear = new List<PlayerController>();
+        private List<PlayerController> redPlayersNear = new List<PlayerController>();
         private List<PlayerController>[] playersTeam = new List<PlayerController>[2];
 
         [SerializeField] private double maxValue = 3000;
@@ -43,7 +43,7 @@ namespace Zones
             }
             if (playerNear && !PauseMenu.isleft)
             {
-                (int TeamTryingControl, int playersTryControl) = GetTeamAndPlayersTryControl(bluePlayers, redPlayers);
+                (int TeamTryingControl, int playersTryControl) = GetTeamAndPlayersTryControl(bluePlayersNear, redPlayersNear);
                 Debug.Log("number of playersTryControl: "+playersTryControl);
                 if (playersTryControl != 0)
                 { // if there are the same number of blue and red players, then do nothing
@@ -178,7 +178,7 @@ namespace Zones
                 }
             }
 
-            DisplayTimeForPlayers(bluePlayers,redPlayers);
+            DisplayTimeForPlayers(bluePlayersNear,redPlayersNear);
             // this will be difficult. We need to show the timer which has been updated, however, 
             // if a red-player enters a blue-controlled zone with a blue player in it, the blue player should still see the ore timer freezed, while
             // the red player should see the capture timer freezed.
@@ -224,14 +224,14 @@ namespace Zones
                 // timer ore of team
             }
 
-            if (Timers[team][0] == maxValue)
+            if (Timers[team][0] > 0 && Timers[team][0] < maxValue)
             {
-                return Timers[(team + 1) % 2][0]; 
-                // timer capture of other team
+                return Timers[team][0];
+                // timer capture of team
             }
 
-            return Timers[team][0];
-            // timer capture of team
+            return Timers[(team + 1) % 2][0];
+            // timer capture of other team
         }
 
         void DisplayTimeForTeam(List<PlayerController> PlayersOfTeam, double time)
@@ -307,7 +307,7 @@ namespace Zones
                 Debug.Log("players Count as of now : "+PlayerManager.players.Count);
                 Debug.Log("playersNear Count as of now : "+playersNear.Count);
                 
-                DisplayTimeForPlayers(bluePlayers,redPlayers);
+                DisplayTimeForPlayers(bluePlayersNear,redPlayersNear);
                 // show timer
             }
 
@@ -362,8 +362,8 @@ namespace Zones
 
         private void Awake()
         {
-            playersTeam[0] = bluePlayers;
-            playersTeam[1] = redPlayers;
+            playersTeam[0] = bluePlayersNear;
+            playersTeam[1] = redPlayersNear;
 
             blueTimers[0] = maxValue;
             blueTimers[1] = maxValueOre;

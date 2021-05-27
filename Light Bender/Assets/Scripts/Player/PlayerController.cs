@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     
     [SerializeField] float mouseSensivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
 
+    [SerializeField] float respawnTime;
+    
     [SerializeField]  Item[] items;
     
     [SerializeField] ProgressBarPro _progressBarPro;
@@ -89,10 +91,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
     void Start()
     {
-        Debug.Log("Starting");
+        //Debug.Log("Starting");
         if (Phv.IsMine)
         {
-            Debug.Log("Phv is mine");
+            //Debug.Log("Phv is mine");
             EquipItem(0);
             animator = GetComponent<Animator>();
             health.SetActive(true);
@@ -121,8 +123,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     
     void Update()
     {
-        
-        Debug.Log(PauseMenu.GameIsPaused + "  <>  " + Phv.IsMine );
+        //Debug.Log(PauseMenu.GameIsPaused + "  <>  " + Phv.IsMine );
         if (!Phv.IsMine || PauseMenu.GameIsPaused)
             return;
 
@@ -130,7 +131,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         Look();
         if (!PlayerOnlyLook)
         {
-            Debug.Log("updated movement");
+            //Debug.Log("updated movement");
             Move();
             Jump();
         }
@@ -198,7 +199,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
     void Move()
     {
-        Debug.Log("Movement activated");
+        //Debug.Log("Movement activated");
         Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
 
         moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed),
@@ -217,13 +218,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         
         bool isDance = animator.GetBool("IsDance");
         bool presseddance = Input.GetKey("l");;
-        Debug.Log("Movement");
+        //Debug.Log("Movement");
         
         // walk
         if (!isWalking && pressedwalk)
         {
             animator.SetBool("IsWalking",true);
-            Debug.Log("Walking");
+            //Debug.Log("Walking");
         }
         if (isWalking && !pressedwalk)
         {
@@ -389,7 +390,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
          Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage);
      }
     
-     IEnumerator Respawn()
+     IEnumerator Respawn(float respawnTime)
      {
          SetRenderers(false);
          currentHealth = 100;
@@ -407,7 +408,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
          transform.position = spawn.position;
          transform.rotation = spawn.rotation;
          GetComponent<PlayerController>().enabled = true;
-         yield return new WaitForSeconds(1);        
+         
+         yield return new WaitForSeconds(respawnTime);     
+         
          SetRenderers(true);
      }
 
@@ -429,60 +432,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
          _progressBarPro.SetValue(currentHealth,100f);
          if (currentHealth <= 0)
          {
-             StartCoroutine(Respawn());
+             StartCoroutine(Respawn(respawnTime));
          }
      }
 }
-
-
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-   /* public void TakeDamage(float damage) // juste sur le shooter
-    {
-        Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage);
-    }
-
-    [PunRPC]
-    void RPC_TakeDamage(float damage) // execute sur tous les ordinateurs
-    {
-        if (!Phv.IsMine)
-            return;
-        currentHealth -= damage;
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-    void Die()
-    {
-        playerManager.Die();
-    }*/
-
