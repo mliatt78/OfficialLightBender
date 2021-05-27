@@ -8397,6 +8397,7 @@ MonoBehaviour:
   walkSpeed: 3
   jumpForce: 300
   smoothTime: 0.15
+  respawnTime: 5
   items:
   - {fileID: 3404314541941351947}
   - {fileID: 7473042220427253011}

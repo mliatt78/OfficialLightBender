@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using Random = UnityEngine.Random;
-using UnityEngine.SceneManagement;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
@@ -22,6 +20,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] GameObject StartGamebutton;
     public AudioSource AudioSource;
 
+
+    public bool isFocused;
     private void Awake()
     {
         Instance = this;
@@ -159,5 +159,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         AudioSource.Play();
     }
-    
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        isFocused = hasFocus;
+        AudioListener.pause = !isFocused;
+    }
 }
