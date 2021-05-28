@@ -30,14 +30,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] int redbots;
     [SerializeField] int bluebots;
 
-    public static int BlueLayer = LayerMask.NameToLayer("BlueL");
-    public static int RedLayer = LayerMask.NameToLayer("RedL");
+    public static int BlueLayer;
+    public static int RedLayer;
     
     public bool isFocused;
 
     private void Start()
-
     {
+        BlueLayer = LayerMask.NameToLayer("BlueL");
+        RedLayer = LayerMask.NameToLayer("RedL");
         //check that we dont have a local instance before we instantiate the prefab
         if (PlayerManager.localPlayerInstance == null)
         {

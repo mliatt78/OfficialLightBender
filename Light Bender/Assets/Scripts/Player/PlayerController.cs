@@ -5,6 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using Zones;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 {
@@ -23,6 +24,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     [SerializeField]  GameObject munitionObject;
     
     [SerializeField] GameObject health;
+
+    public ZoneCapture[] captureZones;
 
     int itemIndex;
     int previousItemIndex = -1;
@@ -332,7 +335,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         }
     }
 
-    public void ResetAnimator()
+    private void ResetAnimator()
     {
         animator.SetBool("isWalking",false);
         animator.SetBool("IsRunning",false);
@@ -349,7 +352,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     {
         oresHolded += oresToAdd;
     }
-    public int GetOresHolded()
+    public int GetOresBeingHeld()
     {
         return oresHolded;
     }
@@ -361,15 +364,15 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     {
         return PlayerOnlyLook;
     }
-    public void SetOnlyLook(bool OnlyLook)
+    public void SetOnlyLook(bool onlyLook)
     {
-        PlayerOnlyLook = OnlyLook;
+        PlayerOnlyLook = onlyLook;
         ResetAnimator();
     }
     
-    public void SetTeam(int team)
+    public void SetTeam(int Team)
     {
-        this.team = team;
+        team = Team;
     }
 
     public int GetTeam()
@@ -390,7 +393,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
          Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage);
      }
     
-     IEnumerator Respawn(float respawnTime)
+     IEnumerator Respawn(float respawnWait)
      {
          SetRenderers(false);
          currentHealth = 100;
@@ -409,7 +412,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
          transform.rotation = spawn.rotation;
          GetComponent<PlayerController>().enabled = true;
          
-         yield return new WaitForSeconds(respawnTime);     
+         yield return new WaitForSeconds(respawnWait);     
          
          SetRenderers(true);
      }
