@@ -31,7 +31,7 @@ namespace Zones
             {
                 if (playersNear[i].hasOre && playersNear[i].GetTeam() == team)
                 {
-                    PlayerManager.scores[playersNear[i].GetTeam()] += (5 * playersNear[i].GetOresHolded());
+                    PlayerManager.scores[playersNear[i].GetTeam()] += (5 * playersNear[i].GetOresBeingHeld());
                     PlayerManager.UpdateScores();
                     playersNear[i].RemoveOres();
                     Debug.Log(playersNear[i].name + " brought its ores back to his base!");
