@@ -1814,6 +1814,36 @@ Transform:
   m_Father: {fileID: 4984904122995847267}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3403033389875426058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9096309307407979003}
+  m_Layer: 0
+  m_Name: Chat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9096309307407979003
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3403033389875426058}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -499.86832, y: -284.47272, z: -0.93542373}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6017559426994174876}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3688197342871259957
 GameObject:
   m_ObjectHideFlags: 0
@@ -8248,6 +8278,7 @@ RectTransform:
   - {fileID: 2366203964965072079}
   - {fileID: 8703278914839364495}
   - {fileID: 2168849086471333733}
+  - {fileID: 9096309307407979003}
   m_Father: {fileID: 7981149384514563730}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8326,7 +8357,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7981149384514563730}
   - component: {fileID: 4044955672610911464}
-  - component: {fileID: 3400101937459809981}
+  - component: {fileID: 2429349192341154394}
   - component: {fileID: 7906576035142789250}
   - component: {fileID: 4812907613941872380}
   - component: {fileID: -8640442587161200721}
@@ -8379,7 +8410,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &3400101937459809981
+--- !u!114 &2429349192341154394
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8405,13 +8436,13 @@ MonoBehaviour:
   munitionsSlider: {fileID: 8478151829869708774}
   munitionObject: {fileID: 3785556916311484455}
   health: {fileID: 7557960687617959717}
-  captureZones:
-  - {fileID: 0}
-  - {fileID: 0}
   isLocal: 0
+  Phv: {fileID: 0}
   blueScoreText: {fileID: 2858101122115430589}
   redScoreText: {fileID: 1444356222235823986}
+  PlayerOnlyLook: 0
   currentHealth: 100
+  chatMessages: []
 --- !u!114 &7906576035142789250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14718,6 +14749,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14a759585291f914c86607be50c213cc, type: 3}
+--- !u!224 &8587464418153417352 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 224245669313364630, guid: 14a759585291f914c86607be50c213cc,
+    type: 3}
+  m_PrefabInstance: {fileID: 8372300955420493854}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8478151829869708774 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114860996982918648, guid: 14a759585291f914c86607be50c213cc,
@@ -14730,9 +14767,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cdabb6774b00054d818f93e87ba72cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &8587464418153417352 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 224245669313364630, guid: 14a759585291f914c86607be50c213cc,
-    type: 3}
-  m_PrefabInstance: {fileID: 8372300955420493854}
-  m_PrefabAsset: {fileID: 0}
