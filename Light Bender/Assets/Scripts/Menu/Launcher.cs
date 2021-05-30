@@ -97,7 +97,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Debug.Log("Start Game");
         PhotonNetwork.LoadLevel(1) ; // index de la scene
-        
     }
     public void LeaveRoom() // leave room
     {

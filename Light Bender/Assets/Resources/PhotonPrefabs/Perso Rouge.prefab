@@ -8442,7 +8442,7 @@ MonoBehaviour:
   redScoreText: {fileID: 1444356222235823986}
   PlayerOnlyLook: 0
   currentHealth: 100
-  chatMessages: []
+  chat: {fileID: 0}
 --- !u!114 &7906576035142789250
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,9 +24,6 @@ namespace Zones
         public float Radius = 5;
         public bool playerNear;
 
-        public int indexZones;
-        
-        
         // Update is called once per frame
         void Update()
         {
@@ -144,24 +141,7 @@ namespace Zones
                     }
                 }
 
-                /*if (timeValue > 0)
-                {
-                    timeValue -= Time.deltaTime * 100 * factor;
-                }
-                else
-                {
-                    int TeamWhoCaptured = GetTeamMaxPlayers();
-                    controlled = TeamWhoCaptured;
-                    int randInt = new Random().Next(playersTeam[TeamWhoCaptured].Count);
-                    (playersTeam[TeamWhoCaptured])[randInt].SetHasOre(true);
-                    Debug.Log((playersTeam[TeamWhoCaptured])[randInt].name + " has got an ore.");
-                    // should add a visual way to see that the player holds the ore
-                    timeValue += maxValue;
-                    // should not reset but rather tend to neutral
-                }*/
-                // timeValue is in centiseconds
 
-                
             }
             else
             {
