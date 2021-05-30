@@ -16,14 +16,10 @@ public class Chat : MonoBehaviour
 
     [SerializeField] int minHeightOnScreen = 75;
     [SerializeField] int maxLengthMessage = 60;
-    [SerializeField] GUIStyle chatBoxStyle = GUI.skin.GetStyle("box");
+    [SerializeField] GUIStyle chatBoxStyle;
 
     public static List<ChatMessage> chatMessages = GameManager.chatMessages;
-
-    private void Awake()
-    {
-        chatBoxStyle.alignment = TextAnchor.MiddleLeft;
-    }
+    
 
     // Update is called once per frame
     void Update()
@@ -60,7 +56,7 @@ public class Chat : MonoBehaviour
                 if(chatInput.Replace(" ", "") != "")
                 {
                     //Send message
-                    playerController.Phv.RPC("SendChat", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, chatInput);
+                    playerController.SendChatMessage(PhotonNetwork.LocalPlayer.NickName, chatInput);
                 }
                 chatInput = "";
             
@@ -69,7 +65,9 @@ public class Chat : MonoBehaviour
             GUI.SetNextControlName("ChatField");
             GUI.Label(new Rect(5, Screen.height - minHeightOnScreen, 200, 25), "Say:");
             chatInput = GUI.TextField(new Rect(10 + 25, Screen.height - minHeightOnScreen, 400, 22), chatInput, maxLengthMessage, chatBoxStyle);
-        
+            chatBoxStyle = GUI.skin.GetStyle("box");
+            chatBoxStyle.alignment = TextAnchor.MiddleLeft;
+            
             playerController.PlayerOnlyLook = true;
 
             GUI.FocusControl("ChatField");

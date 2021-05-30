@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
-using Random = System.Random;
 
 namespace Zones
 {
@@ -60,14 +59,10 @@ namespace Zones
                                 int randInt = GameManager.rand.Next(playersTeam[teamTryingControl].Count);
                                 (playersTeam[teamTryingControl])[randInt].AddOre(1);
                                 int ores = playersTeam[teamTryingControl][randInt].GetOresBeingHeld();
-                                if (ores == 1)
-                                {
-                                    Debug.Log((playersTeam[teamTryingControl])[randInt].name + " has got an ore.");
-                                }
-                                else
-                                {
-                                    Debug.Log((playersTeam[teamTryingControl])[randInt].name + " has got "+ores+" ores.");
-                                }
+                                PlayerController oreGetter = playersTeam[teamTryingControl][randInt];
+                                string multipleOres = ores > 1 ? "s" : "";
+                                oreGetter.SendChatMessage(oreGetter.name,
+                                    "Got "+ores+" ore"+multipleOres+".");
                                 // should add a visual way to see that the player holds the ore
                                 Timers[teamTryingControl][1] += maxValueOre;
                                 // resets the timer Ore

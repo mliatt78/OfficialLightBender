@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 {
                     //get a spawn for the correct team
                     Transform spawn = SpawnManager.instance.blueTeamSpawns[BS].transform;
-                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", BlueBot.name), spawn.position, spawn.rotation);
+                    GameObject bot = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", BlueBot.name), spawn.position, spawn.rotation);
                     BS++;
                 }
          
@@ -100,11 +100,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             Chat chat = player.AddComponent<Chat>();
             playerController.chat = chat;
             playerController.chat.playerController = playerController;
-
-            if (!PlayerManager.players.Contains(playerController))
-            {
-                PlayerManager.players.Add(playerController);
-            }
+            
+            PlayerManager.players.Add(playerController);
         }
 
     }

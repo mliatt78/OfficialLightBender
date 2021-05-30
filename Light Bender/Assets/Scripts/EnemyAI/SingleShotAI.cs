@@ -1,10 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using EnemyAI;
 using Photon.Pun;
 using UnityEngine;
 
 public class SingleShotAI : GUN
 {
+   public AIController AiOwner;
+   
    public float firerate;
    public LayerMask ignoreLayerMask;
    public Transform gunTransform;
@@ -75,6 +77,14 @@ public class SingleShotAI : GUN
                   bulletImpact.transform.SetParent(bimp[0].transform);
                }
                hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
+               if (hit.collider.gameObject.GetComponent<PlayerController>() != null)
+               {
+                  hit.collider.gameObject.GetComponent<PlayerController>().lastShooter = AiOwner.gameObject;
+               }
+               else if (hit.collider.gameObject.GetComponent<AIController>() != null)
+               {
+                  hit.collider.gameObject.GetComponent<AIController>().lastShooter = AiOwner.gameObject;
+               }
                
                //Debug.Log(((GunInfo) iteminfo).damage + " DAMAGE");
                if (hit.rigidbody != null)

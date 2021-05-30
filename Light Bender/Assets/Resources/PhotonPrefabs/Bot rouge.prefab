@@ -178,6 +178,7 @@ MonoBehaviour:
   enemies: []
   enemyTeam: BlueS
   currentHealth: 100
+  lastShooter: {fileID: 0}
   items:
   - {fileID: 6620249896316005263}
   team: 1
@@ -6886,6 +6887,7 @@ MonoBehaviour:
   itemGameObject: {fileID: 2857078798505904122}
   bulletImpactPrefab: {fileID: 1723818010802918, guid: cf5aacd810ed5d044a1dc012538fa468,
     type: 3}
+  AiOwner: {fileID: 0}
   firerate: 8
   ignoreLayerMask:
     serializedVersion: 2

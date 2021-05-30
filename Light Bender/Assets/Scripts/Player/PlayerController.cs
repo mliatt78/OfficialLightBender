@@ -45,6 +45,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
     PlayerManager playerManager;
     
+    public GameObject lastShooter;
+    
     public TextMeshProUGUI blueScoreText;
     public TextMeshProUGUI redScoreText;
     
@@ -101,6 +103,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             if (items[itemIndex] is SingleShot)
             {
                 singleshot = (SingleShot) items[itemIndex];
+                singleshot.PlayerOwner = this;
                 //Debug.Log("Name " + items[itemIndex].name);
                 //Debug.Log(singleshot.nbballes + " :::: " + singleshot.nbinit);
             }
@@ -361,6 +364,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     {
         PlayerOnlyLook = onlyLook;
         ResetAnimator();
+        rb.velocity = Vector3.zero;
     }
     
     public void SetTeam(int Team)
@@ -397,13 +401,16 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
              Debug.Log(name+" died and lost the ores he was holding.");
              RemoveOres();
          }
-         
+
          _progressBarPro.SetValue(100f,100f);
          GetComponent<PlayerController>().enabled = false;
          Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
          transform.position = spawn.position;
          transform.rotation = spawn.rotation;
          GetComponent<PlayerController>().enabled = true;
+         
+         SendChatMessage("System",
+             lastShooter.name +" killed " + name);
          
          yield return new WaitForSeconds(respawnWait);     
          
@@ -418,9 +425,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
          }
      }
 
-     void SendChatMessage(string sender, string message)
+     public void SendChatMessage(string sender, string message)
      {
-         
+         Phv.RPC("SendChat",RpcTarget.All,sender,message);
      }
 
 

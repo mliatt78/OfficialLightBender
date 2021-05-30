@@ -4,7 +4,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Timeline;
 using Random = UnityEngine.Random;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -21,6 +20,8 @@ namespace EnemyAI
         
         public const float maxHealth = 100f;
         public float currentHealth = maxHealth;
+
+        public GameObject lastShooter;
         
         [NonSerialized] private bool alreadyAttacked;
         [NonSerialized] private int framesUntilAttack = 60;
@@ -32,6 +33,8 @@ namespace EnemyAI
         public int team;
         int itemIndex;
         int previousItemIndex = -1;
+
+        private SingleShotAI SingleShotAI;
         
         void Awake()
         {
@@ -46,6 +49,8 @@ namespace EnemyAI
             if (Phv.IsMine)
             {
                 EquipItem(0);
+                SingleShotAI = (SingleShotAI) items[0];
+                SingleShotAI.AiOwner = this;
             }
             NextWalkPoint();
             visuals = GetComponentsInChildren<Renderer>();
@@ -167,13 +172,24 @@ namespace EnemyAI
             transform.position = spawn.position;
             transform.rotation = spawn.rotation;
             GetComponent<AIController>().enabled = true;
-            yield return new WaitForSeconds(1);        
+            
+            SendChatMessage("System",
+                lastShooter.name +" killed " + name);
+            
+            yield return new WaitForSeconds(1);     
+            
+            
             SetRenderers(true);
         }
 
         public void TakeDamage(float damage)
         {
             Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage);
+        }
+        
+        public void SendChatMessage(string sender, string message)
+        {
+            Phv.RPC("SendChat",RpcTarget.All,sender,message);
         }
         
         [PunRPC]
@@ -188,6 +204,21 @@ namespace EnemyAI
             {
                 StartCoroutine(Respawn());
             }
+        }
+        
+        [PunRPC]
+        void SendChat(string sender, string message)
+        {
+            ChatMessage m = new ChatMessage(sender,message);
+
+            GameManager.chatMessages.Insert(0, m);
+            if(GameManager.chatMessages.Count > 8)
+            {
+                GameManager.chatMessages.RemoveAt(GameManager.chatMessages.Count - 1);
+            }
+
+            Chat.chatMessages = GameManager.chatMessages;
+            // responsible for the synchronisation of all messages
         }
     }
 }
