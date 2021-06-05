@@ -1,44 +1,25 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
+using UnityEngine;
 
 // source : https://sharpcoderblog.com/blog/pun-2-adding-room-chat
 
-public class Chat : MonoBehaviourPun
+public class Chat : MonoBehaviour
 {
-    [SerializeField] PlayerController playerController;
+    public PlayerController playerController;
 
     //private PhotonView PhotonView;
-    
-    bool isChatting = false;
+
+    bool isChatting;
     string chatInput = "";
 
-    int minHeightOnScreen = 75;
+    [SerializeField] int minHeightOnScreen = 75;
+    [SerializeField] int maxLengthMessage = 60;
+    [SerializeField] GUIStyle chatBoxStyle;
 
-    [System.Serializable]
-    public class ChatMessage
-    {
-        public string sender = "";
-        public string message = "";
-        public float timer = 0;
-    }
-
-    List<ChatMessage> chatMessages = new List<ChatMessage>();
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        //PhotonView = playerController.Phv;
-        
-        //Initialize Photon View
-        /*if(gameObject.GetComponent<PhotonView>() == null)
-        {
-            PhotonView photonView = gameObject.AddComponent<PhotonView>();
-            PhotonNetwork.AllocateViewID(photonView);
-        }*/
-    }
+    public static List<ChatMessage> chatMessages = GameManager.chatMessages;
+    
 
     // Update is called once per frame
     void Update()
@@ -64,7 +45,7 @@ public class Chat : MonoBehaviourPun
         if (!isChatting)
         {
             playerController.PlayerOnlyLook = false;
-            
+        
             GUI.Label(new Rect(5, Screen.height - minHeightOnScreen, 200, 25), "Press 'T' to chat");
         }
         else
@@ -75,23 +56,23 @@ public class Chat : MonoBehaviourPun
                 if(chatInput.Replace(" ", "") != "")
                 {
                     //Send message
-                    playerController.Phv.RPC("SendChat", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, chatInput, chatMessages);
+                    playerController.SendChatMessage(PhotonNetwork.LocalPlayer.NickName, chatInput);
                 }
                 chatInput = "";
-                
+            
             }
 
             GUI.SetNextControlName("ChatField");
             GUI.Label(new Rect(5, Screen.height - minHeightOnScreen, 200, 25), "Say:");
-            GUIStyle inputStyle = GUI.skin.GetStyle("box");
-            inputStyle.alignment = TextAnchor.MiddleLeft;
-            chatInput = GUI.TextField(new Rect(10 + 25, Screen.height - minHeightOnScreen, 400, 22), chatInput, 60, inputStyle);
+            chatInput = GUI.TextField(new Rect(10 + 25, Screen.height - minHeightOnScreen, 400, 22), chatInput, maxLengthMessage, chatBoxStyle);
+            chatBoxStyle = GUI.skin.GetStyle("box");
+            chatBoxStyle.alignment = TextAnchor.MiddleLeft;
             
             playerController.PlayerOnlyLook = true;
 
             GUI.FocusControl("ChatField");
         }
-        
+    
         //Show messages
         for(int i = 0; i < chatMessages.Count; i++)
         {
@@ -101,19 +82,19 @@ public class Chat : MonoBehaviourPun
             }
         } 
     }
+}
 
-    [PunRPC]
-    void SendChat(string sender, string message, List<ChatMessage> chatMessages)
+
+public class ChatMessage
+{
+    public readonly string sender;
+    public readonly string message;
+    public float timer;
+
+    public ChatMessage(string sender,string message, float timer = 15.0f)
     {
-        ChatMessage m = new ChatMessage();
-        m.sender = sender;
-        m.message = message;
-        m.timer = 15.0f;
-
-        chatMessages.Insert(0, m);
-        if(chatMessages.Count > 8)
-        {
-            chatMessages.RemoveAt(chatMessages.Count - 1);
-        }
+        this.sender = sender;
+        this.message = message;
+        this.timer = timer;
     }
 }

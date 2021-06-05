@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
-using Random = System.Random;
 
 namespace Zones
 {
@@ -24,9 +23,6 @@ namespace Zones
         public float Radius = 5;
         public bool playerNear;
 
-        public int indexZones;
-        
-        
         // Update is called once per frame
         void Update()
         {
@@ -63,14 +59,10 @@ namespace Zones
                                 int randInt = GameManager.rand.Next(playersTeam[teamTryingControl].Count);
                                 (playersTeam[teamTryingControl])[randInt].AddOre(1);
                                 int ores = playersTeam[teamTryingControl][randInt].GetOresBeingHeld();
-                                if (ores == 1)
-                                {
-                                    Debug.Log((playersTeam[teamTryingControl])[randInt].name + " has got an ore.");
-                                }
-                                else
-                                {
-                                    Debug.Log((playersTeam[teamTryingControl])[randInt].name + " has got "+ores+" ores.");
-                                }
+                                PlayerController oreGetter = playersTeam[teamTryingControl][randInt];
+                                string multipleOres = ores > 1 ? "s" : "";
+                                oreGetter.SendChatMessage(oreGetter.name,
+                                    "Got "+ores+" ore"+multipleOres+".");
                                 // should add a visual way to see that the player holds the ore
                                 Timers[teamTryingControl][1] += maxValueOre;
                                 // resets the timer Ore
@@ -144,24 +136,7 @@ namespace Zones
                     }
                 }
 
-                /*if (timeValue > 0)
-                {
-                    timeValue -= Time.deltaTime * 100 * factor;
-                }
-                else
-                {
-                    int TeamWhoCaptured = GetTeamMaxPlayers();
-                    controlled = TeamWhoCaptured;
-                    int randInt = new Random().Next(playersTeam[TeamWhoCaptured].Count);
-                    (playersTeam[TeamWhoCaptured])[randInt].SetHasOre(true);
-                    Debug.Log((playersTeam[TeamWhoCaptured])[randInt].name + " has got an ore.");
-                    // should add a visual way to see that the player holds the ore
-                    timeValue += maxValue;
-                    // should not reset but rather tend to neutral
-                }*/
-                // timeValue is in centiseconds
 
-                
             }
             else
             {

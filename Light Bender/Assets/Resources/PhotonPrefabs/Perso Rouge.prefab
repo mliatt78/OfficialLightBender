@@ -2035,6 +2035,7 @@ MonoBehaviour:
   itemGameObject: {fileID: 3258289817550228656}
   bulletImpactPrefab: {fileID: 1723818010802918, guid: cf5aacd810ed5d044a1dc012538fa468,
     type: 3}
+  PlayerOwner: {fileID: 0}
   firerate: 10
   cam: {fileID: 7725335144722012642}
   ignoreLayerMask:
@@ -8115,6 +8116,7 @@ MonoBehaviour:
   iteminfo: {fileID: 11400000, guid: bce9bc512ab833a418b48c290c3f0897, type: 2}
   itemGameObject: {fileID: 3049628817943840148}
   bulletImpactPrefab: {fileID: 100000, guid: baa7bc3f5a09228449b60e046bcab0ab, type: 3}
+  PlayerOwner: {fileID: 0}
   firerate: 2
   cam: {fileID: 7725335144722012642}
   ignoreLayerMask:
@@ -8438,11 +8440,12 @@ MonoBehaviour:
   health: {fileID: 7557960687617959717}
   isLocal: 0
   Phv: {fileID: 0}
+  lastShooter: {fileID: 0}
   blueScoreText: {fileID: 2858101122115430589}
   redScoreText: {fileID: 1444356222235823986}
   PlayerOnlyLook: 0
   currentHealth: 100
-  chatMessages: []
+  chat: {fileID: 0}
 --- !u!114 &7906576035142789250
 MonoBehaviour:
   m_ObjectHideFlags: 0

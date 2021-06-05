@@ -1,10 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using EnemyAI;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
@@ -22,8 +20,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public static List<AIController> redBots = new List<AIController>();
     
     public static int[] scores = {0,0};
-     
-    /* int team;*/
 
     void Awake()
     {
@@ -42,7 +38,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         (redPlayers, redBots) = SeparateBotsPlayers(redAll);
         players = bluePlayers.Concat(redPlayers).ToList();
         bots = blueBots.Concat(redBots).ToList();
-        
         
         /*
         Debug.Log("Temp lists :");
@@ -72,7 +67,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             players[i].blueScoreText.text = scores[0].ToString();
             players[i].redScoreText.text = scores[1].ToString();
-            Debug.Log("Score : " + scores[0] + " -- "+scores[1]);
+            Debug.Log("Score : " + scores[0] + " -- " + scores[1]);
         }
     }
 
@@ -141,13 +136,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
         return (listPlayers, listBots);
     }
-
-    public static int GetIndexPlayer(PlayerController player, List<PlayerController> Players)
-    {
-        return Players.FindIndex(playerController => playerController == player);
-    }
-    
-    
     
     private static string TempPrintList(List<GameObject> list)
     {
@@ -167,5 +155,4 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
         return ret;
     }
-
 }

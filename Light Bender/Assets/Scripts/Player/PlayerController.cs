@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
-using Zones;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 {
@@ -46,10 +43,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
     private Animator animator;
 
-    /* const float maxHealth = 100f;
-     float currentHealth = maxHealth;*/
-
     PlayerManager playerManager;
+    
+    public GameObject lastShooter;
     
     public TextMeshProUGUI blueScoreText;
     public TextMeshProUGUI redScoreText;
@@ -58,24 +54,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     int team;
 
     public bool PlayerOnlyLook;
-    
-    public const float maxHealth = 100f;
+
+    private const float maxHealth = 100f;
     public float currentHealth = maxHealth;
 
     private SingleShot singleshot;
 
-    public List<ChatMessage> chatMessages = new List<ChatMessage>();
-    bool isChatting = false;
-    string chatInput = "";
-    int minHeightOnScreen = 75;
-    
-    [System.Serializable]
-    public class ChatMessage
-    {
-        public string sender = "";
-        public string message = "";
-        public float timer = 0;
-    }
+    public Chat chat;
 
     void Awake()
     {
@@ -118,6 +103,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             if (items[itemIndex] is SingleShot)
             {
                 singleshot = (SingleShot) items[itemIndex];
+                singleshot.PlayerOwner = this;
                 //Debug.Log("Name " + items[itemIndex].name);
                 //Debug.Log(singleshot.nbballes + " :::: " + singleshot.nbinit);
             }
@@ -128,9 +114,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         }
         else
         {
-            
             Debug.Log("Destroy component");
-            Debug.Log("Player name of phv: "+Phv.Owner.NickName);
+            Debug.Log("Owner name of phv: "+Phv.Owner.NickName);
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
@@ -142,26 +127,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         if (!Phv.IsMine || PauseMenu.GameIsPaused)
             return;
         
-        // CHAT PART
-        if (Input.GetKeyUp(KeyCode.T) && !isChatting)
-        {
-            isChatting = true;
-            chatInput = "";
-        }
-        //Hide messages after timer is expired
-        for (int i = 0; i < chatMessages.Count; i++)
-        {
-            if (chatMessages[i].timer > 0)
-            {
-                chatMessages[i].timer -= Time.deltaTime;
-            }
-        }
-        // END OF CHAT PART
         
         Look();
         if (!PlayerOnlyLook)
         {
-            //Debug.Log("updated movement");
             Move();
             Jump();
         }
@@ -395,6 +364,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     {
         PlayerOnlyLook = onlyLook;
         ResetAnimator();
+        rb.velocity = Vector3.zero;
     }
     
     public void SetTeam(int Team)
@@ -431,13 +401,16 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
              Debug.Log(name+" died and lost the ores he was holding.");
              RemoveOres();
          }
-         
+
          _progressBarPro.SetValue(100f,100f);
          GetComponent<PlayerController>().enabled = false;
          Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
          transform.position = spawn.position;
          transform.rotation = spawn.rotation;
          GetComponent<PlayerController>().enabled = true;
+         
+         SendChatMessage("System",
+             lastShooter.name +" killed " + name);
          
          yield return new WaitForSeconds(respawnWait);     
          
@@ -451,56 +424,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
              renderer.enabled = state;
          }
      }
-     
-     void OnGUI()
+
+     public void SendChatMessage(string sender, string message)
      {
-         if (!isChatting)
-         {
-             PlayerOnlyLook = false;
-            
-             GUI.Label(new Rect(5, Screen.height - minHeightOnScreen, 200, 25), "Press 'T' to chat");
-         }
-         else
-         {
-             if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Return)
-             {
-                 isChatting = false;
-                 if(chatInput.Replace(" ", "") != "")
-                 {
-                     /*Debug.Log("chatMessages.Count: "+chatMessages.Count);
-                     Debug.Log("sender: "+PhotonNetwork.LocalPlayer.NickName);
-                     Debug.Log("message: "+ chatInput);*/
-
-                     //Send message
-                     Phv.RPC("SendChat", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, chatInput);
-                 }
-                 chatInput = "";
-                
-             }
-
-             GUI.SetNextControlName("ChatField");
-             GUI.Label(new Rect(5, Screen.height - minHeightOnScreen, 200, 25), "Say:");
-             GUIStyle inputStyle = GUI.skin.GetStyle("box");
-             inputStyle.alignment = TextAnchor.MiddleLeft;
-             chatInput = GUI.TextField(new Rect(10 + 25, Screen.height - minHeightOnScreen, 400, 22), chatInput, 60, inputStyle);
-            
-             PlayerOnlyLook = true;
-
-             GUI.FocusControl("ChatField");
-         }
-
-         //Show messages
-         for(int i = 0; i < chatMessages.Count; i++)
-         {
-             if(chatMessages[i].timer > 0 || isChatting)
-             {
-                 GUI.Label(new Rect(5, Screen.height - (minHeightOnScreen+25) - 25 * i, 500, 25), chatMessages[i].sender + ": " + chatMessages[i].message);
-             }
-         }
+         Phv.RPC("SendChat",RpcTarget.All,sender,message);
      }
-     
-     
-    
+
+
      [PunRPC]
      void RPC_TakeDamage(float damage)
      {
@@ -518,15 +448,15 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
      [PunRPC]
      void SendChat(string sender, string message)
      {
-         ChatMessage m = new ChatMessage();
-         m.sender = sender;
-         m.message = message;
-         m.timer = 15.0f;
-         
-         chatMessages.Insert(0, m);
-         if(chatMessages.Count > 8)
+         ChatMessage m = new ChatMessage(sender,message);
+
+         GameManager.chatMessages.Insert(0, m);
+         if(GameManager.chatMessages.Count > 8)
          {
-             chatMessages.RemoveAt(chatMessages.Count - 1);
+             GameManager.chatMessages.RemoveAt(GameManager.chatMessages.Count - 1);
          }
+
+         Chat.chatMessages = GameManager.chatMessages;
+         // responsible for the synchronisation of all messages
      }
 }
