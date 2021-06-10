@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     public bool IsLocal => isLocal;
 
     public bool isLocal;
+
+    private bool canRespawn = true;
      
     float verticalLookRotation;
     bool grounded;
@@ -397,6 +399,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     
      IEnumerator Respawn(float respawnWait)
      {
+         canRespawn = false;
+         // overflow protection for respawn
+         
          SetRenderers(false);
 
          currentHealth = 100;
@@ -421,7 +426,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
          
          yield return new WaitForSeconds(respawnWait);
 
+         currentHealth = 100; 
+         // just in case someone manages to shoot the player when waiting
+
          SetRenderers(true);
+         canRespawn = true;
      }
 
      void SetRenderers(bool state)
@@ -446,7 +455,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
          currentHealth -= damage;
          _progressBarPro.SetValue(currentHealth,100f);
-         if (currentHealth <= 0)
+         if (currentHealth <= 0 && canRespawn)
          {
              StartCoroutine(Respawn(respawnTime));
          }
