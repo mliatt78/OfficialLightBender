@@ -319,8 +319,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         
         if (Phv.IsMine)
         {
-            Hashtable hash = new Hashtable();
-            hash.Add("itemindex", itemIndex);
+            Hashtable hash = new Hashtable {{"itemindex", itemIndex}};
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
     }
@@ -413,8 +412,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
                  lastShooter.name +" killed " + name);
              RemoveOres();
          }
-
-         _progressBarPro.SetValue(100f,100f);
+         
          GetComponent<PlayerController>().enabled = false;
          Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
          transform.position = spawn.position;
@@ -428,6 +426,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
          currentHealth = 100; 
          // just in case someone manages to shoot the player when waiting
+         
+         _progressBarPro.SetValue(100f,100f);
 
          SetRenderers(true);
          canRespawn = true;
