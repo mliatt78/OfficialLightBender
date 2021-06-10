@@ -379,9 +379,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     
     void FixedUpdate()
     {
+        if (PlayerOnlyLook)
+        {
+            rb.velocity = Vector3.zero;
+            // we do not want the player to move if the player stopped
+        }
         if (!Phv.IsMine || PauseMenu.GameIsPaused || PlayerOnlyLook)
             return;
-        
+
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
     }
      

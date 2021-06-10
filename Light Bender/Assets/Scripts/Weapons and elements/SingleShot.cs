@@ -7,8 +7,7 @@ public class SingleShot : GUN
 {
    public PlayerController PlayerOwner;
    
-   public float firerate = 15; 
-   [SerializeField] Camera cam;
+   public float firerate = 15;
    public LayerMask ignoreLayerMask;
    public Transform gunTransform;
 
@@ -63,9 +62,7 @@ public class SingleShot : GUN
    void RPC_Shoot()
    {
       Ray rayon = new Ray(gunTransform.position, gunTransform.forward);
-      if (nbballes <= 0)
-         return;
-      else
+      if (nbballes > 0)
       {
          if (Time.time >= nexttimetofire)
          {

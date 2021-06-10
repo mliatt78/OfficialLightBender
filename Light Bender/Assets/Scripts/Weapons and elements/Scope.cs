@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
-using Photon;
 using Photon.Pun;
 
 public class Scope : MonoBehaviour
@@ -20,7 +17,9 @@ public class Scope : MonoBehaviour
    public Camera mainCamera;
 
    public float scopedFOV = 15f;
-
+   public float scopeWaitTime = 0.15f;
+   public KeyCode scopeKey = KeyCode.Mouse1;
+   
    private float normalFOV;
 
    private void Awake()
@@ -36,28 +35,24 @@ public class Scope : MonoBehaviour
 
    private void Update()
    {
-      if (Input.GetButtonDown("Fire2"))
+      if (Input.GetKeyDown(scopeKey))
       {
-         
-         if (!Phv.IsMine)
+         if (!Phv.IsMine || PauseMenu.GameIsPaused)
             return;
-         {
-            isScoped = !isScoped;
-            animator.SetBool("Scoped",isScoped);
-            scopeOverlay.SetActive(isScoped);
-            if (isScoped)
-               StartCoroutine(OnScoped());
-            else
-               OnUnscoped();
-         }
-         
+         isScoped = !isScoped;
+         animator.SetBool("Scoped",isScoped);
+         scopeOverlay.SetActive(isScoped);
+         if (isScoped)
+            StartCoroutine(OnScoped(scopeWaitTime));
+         else
+            OnUnscoped();
       }
 
    }
 
-   IEnumerator OnScoped()
+   IEnumerator OnScoped(float scopeWait)
    {
-      yield return new WaitForSeconds(.15f);
+      yield return new WaitForSeconds(scopeWait);
 
       scopeOverlay.SetActive(true);
       weaponCam.SetActive(false);
