@@ -18,8 +18,8 @@ public class Scope : MonoBehaviour
 
    public float scopedFOV = 15f;
    public float scopeWaitTime = 0.15f;
-   public KeyCode scopeKey = KeyCode.Mouse1;
-   
+   public bool canScope = true;
+
    private float normalFOV;
 
    private void Awake()
@@ -35,9 +35,9 @@ public class Scope : MonoBehaviour
 
    private void Update()
    {
-      if (Input.GetKeyDown(scopeKey))
+      if (Input.GetMouseButtonDown(1))
       {
-         if (!Phv.IsMine || PauseMenu.GameIsPaused)
+         if (!Phv.IsMine || PauseMenu.GameIsPaused || !canScope)
             return;
          isScoped = !isScoped;
          animator.SetBool("Scoped",isScoped);
@@ -52,6 +52,9 @@ public class Scope : MonoBehaviour
 
    IEnumerator OnScoped(float scopeWait)
    {
+      canScope = false;
+      // cannot unscope when in the process of scoping
+      
       yield return new WaitForSeconds(scopeWait);
 
       scopeOverlay.SetActive(true);
@@ -59,6 +62,8 @@ public class Scope : MonoBehaviour
 
       normalFOV = mainCamera.fieldOfView;
       mainCamera.fieldOfView = scopedFOV;
+
+      canScope = true;
    }
 
    private void OnUnscoped()
