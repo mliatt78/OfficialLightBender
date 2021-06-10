@@ -398,12 +398,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
      IEnumerator Respawn(float respawnWait)
      {
          SetRenderers(false);
+
          currentHealth = 100;
          PlayerManager.scores[(team+1)%2] += 1;
          PlayerManager.UpdateScores();
          if (oresHolded != 0)
          {
-             Debug.Log(name+" died and lost the ores he was holding.");
+             SendChatMessage("System",
+                 lastShooter.name +" killed " + name);
              RemoveOres();
          }
 
@@ -417,8 +419,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
          SendChatMessage("System",
              lastShooter.name +" killed " + name);
          
-         yield return new WaitForSeconds(respawnWait);     
-         
+         yield return new WaitForSeconds(respawnWait);
+
          SetRenderers(true);
      }
 

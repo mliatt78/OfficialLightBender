@@ -1337,6 +1337,8 @@ MonoBehaviour:
   weaponCam: {fileID: 7374215912390340996}
   mainCamera: {fileID: 7725335144722012642}
   scopedFOV: 15
+  scopeWaitTime: 0.15
+  canScope: 1
 --- !u!114 &779106174777902891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2037,7 +2039,6 @@ MonoBehaviour:
     type: 3}
   PlayerOwner: {fileID: 0}
   firerate: 10
-  cam: {fileID: 7725335144722012642}
   ignoreLayerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -8118,7 +8119,6 @@ MonoBehaviour:
   bulletImpactPrefab: {fileID: 100000, guid: baa7bc3f5a09228449b60e046bcab0ab, type: 3}
   PlayerOwner: {fileID: 0}
   firerate: 2
-  cam: {fileID: 7725335144722012642}
   ignoreLayerMask:
     serializedVersion: 2
     m_Bits: 256
