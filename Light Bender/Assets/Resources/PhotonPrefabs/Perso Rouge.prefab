@@ -8425,6 +8425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraHolder: {fileID: 1728960968149508185}
+  capsuleCollider: {fileID: 3745653837150883550}
   mouseSensivity: 3
   sprintSpeed: 6
   walkSpeed: 3
@@ -8561,7 +8562,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.23
+  m_Radius: 0.2
   m_Height: 1.9163977
   m_Direction: 1
   m_Center: {x: 0, y: 0.9367276, z: 0}

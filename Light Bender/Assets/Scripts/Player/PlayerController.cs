@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -7,11 +8,13 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 {
     [SerializeField] GameObject cameraHolder;
+
+    [SerializeField] CapsuleCollider capsuleCollider;
     
     [SerializeField] float mouseSensivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
 
     [SerializeField] float respawnTime;
-    
+
     [SerializeField]  Item[] items;
     
     [SerializeField] ProgressBarPro _progressBarPro;
@@ -29,11 +32,17 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     public bool hasOre => oresHolded != 0;
 
     public bool IsLocal => isLocal;
-
     public bool isLocal;
 
     private bool canRespawn = true;
-     
+    private bool isCrouching,isProning;
+
+    private Vector3 capsuleColliderCenter;
+    private int capsuleColliderDirection;
+    private float heightCollider;
+
+    private float baseWalkSpeed, baseSprintSpeed;
+
     float verticalLookRotation;
     bool grounded;
     Vector3 smoothMoveVelocity;
@@ -68,6 +77,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     {
         rb = GetComponent<Rigidbody>();
         Phv = GetComponent<PhotonView>();
+
+        baseWalkSpeed = walkSpeed;
+        baseSprintSpeed = sprintSpeed;
+        
+        heightCollider = capsuleCollider.height;
+        capsuleColliderCenter = capsuleCollider.center;
+        capsuleColliderDirection = capsuleCollider.direction;
+        
         //playerManager = PhotonView.Find((int)Phv.InstantiationData[0]).GetComponent<PlayerManager>();
 
         if (!PlayerManager.players.Contains(this))
@@ -175,6 +192,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         {
             items[itemIndex].Use();
         }
+        
 
         /*if (transform.position.y < -10f)
         {
@@ -283,6 +301,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     {
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
+            UnCrouchAndProne();
             rb.AddForce(transform.up * jumpForce);
         }
     }
@@ -339,6 +358,67 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         animator.SetBool("IsLeftWalk",false);
         animator.SetBool("IsRightWalk",false);
         animator.SetBool("IsDance",false);
+    }
+
+    private void Crouch()
+    {
+        capsuleCollider.height = 1f;
+        Vector3 center = capsuleCollider.center;
+        center.y = 0.5f;
+        capsuleCollider.center = center;
+
+        walkSpeed = walkSpeed/2;
+        Debug.Log("Result of walkSpeed/2 is: "+walkSpeed);
+        sprintSpeed = sprintSpeed/2;
+
+        isCrouching = true;
+    }
+
+    private void UnCrouch()
+    {
+        capsuleCollider.height = heightCollider;
+        capsuleCollider.center = capsuleColliderCenter;
+
+        walkSpeed = baseWalkSpeed;
+        sprintSpeed = baseSprintSpeed;
+
+        isCrouching = false;
+    }
+
+    private void Prone()
+    {
+        capsuleCollider.direction = 2; // z-axis
+        Vector3 center = capsuleCollider.center;
+        center.y = 0.2f; // just above floor
+        capsuleCollider.center = center;
+
+        walkSpeed = walkSpeed/6;
+        sprintSpeed = sprintSpeed/12;
+
+        isProning = true;
+    }
+
+    private void UnProne()
+    {
+        capsuleCollider.direction = capsuleColliderDirection;
+        capsuleCollider.center = capsuleColliderCenter;
+
+        walkSpeed = baseWalkSpeed;
+        sprintSpeed = baseSprintSpeed;
+
+        isProning = false;
+    }
+
+    private void UnCrouchAndProne()
+    {
+        if (isCrouching)
+        {
+            UnCrouch();
+        }
+        if (isProning)
+        {
+            UnProne();
+        }
     }
 
     public void SetGroundedState(bool _grounded)
