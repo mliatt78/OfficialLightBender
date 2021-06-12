@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using Photon.Pun;
 using UnityEngine;
 
@@ -22,7 +20,7 @@ public class HEALTH : MonoBehaviourPunCallbacks,IPunObservable
         }
     }
 
-    public void TakeDamages(float damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
     }

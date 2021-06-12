@@ -23,10 +23,14 @@ namespace EnemyAI
 
         public GameObject lastShooter;
         
-        [NonSerialized] private bool alreadyAttacked;
-        [NonSerialized] private int framesUntilAttack = 60;
+        private bool alreadyAttacked;
+        private int framesUntilAttack = 60;
+
+        private bool canRespawn = true;
+
+        public float respawnTime = 5;
         
-        //Armes
+        // Weapons
         [SerializeField]  Item[] items;
         PhotonView Phv;
         Renderer[] visuals;
@@ -137,8 +141,7 @@ namespace EnemyAI
         
             if (Phv.IsMine)
             {
-                Hashtable hash = new Hashtable();
-                hash.Add("itemindex", itemIndex);
+                Hashtable hash = new Hashtable {{"itemindex", itemIndex}};
                 PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
             }
         }
@@ -160,8 +163,9 @@ namespace EnemyAI
             }
         }
         
-        IEnumerator Respawn()
+        IEnumerator Respawn(float respawnWaitTime)
         {
+            canRespawn = false;
             SetRenderers(false);
             currentHealth = 100;
             PlayerManager.scores[(team+1)%2] += 1;
@@ -176,18 +180,19 @@ namespace EnemyAI
             SendChatMessage("System",
                 lastShooter.name +" killed " + name);
             
-            yield return new WaitForSeconds(1);     
+            yield return new WaitForSeconds(respawnWaitTime);     
             
             
             SetRenderers(true);
+            canRespawn = true;
         }
 
         public void TakeDamage(float damage)
         {
             Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage);
         }
-        
-        public void SendChatMessage(string sender, string message)
+
+        private void SendChatMessage(string sender, string message)
         {
             Phv.RPC("SendChat",RpcTarget.All,sender,message);
         }
@@ -200,9 +205,9 @@ namespace EnemyAI
 
             currentHealth -= damage;
 
-            if (currentHealth <= 0)
+            if (currentHealth <= 0 && canRespawn)
             {
-                StartCoroutine(Respawn());
+                StartCoroutine(Respawn(respawnTime));
             }
         }
         

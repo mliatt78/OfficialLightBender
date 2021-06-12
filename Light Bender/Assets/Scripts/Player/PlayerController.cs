@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     public bool IsLocal => isLocal;
 
     public bool isLocal;
+
+    private bool canRespawn = true;
      
     float verticalLookRotation;
     bool grounded;
@@ -317,8 +319,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         
         if (Phv.IsMine)
         {
-            Hashtable hash = new Hashtable();
-            hash.Add("itemindex", itemIndex);
+            Hashtable hash = new Hashtable {{"itemindex", itemIndex}};
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
     }
@@ -379,9 +380,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     
     void FixedUpdate()
     {
+        if (PlayerOnlyLook)
+        {
+            rb.velocity = Vector3.zero;
+            // we do not want the player to move if the player stopped
+        }
         if (!Phv.IsMine || PauseMenu.GameIsPaused || PlayerOnlyLook)
             return;
-        
+
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
     }
      
@@ -392,17 +398,21 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     
      IEnumerator Respawn(float respawnWait)
      {
+         canRespawn = false;
+         // overflow protection for respawn
+         
          SetRenderers(false);
+
          currentHealth = 100;
          PlayerManager.scores[(team+1)%2] += 1;
          PlayerManager.UpdateScores();
          if (oresHolded != 0)
          {
-             Debug.Log(name+" died and lost the ores he was holding.");
+             SendChatMessage("System",
+                 lastShooter.name +" killed " + name);
              RemoveOres();
          }
-
-         _progressBarPro.SetValue(100f,100f);
+         
          GetComponent<PlayerController>().enabled = false;
          Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
          transform.position = spawn.position;
@@ -412,9 +422,15 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
          SendChatMessage("System",
              lastShooter.name +" killed " + name);
          
-         yield return new WaitForSeconds(respawnWait);     
+         yield return new WaitForSeconds(respawnWait);
+
+         currentHealth = 100; 
+         // just in case someone manages to shoot the player when waiting
          
+         _progressBarPro.SetValue(100f,100f);
+
          SetRenderers(true);
+         canRespawn = true;
      }
 
      void SetRenderers(bool state)
@@ -439,7 +455,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
          currentHealth -= damage;
          _progressBarPro.SetValue(currentHealth,100f);
-         if (currentHealth <= 0)
+         if (currentHealth <= 0 && canRespawn)
          {
              StartCoroutine(Respawn(respawnTime));
          }

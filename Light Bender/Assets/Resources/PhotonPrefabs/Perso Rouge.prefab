@@ -1337,6 +1337,8 @@ MonoBehaviour:
   weaponCam: {fileID: 7374215912390340996}
   mainCamera: {fileID: 7725335144722012642}
   scopedFOV: 15
+  scopeWaitTime: 0.15
+  canScope: 1
 --- !u!114 &779106174777902891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2037,7 +2039,6 @@ MonoBehaviour:
     type: 3}
   PlayerOwner: {fileID: 0}
   firerate: 10
-  cam: {fileID: 7725335144722012642}
   ignoreLayerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -8118,7 +8119,6 @@ MonoBehaviour:
   bulletImpactPrefab: {fileID: 100000, guid: baa7bc3f5a09228449b60e046bcab0ab, type: 3}
   PlayerOwner: {fileID: 0}
   firerate: 2
-  cam: {fileID: 7725335144722012642}
   ignoreLayerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -8365,7 +8365,7 @@ GameObject:
   - component: {fileID: -8640442587161200721}
   - component: {fileID: 5631733737691088860}
   - component: {fileID: 1950788945730073686}
-  - component: {fileID: 7482682730635467916}
+  - component: {fileID: 3745653837150883550}
   m_Layer: 8
   m_Name: Perso Rouge
   m_TagString: RedS
@@ -8551,7 +8551,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!136 &7482682730635467916
+--- !u!136 &3745653837150883550
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8562,9 +8562,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.23
-  m_Height: 1.62
+  m_Height: 1.9163977
   m_Direction: 1
-  m_Center: {x: 0, y: 0.8, z: 0}
+  m_Center: {x: 0, y: 0.9367276, z: 0}
 --- !u!1 &7371553617762899827
 GameObject:
   m_ObjectHideFlags: 0
