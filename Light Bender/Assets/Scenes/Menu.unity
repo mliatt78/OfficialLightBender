@@ -2627,6 +2627,7 @@ MonoBehaviour:
     type: 3}
   StartGamebutton: {fileID: 546432871}
   AudioSource: {fileID: 621660829}
+  isFocused: 0
 --- !u!114 &621660828
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
-using Photon;
 using Photon.Pun;
 
 public class Scope : MonoBehaviour
@@ -20,6 +17,8 @@ public class Scope : MonoBehaviour
    public Camera mainCamera;
 
    public float scopedFOV = 15f;
+   public float scopeWaitTime = 0.15f;
+   public bool canScope = true;
 
    private float normalFOV;
 
@@ -36,34 +35,35 @@ public class Scope : MonoBehaviour
 
    private void Update()
    {
-      if (Input.GetButtonDown("Fire2"))
+      if (Input.GetMouseButtonDown(1))
       {
-         
-         if (!Phv.IsMine)
+         if (!Phv.IsMine || PauseMenu.GameIsPaused || !canScope)
             return;
-         {
-            isScoped = !isScoped;
-            animator.SetBool("Scoped",isScoped);
-            scopeOverlay.SetActive(isScoped);
-            if (isScoped)
-               StartCoroutine(OnScoped());
-            else
-               OnUnscoped();
-         }
-         
+         isScoped = !isScoped;
+         animator.SetBool("Scoped",isScoped);
+         scopeOverlay.SetActive(isScoped);
+         if (isScoped)
+            StartCoroutine(OnScoped(scopeWaitTime));
+         else
+            OnUnscoped();
       }
 
    }
 
-   IEnumerator OnScoped()
+   IEnumerator OnScoped(float scopeWait)
    {
-      yield return new WaitForSeconds(.15f);
+      canScope = false;
+      // cannot unscope when in the process of scoping
+      
+      yield return new WaitForSeconds(scopeWait);
 
       scopeOverlay.SetActive(true);
       weaponCam.SetActive(false);
 
       normalFOV = mainCamera.fieldOfView;
       mainCamera.fieldOfView = scopedFOV;
+
+      canScope = true;
    }
 
    private void OnUnscoped()
