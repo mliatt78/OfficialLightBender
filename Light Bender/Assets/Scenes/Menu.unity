@@ -1560,7 +1560,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -49.316345, y: -9.734436}
+  m_AnchoredPosition: {x: -49.316284, y: -9.734436}
   m_SizeDelta: {x: -2152.1426, y: -788.53156}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &322808624
@@ -1785,6 +1785,9 @@ MonoBehaviour:
   down: {fileID: 809417003}
   right: {fileID: 970374902}
   jump: {fileID: 1407120085}
+  crouch: {fileID: 0}
+  prone: {fileID: 0}
+  keyButtons: []
 --- !u!1 &371484892
 GameObject:
   m_ObjectHideFlags: 0
