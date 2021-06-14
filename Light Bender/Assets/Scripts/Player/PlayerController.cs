@@ -627,4 +627,82 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     
    
     
+
+     IEnumerator Respawn(float respawnWait)
+     {
+         canRespawn = false;
+         // overflow protection for respawn
+         
+         SetRenderers(false);
+
+         currentHealth = 100;
+         PlayerManager.scores[(team+1)%2] += 1;
+         PlayerManager.UpdateScores();
+         if (hasOre)
+         {
+             RemoveOres();
+         }
+         
+         //GetComponent<PlayerController>().enabled = false;
+         Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
+
+         SendChatMessage("System",
+             lastShooter.name +" killed " + name);
+         
+         yield return new WaitForSeconds(respawnWait);
+
+         currentHealth = 100; 
+         // just in case someone manages to shoot the player when waiting
+         _progressBarPro.SetValue(100f,100f);
+         
+         transform.position = spawn.position;
+         transform.rotation = spawn.rotation;
+         //GetComponent<PlayerController>().enabled = true;
+
+         SetRenderers(true);
+         canRespawn = true;
+     }
+
+     void SetRenderers(bool state)
+     {
+         foreach (var renderer in visuals)
+         {
+             renderer.enabled = state;
+         }
+     }
+
+     public void SendChatMessage(string sender, string message)
+     {
+         Phv.RPC("SendChat",RpcTarget.All,sender,message);
+     }
+
+
+     [PunRPC]
+     void RPC_TakeDamage(float damage)
+     {
+         if (!Phv.IsMine)
+             return;
+
+         currentHealth -= damage;
+         _progressBarPro.SetValue(currentHealth,100f);
+         if (currentHealth <= 0 && canRespawn)
+         {
+             StartCoroutine(Respawn(respawnTime));
+         }
+     }
+     
+     [PunRPC]
+     void SendChat(string sender, string message)
+     {
+         ChatMessage m = new ChatMessage(sender,message);
+
+         GameManager.chatMessages.Insert(0, m);
+         if(GameManager.chatMessages.Count > 8)
+         {
+             GameManager.chatMessages.RemoveAt(GameManager.chatMessages.Count - 1);
+         }
+
+         Chat.chatMessages = GameManager.chatMessages;
+         // responsible for the synchronisation of all messages
+     }
 }
