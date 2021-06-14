@@ -486,19 +486,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
          currentHealth = 100;
          PlayerManager.scores[(team+1)%2] += 1;
          PlayerManager.UpdateScores();
-         if (oresHolded != 0)
+         if (hasOre)
          {
-             SendChatMessage("System",
-                 lastShooter.name +" killed " + name);
              RemoveOres();
          }
          
-         GetComponent<PlayerController>().enabled = false;
+         //GetComponent<PlayerController>().enabled = false;
          Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
-         transform.position = spawn.position;
-         transform.rotation = spawn.rotation;
-         GetComponent<PlayerController>().enabled = true;
-         
+
          SendChatMessage("System",
              lastShooter.name +" killed " + name);
          
@@ -506,8 +501,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
          currentHealth = 100; 
          // just in case someone manages to shoot the player when waiting
-         
          _progressBarPro.SetValue(100f,100f);
+         
+         transform.position = spawn.position;
+         transform.rotation = spawn.rotation;
+         //GetComponent<PlayerController>().enabled = true;
 
          SetRenderers(true);
          canRespawn = true;

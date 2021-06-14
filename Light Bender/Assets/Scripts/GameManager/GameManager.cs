@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static int BlueLayer;
     public static int RedLayer;
 
-    public bool isFocused;
+    public static bool isFocused = true;
 
     public static List<ChatMessage> chatMessages = new List<ChatMessage>();
 
