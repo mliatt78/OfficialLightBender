@@ -114,6 +114,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             keys.Add("Left", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Left","A")));
             keys.Add("Right", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Right","D")));
             keys.Add("Jump", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Jump","Space")));
+            keys.Add("Crouch", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Crouch","C")));
+            keys.Add("Prone", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Prone","V")));
         }
         else if (instance != this)
             Destroy(gameObject);

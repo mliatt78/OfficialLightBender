@@ -22,11 +22,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] float mouseSensivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
 
     [SerializeField] float respawnTime;
-
-
+    
     [SerializeField]  Item[] items;
     
-
     [SerializeField] ProgressBarPro _progressBarPro;
 
     [SerializeField] ProgressBarPro munitionsSlider;
@@ -172,6 +170,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         {
             Move();
             Jump();
+            CheckCrouchProne();
         }
 
         for (int i = 0; i < items.Length; i++)
@@ -251,15 +250,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         return ret;
     }*/
 
-    public Vector3 CustomGetAxisRaw(Dictionary<string, KeyCode> dict )
+    public Vector3 CustomGetAxisRaw(Dictionary<string, KeyCode> dict)
     {
         Vector3 vect = Vector3.zero;
         foreach (var dc in dict)
         {
-            
             if (Input.GetKey(dc.Value))
             {
-                Debug.Log(dc.Value);
+                //Debug.Log(dc.Value);
                 switch (dc.Key)
                 {
                     case "Up":
@@ -283,11 +281,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void Move()
     {
         //Debug.Log("Movement activated");
-        // if (Input.GetKey(keys["Up"]) || Input.GetKey(keys["Left"]) || Input.GetKey(keys["Right"]) ||
-        //   Input.GetKey(keys["Down"]) || Input.GetKey(keys["Jump"]))
 
         Vector3 moveDir = CustomGetAxisRaw(GameManager.instance.keys);
-        Debug.Log(moveDir.x + " : " + moveDir.y +" : " + moveDir.z + " ");
+        
+        //Debug.Log(moveDir.x + " : " + moveDir.y +" : " + moveDir.z + " ");
 
         moveAmount = Vector3.SmoothDamp(moveAmount,
             moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed),
@@ -381,7 +378,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     {
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
-            UnCrouchAndProne();
+            UnCrouchOrProne();
             rb.AddForce(transform.up * jumpForce);
         }
     }
@@ -434,6 +431,33 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         animator.SetBool("IsDance", false);
     }
 
+    void CheckCrouchProne()
+    {
+        if (Input.GetKeyDown(GameManager.instance.keys["Prone"]))
+        {
+            if (!isProning)
+            {
+                Prone();
+            }
+            else
+            {
+                UnCrouchOrProne();
+            }
+        }
+        else if (Input.GetKeyDown(GameManager.instance.keys["Crouch"]))
+        {
+            if (!isCrouching)
+            {
+                Crouch();
+            }
+            else
+            {
+                UnCrouchOrProne();
+            }
+        }
+        
+    }
+
 
     private void Crouch()
     {
@@ -442,24 +466,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         center.y = 0.5f;
         capsuleCollider.center = center;
 
-        walkSpeed = walkSpeed/2;
-        Debug.Log("Result of walkSpeed/2 is: "+walkSpeed);
-        sprintSpeed = sprintSpeed/2;
+        walkSpeed = baseWalkSpeed/2;
+        sprintSpeed = baseSprintSpeed/2;
 
         isCrouching = true;
     }
-
-    private void UnCrouch()
-    {
-        capsuleCollider.height = heightCollider;
-        capsuleCollider.center = capsuleColliderCenter;
-
-        walkSpeed = baseWalkSpeed;
-        sprintSpeed = baseSprintSpeed;
-
-        isCrouching = false;
-    }
-
+    
     private void Prone()
     {
         capsuleCollider.direction = 2; // z-axis
@@ -467,55 +479,30 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         center.y = 0.2f; // just above floor
         capsuleCollider.center = center;
 
-        walkSpeed = walkSpeed/6;
-        sprintSpeed = sprintSpeed/12;
+        walkSpeed = baseWalkSpeed/3;
+        sprintSpeed = baseSprintSpeed/6;
 
         isProning = true;
     }
 
-    private void UnProne()
+    private void UnCrouchOrProne()
     {
-        capsuleCollider.direction = capsuleColliderDirection;
+        capsuleCollider.height = heightCollider;
         capsuleCollider.center = capsuleColliderCenter;
+        capsuleCollider.direction = capsuleColliderDirection;
 
         walkSpeed = baseWalkSpeed;
         sprintSpeed = baseSprintSpeed;
 
+        isCrouching = false;
         isProning = false;
     }
 
-    private void UnCrouchAndProne()
-    {
-        if (isCrouching)
-        {
-            UnCrouch();
-        }
-        if (isProning)
-        {
-            UnProne();
-        }
-    }
-
-    public void SetGroundedState(bool _grounded)
-    {
-        grounded = _grounded; 
-    }
-    public void AddOre(int oresToAdd)
-    {
-        oresHolded += oresToAdd;
-    }
-    public int GetOresBeingHeld()
-    {
-        return oresHolded;
-    }
-    public void RemoveOres()
-    {
-        oresHolded = 0;
-    }
-    public bool GetOnlyLook()
-    {
-        return PlayerOnlyLook;
-    }
+    public void SetGroundedState(bool _grounded) => grounded = _grounded;
+    public void AddOre(int oresToAdd) => oresHolded += oresToAdd;
+    public int GetOresBeingHeld() => oresHolded;
+    public void RemoveOres() => oresHolded = 0;
+    public bool GetOnlyLook() => PlayerOnlyLook;
 
     public void SetOnlyLook(bool onlyLook)
     {
