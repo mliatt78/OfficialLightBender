@@ -9,6 +9,7 @@ public class PauseMenu : MonoBehaviourPunCallbacks
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
     public AudioSource audioSource;
+    public GameObject KEYS;
 
     public static bool isleft = false;
     void Update()
@@ -25,6 +26,8 @@ public class PauseMenu : MonoBehaviourPunCallbacks
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
+        KEYS.SetActive(false);
+        Debug.Log("Resume");
     }
 
     void Pause()
@@ -76,6 +79,15 @@ public class PauseMenu : MonoBehaviourPunCallbacks
    {
        audioSource.Play();
    }
+
+   public void OpenKeys()
+   {
+       pauseMenuUI.SetActive(false);
+       KEYS.SetActive(true);
+       
+       
+   }
+   
 
     
 }

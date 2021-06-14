@@ -5,17 +5,22 @@ using UnityEngine;
 
 public class KeyBinderScript : MonoBehaviour
 {
-    public Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>(); 
+    public  Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>(); 
 
     public ButtonManagerBasic up, left, down, right, jump;
 
     private GameObject currentkey;
-    
+
+
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        KeysInitialise();
+    }
+
+    void KeysInitialise()
+    {
         keys.Add("Up", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Up","W")));
         keys.Add("Down", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Down","S")));
         keys.Add("Left", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Left","A")));
@@ -35,11 +40,7 @@ public class KeyBinderScript : MonoBehaviour
         jump.UpdateUI();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-      
-    }
+    
     
     void OnGUI()
     {
@@ -48,29 +49,26 @@ public class KeyBinderScript : MonoBehaviour
             Event e = Event.current;
             if (e.isKey)
             {
+                Debug.Log("currentkey : " + currentkey.name);
+                Debug.Log("e keycode : " + e.keyCode);
                 keys[currentkey.name] = e.keyCode;
 
                 ButtonManagerBasic buttonManager = currentkey.GetComponent<ButtonManagerBasic>();
                 buttonManager.buttonText = e.keyCode.ToString();
                 buttonManager.UpdateUI();
                 currentkey = null;
-               
             }
         }
     }
-
-    public void Changekey(GameObject clicked)
-    {
-        currentkey = clicked;
-    }
+    public void Changekey(GameObject clicked) => currentkey = clicked;
 
     public void Savekeys()
     {
-        Debug.Log(keys.Count);
-        foreach (var key in keys)
+        //Debug.Log(keys.Count);
+       foreach (var key in keys)
         {
-            //Debug.Log(key.Key);
             PlayerPrefs.SetString(key.Key,key.Value.ToString());
+            GameManager.instance.keys[key.Key] = key.Value;
         }
         PlayerPrefs.Save();
     }
