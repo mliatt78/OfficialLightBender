@@ -1,18 +1,19 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using EnemyAI;
 using Photon.Pun;
 using UnityEngine;
 
 public class SingleShot : GUN
 {
-   public float firerate = 15; 
-   [SerializeField] Camera cam;
+   public PlayerController PlayerOwner;
+   
+   public float firerate = 15;
    public LayerMask ignoreLayerMask;
    public Transform gunTransform;
 
    private float nexttimetofire = 0;
 
-   public  ParticleSystem particleSystem;
+   public ParticleSystem particleSystem;
 
    public float impactforce = 60;
    
@@ -21,6 +22,7 @@ public class SingleShot : GUN
     [SerializeField]  ProgressBarPro munitionsSlider;
 
     public int nbinit { get; set; }
+    public float secondsToReload { get; set; }
 
 
     public int nbballes { get; set; }
@@ -31,10 +33,12 @@ public class SingleShot : GUN
     void Awake()
     {
        Pv = GetComponent<PhotonView>();
-       nbinit = ((GunInfo) iteminfo).nbinit;
+       GunInfo weaponProperties = (GunInfo) iteminfo;
+       nbinit = weaponProperties.nbinit;
        nbballes = nbinit;
-       Debug.Log(nbinit + "--" + nbballes);
+       secondsToReload = weaponProperties.secondsToReload;
 
+       //Debug.Log(nbinit + "--" + nbballes);
     }
    public override void Use()
    {
@@ -47,9 +51,9 @@ public class SingleShot : GUN
    }
    
 
-  public IEnumerator Reload()
+  public IEnumerator Reload(float secondsToWait)
    {
-      yield return new WaitForSeconds(2f);
+      yield return new WaitForSeconds(secondsToWait);
       nbballes = nbinit;
       munitionsSlider.SetValue(nbballes,nbinit);
    }
@@ -58,9 +62,7 @@ public class SingleShot : GUN
    void RPC_Shoot()
    {
       Ray rayon = new Ray(gunTransform.position, gunTransform.forward);
-      if (nbballes <= 0)
-         return;
-      else
+      if (nbballes > 0)
       {
          if (Time.time >= nexttimetofire)
          {
@@ -81,8 +83,17 @@ public class SingleShot : GUN
                   Destroy(buletimpact, 2f);
                   buletimpact.transform.SetParent(bimp[0].transform);
                }
-
-               hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
+               
+               IDamageable damageableOfCollider = hit.collider.gameObject.GetComponent<IDamageable>();
+               damageableOfCollider?.TakeDamage(((GunInfo) iteminfo).damage);
+               if (hit.collider.gameObject.GetComponent<PlayerController>() != null)
+               {
+                  hit.collider.gameObject.GetComponent<PlayerController>().lastShooter = PlayerOwner.gameObject;
+               }
+               else if (hit.collider.gameObject.GetComponent<AIController>() != null)
+               {
+                  hit.collider.gameObject.GetComponent<AIController>().lastShooter = PlayerOwner.gameObject;
+               }
 
                //Debug.Log(((GunInfo) iteminfo).damage + " DOMMAGES");
                if (hit.rigidbody != null)

@@ -17,29 +17,31 @@ namespace Zones
         // Update is called once per frame
         void Update()
         {
-            CheckIfPlayersInZone();
-            CheckIfPlayersLeave();
-
-            CheckIfPlayersHaveOre();
+            if (!PauseMenu.isleft)
+            {
+                CheckIfPlayersInZone();
+                CheckIfPlayersLeave();
+                CheckIfPlayersHaveOre();
+            }
         }
 
        void CheckIfPlayersHaveOre()
         {
             for (int i = 0; i < playersNear.Count; i++)
             {
-                if (playersNear[i].GetHasOre() && playersNear[i].GetTeam() == team)
+                if (playersNear[i].hasOre && playersNear[i].GetTeam() == team)
                 {
-                    playersNear[i].SetHasOre(false);
-                    Debug.Log(playersNear[i].name + " brought the ore back to his base!");
-                    PlayerManager.scores[playersNear[i].GetTeam()] += 5; 
-                    // getTeamMaxPlayers used to determine which team has the most players in the zone. 
+                    PlayerManager.scores[playersNear[i].GetTeam()] += (5 * playersNear[i].GetOresBeingHeld());
                     PlayerManager.UpdateScores();
+                    playersNear[i].RemoveOres();
+                    Debug.Log(playersNear[i].name + " brought its ores back to his base!");
                 }
             }
         }
 
         void CheckIfPlayersInZone()
         {
+            
             for (int i = 0; i < PlayerManager.players.Count; i++)
             {
                 float dist = Vector3.Distance(PlayerManager.players[i].transform.position, transform.position);
@@ -82,5 +84,5 @@ namespace Zones
         
     }
 }
-    
+
 

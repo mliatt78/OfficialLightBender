@@ -4,7 +4,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Timeline;
 using Random = UnityEngine.Random;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -21,17 +20,25 @@ namespace EnemyAI
         
         public const float maxHealth = 100f;
         public float currentHealth = maxHealth;
+
+        public GameObject lastShooter;
         
-        [NonSerialized] private bool alreadyAttacked;
-        [NonSerialized] private int framesUntilAttack = 60;
+        private bool alreadyAttacked;
+        private int framesUntilAttack = 60;
+
+        private bool canRespawn = true;
+
+        public float respawnTime = 5;
         
-        //Armes
+        // Weapons
         [SerializeField]  Item[] items;
         PhotonView Phv;
         Renderer[] visuals;
         public int team;
         int itemIndex;
         int previousItemIndex = -1;
+
+        private SingleShotAI SingleShotAI;
         
         void Awake()
         {
@@ -46,6 +53,8 @@ namespace EnemyAI
             if (Phv.IsMine)
             {
                 EquipItem(0);
+                SingleShotAI = (SingleShotAI) items[0];
+                SingleShotAI.AiOwner = this;
             }
             NextWalkPoint();
             visuals = GetComponentsInChildren<Renderer>();
@@ -132,8 +141,7 @@ namespace EnemyAI
         
             if (Phv.IsMine)
             {
-                Hashtable hash = new Hashtable();
-                hash.Add("itemindex", itemIndex);
+                Hashtable hash = new Hashtable {{"itemindex", itemIndex}};
                 PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
             }
         }
@@ -155,8 +163,9 @@ namespace EnemyAI
             }
         }
         
-        IEnumerator Respawn()
+        IEnumerator Respawn(float respawnWaitTime)
         {
+            canRespawn = false;
             SetRenderers(false);
             currentHealth = 100;
             PlayerManager.scores[(team+1)%2] += 1;
@@ -167,13 +176,25 @@ namespace EnemyAI
             transform.position = spawn.position;
             transform.rotation = spawn.rotation;
             GetComponent<AIController>().enabled = true;
-            yield return new WaitForSeconds(1);        
+            
+            SendChatMessage("System",
+                lastShooter.name +" killed " + name);
+            
+            yield return new WaitForSeconds(respawnWaitTime);     
+            
+            
             SetRenderers(true);
+            canRespawn = true;
         }
 
         public void TakeDamage(float damage)
         {
             Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage);
+        }
+
+        private void SendChatMessage(string sender, string message)
+        {
+            Phv.RPC("SendChat",RpcTarget.All,sender,message);
         }
         
         [PunRPC]
@@ -184,10 +205,25 @@ namespace EnemyAI
 
             currentHealth -= damage;
 
-            if (currentHealth <= 0)
+            if (currentHealth <= 0 && canRespawn)
             {
-                StartCoroutine(Respawn());
+                StartCoroutine(Respawn(respawnTime));
             }
+        }
+        
+        [PunRPC]
+        void SendChat(string sender, string message)
+        {
+            ChatMessage m = new ChatMessage(sender,message);
+
+            GameManager.chatMessages.Insert(0, m);
+            if(GameManager.chatMessages.Count > 8)
+            {
+                GameManager.chatMessages.RemoveAt(GameManager.chatMessages.Count - 1);
+            }
+
+            Chat.chatMessages = GameManager.chatMessages;
+            // responsible for the synchronisation of all messages
         }
     }
 }

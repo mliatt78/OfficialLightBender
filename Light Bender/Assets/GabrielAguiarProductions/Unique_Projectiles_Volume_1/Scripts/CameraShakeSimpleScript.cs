@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class CameraShakeSimpleScript : MonoBehaviour {
 
-	private bool isRunning = false;
+	private bool isRunning;
 	private Animation anim;
 
 	void Start () {
 		anim = GetComponent<Animation> ();
+		isRunning = false;
 	}
 
 	public void ShakeCamera() {	

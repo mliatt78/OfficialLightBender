@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "FPS/New Gun")]
 
 public class GunInfo : ItemInfo
 {
     public float damage;
+    public float secondsToReload;
     
     public int nbinit; 
     

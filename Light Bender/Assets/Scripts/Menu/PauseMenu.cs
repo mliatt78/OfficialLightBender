@@ -9,19 +9,16 @@ public class PauseMenu : MonoBehaviourPunCallbacks
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
     public AudioSource audioSource;
+    public GameObject KEYS;
+
+    public static bool isleft = false;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-        {
             if (GameIsPaused)
-            {
                 Resume();
-            }
             else
-            {
                 Pause();
-            }
-        }
     }
 
     public void Resume()
@@ -29,6 +26,8 @@ public class PauseMenu : MonoBehaviourPunCallbacks
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
+        KEYS.SetActive(false);
+        Debug.Log("Resume");
     }
 
     void Pause()
@@ -43,38 +42,52 @@ public class PauseMenu : MonoBehaviourPunCallbacks
         Application.Quit();
     }
 
-   /* public void DisconnectPlayer()
+    public void DisconnectPlayer()
     {
-        PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene(2);
-        //StartCoroutine((DisconnectAndLoad()));
-    }*/
+       // PhotonNetwork.LeaveRoom();
+       // SceneManager.LoadScene(2);
+        StartCoroutine((DisconnectAndLoad()));
+    }
 
-   /*IEnumerator DisconnectAndLoad()
+   IEnumerator DisconnectAndLoad()
     {
-        PhotonNetwork.LeaveRoom();
-        while (PhotonNetwork.InRoom)
+        GameIsPaused = false;
+        isleft = true;
+        PhotonNetwork.Disconnect();
+        while (PhotonNetwork.IsConnected)
             yield return null;
-        // SceneManager.LoadScene(0);
-    }*/
+        SceneManager.LoadScene(2);
+    }
    
-   public void LeaveRoom()
+   /*public void LeaveRoom() // local player leaves
    {
-       PhotonNetwork.Destroy(RoomManager.Instance.photonView);
-       PhotonNetwork.LeaveRoom();
+      // PhotonNetwork.Destroy(RoomManager.Instance.photonView);
+      PhotonNetwork.Disconnect();
+      while(PhotonNetwork.IsConnected)
+          Debug.Log("say hi");
+      
+      PhotonNetwork.LeaveLobby();
    }
    public override void OnLeftRoom()
    {
-       SceneManager.LoadScene(0);
+      // PlayerManager.players.Remove(PlayerManager.GetLocalPlayer());
+       SceneManager.LoadScene(2);
        base.OnLeftRoom();
-       
-
-   }
+   }*/
 
    public void PlayButtonSound()
    {
        audioSource.Play();
    }
+
+   public void OpenKeys()
+   {
+       pauseMenuUI.SetActive(false);
+       KEYS.SetActive(true);
+       
+       
+   }
+   
 
     
 }

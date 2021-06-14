@@ -178,6 +178,8 @@ MonoBehaviour:
   enemies: []
   enemyTeam: BlueS
   currentHealth: 100
+  lastShooter: {fileID: 0}
+  respawnTime: 5
   items:
   - {fileID: 6620249896316005263}
   team: 1
@@ -6886,6 +6888,7 @@ MonoBehaviour:
   itemGameObject: {fileID: 2857078798505904122}
   bulletImpactPrefab: {fileID: 1723818010802918, guid: cf5aacd810ed5d044a1dc012538fa468,
     type: 3}
+  AiOwner: {fileID: 0}
   firerate: 8
   ignoreLayerMask:
     serializedVersion: 2
@@ -6894,6 +6897,8 @@ MonoBehaviour:
   particleSystem: {fileID: 8046590070664558252}
   impactforce: 60
   nbballes: 25
+  secondsToReload: 0
+  BotWaitReloadTime: 2
 --- !u!1 &7296325746077973598
 GameObject:
   m_ObjectHideFlags: 0
