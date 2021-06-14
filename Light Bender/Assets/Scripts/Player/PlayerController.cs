@@ -1,28 +1,38 @@
-﻿using System.Collections;
+using System.Collections;
+
+using System.Collections.Generic;
+using Michsky.UI.ModernUIPack;
+
 using System.Runtime.CompilerServices;
+
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
+
+public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 {
     [SerializeField] GameObject cameraHolder;
 
+
     [SerializeField] CapsuleCollider capsuleCollider;
     
+
     [SerializeField] float mouseSensivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
 
     [SerializeField] float respawnTime;
 
+
     [SerializeField]  Item[] items;
     
-    [SerializeField] ProgressBarPro _progressBarPro;
-    
-    [SerializeField]  ProgressBarPro munitionsSlider;
 
-    [SerializeField]  GameObject munitionObject;
-    
+    [SerializeField] ProgressBarPro _progressBarPro;
+
+    [SerializeField] ProgressBarPro munitionsSlider;
+
+    [SerializeField] GameObject munitionObject;
+
     [SerializeField] GameObject health;
 
     int itemIndex;
@@ -35,6 +45,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     public bool isLocal;
 
     private bool canRespawn = true;
+
     private bool isCrouching,isProning;
 
     private Vector3 capsuleColliderCenter;
@@ -42,6 +53,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     private float heightCollider;
 
     private float baseWalkSpeed, baseSprintSpeed;
+
 
     float verticalLookRotation;
     bool grounded;
@@ -55,13 +67,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     private Animator animator;
 
     PlayerManager playerManager;
-    
+
     public GameObject lastShooter;
-    
+
     public TextMeshProUGUI blueScoreText;
     public TextMeshProUGUI redScoreText;
-    
+
     Renderer[] visuals;
+    
     int team;
 
     public bool PlayerOnlyLook;
@@ -70,9 +83,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     public float currentHealth = maxHealth;
 
     private SingleShot singleshot;
-
+    
     public Chat chat;
-
+    
+    
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -87,18 +101,18 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         
         //playerManager = PhotonView.Find((int)Phv.InstantiationData[0]).GetComponent<PlayerManager>();
 
-        if (!PlayerManager.players.Contains(this))
-        {
-            PlayerManager.players.Add(this);
-        }
+        if (!PlayerManager.players.Contains(this)) PlayerManager.players.Add(this);
+
+
+
         // playerController is instantiated on each machine in the room. 
         // by doing this, it will locally, on each machine in the room 
         // (PhotonNetwork.Instantiate() creates the object for all machines)
         // add the object to the players. 
-        
+
         // just have to test it out, but it SHOULD work
-        
-        
+
+
         // DEBUG
         /*Debug.Log("Displaying PlayerManager.players on machine of player "+name+":");
         for (int i = 0; i < PlayerManager.players.Count; i++)
@@ -106,6 +120,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             Debug.Log("PLayer Name:" + PlayerManager.players[i].name);
         }*/
     }
+
 
     void Start()
     {
@@ -118,7 +133,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             health.SetActive(true);
             munitionObject.SetActive(true);
             PauseMenu.isleft = true;
-            
+
             if (items[itemIndex] is SingleShot)
             {
                 singleshot = (SingleShot) items[itemIndex];
@@ -126,28 +141,33 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
                 //Debug.Log("Name " + items[itemIndex].name);
                 //Debug.Log(singleshot.nbballes + " :::: " + singleshot.nbinit);
             }
+
             
+
             visuals = GetComponentsInChildren<Renderer>();
-            team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
+            team = (int) PhotonNetwork.LocalPlayer.CustomProperties["Team"];
             Debug.Log("Instantiation is finished");
+           
+            
         }
         else
         {
             Debug.Log("Destroy component");
-            Debug.Log("Owner name of phv: "+Phv.Owner.NickName);
+            Debug.Log("Owner name of phv: " + Phv.Owner.NickName);
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
     }
-    
+
+
     void Update()
     {
         //Debug.Log(PauseMenu.GameIsPaused + "  <>  " + Phv.IsMine );
         if (!Phv.IsMine || PauseMenu.GameIsPaused)
             return;
         
-        
         Look();
+        
         if (!PlayerOnlyLook)
         {
             Move();
@@ -185,7 +205,6 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             {
                 EquipItem(itemIndex - 1);
             }
-           
         }
 
         if (Input.GetMouseButton(0))
@@ -216,84 +235,145 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
         }
     }
 
+    /*public bool GetInputRaw(Dictionary<string, KeyCode> dict,string keycode)
+    {
+        foreach (var input in dict)
+            if (Input.GetKey(input.Value) && keycode == input.Key)
+                return true;
+        return false;
+    }
+
+    public int CustomGetAxisRaw(bool inputX, bool inputY)
+    {
+        int ret = 0;
+        ret += (inputX ? 1 : 0);
+        ret += (inputY ? -1 : 0);
+        return ret;
+    }*/
+
+    public Vector3 CustomGetAxisRaw(Dictionary<string, KeyCode> dict )
+    {
+        Vector3 vect = Vector3.zero;
+        foreach (var dc in dict)
+        {
+            
+            if (Input.GetKey(dc.Value))
+            {
+                Debug.Log(dc.Value);
+                switch (dc.Key)
+                {
+                    case "Up":
+                        vect.z += 1;
+                        break;
+                    case "Down":
+                        vect.z -= 1;
+                        break;
+                    case "Left":
+                        vect.x -= 1;
+                        break;
+                    case "Right":
+                        vect.x += 1;
+                        break;
+                }
+            }
+        }
+        return vect.normalized;
+    }
+
     void Move()
     {
         //Debug.Log("Movement activated");
-        Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+        // if (Input.GetKey(keys["Up"]) || Input.GetKey(keys["Left"]) || Input.GetKey(keys["Right"]) ||
+        //   Input.GetKey(keys["Down"]) || Input.GetKey(keys["Jump"]))
 
-        moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed),
+        Vector3 moveDir = CustomGetAxisRaw(GameManager.instance.keys);
+        Debug.Log(moveDir.x + " : " + moveDir.y +" : " + moveDir.z + " ");
+
+        moveAmount = Vector3.SmoothDamp(moveAmount,
+            moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed),
             ref smoothMoveVelocity, smoothTime);
-        
+
+
         bool isWalking = animator.GetBool("IsWalking");
-        bool pressedwalk = Input.GetKey("w");
-        
+        bool pressedwalk = Input.GetKey(GameManager.instance.keys["Up"]);
+
         bool isRunning = animator.GetBool("IsRunning");
         bool pressedrun = Input.GetKey(KeyCode.LeftShift);
-        
+
         bool isLeft = animator.GetBool("IsLeftWalk");
         bool isRight = animator.GetBool("IsRightWalk");
-        bool pressedleft = Input.GetKey("a");;
-        bool pressedright = Input.GetKey("d");;
-        
+        bool pressedleft = Input.GetKey(GameManager.instance.keys["Left"]);
+        bool pressedright = Input.GetKey(GameManager.instance.keys["Right"]);
+
         bool isDance = animator.GetBool("IsDance");
-        bool presseddance = Input.GetKey("l");;
+        bool presseddance = Input.GetKey("l");
+        ;
         //Debug.Log("Movement");
-        
+
         // walk
         if (!isWalking && pressedwalk)
         {
-            animator.SetBool("IsWalking",true);
+            animator.SetBool("IsWalking", true);
             //Debug.Log("Walking");
         }
+
         if (isWalking && !pressedwalk)
         {
-            animator.SetBool("IsWalking",false);
+            animator.SetBool("IsWalking", false);
         }
+
         // run
-        if(!isRunning && pressedrun)
+        if (!isRunning && pressedrun)
         {
-            animator.SetBool("IsRunning",true);
+            animator.SetBool("IsRunning", true);
         }
+
         if (isRunning && !pressedrun)
         {
-            animator.SetBool("IsRunning",false);
+            animator.SetBool("IsRunning", false);
         }
+
         // left
-        if(!isLeft && pressedleft)
+        if (!isLeft && pressedleft)
         {
-            animator.SetBool("IsLeftWalk",true);
+            animator.SetBool("IsLeftWalk", true);
         }
+
         if (isLeft && !pressedleft)
         {
-            animator.SetBool("IsLeftWalk",false);
+            animator.SetBool("IsLeftWalk", false);
         }
+
         // right
-        if(!isRight && pressedright)
+        if (!isRight && pressedright)
         {
-            animator.SetBool("IsRightWalk",true);
+            animator.SetBool("IsRightWalk", true);
         }
+
         if (isRight && !pressedright)
         {
-            animator.SetBool("IsRightWalk",false);
+            animator.SetBool("IsRightWalk", false);
         }
-        
+
         //dance
-        if(!isDance && presseddance)
+        if (!isDance && presseddance)
         {
-            animator.SetBool("IsDance",true);
+            animator.SetBool("IsDance", true);
         }
+
         if (isDance && !presseddance)
         {
-            animator.SetBool("IsDance",false);
+            animator.SetBool("IsDance", false);
         }
     }
+
     void Look()
     {
         transform.Rotate(Vector3.up * (Input.GetAxisRaw("Mouse X") * mouseSensivity));
 
         verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSensivity;
         verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90);
-        
+
         cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
     }
 
@@ -305,12 +385,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             rb.AddForce(transform.up * jumpForce);
         }
     }
-
     void EquipItem(int _index)
     {
         if (_index == previousItemIndex)
             return;
-        
+
         itemIndex = _index;
 
         items[itemIndex].itemGameObject.SetActive(true);
@@ -320,22 +399,20 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             items[previousItemIndex].itemGameObject.SetActive(false);
         }
 
-        
+
         if (items[itemIndex] is SingleShot)
         {
             singleshot = (SingleShot) items[itemIndex];
             munitionsSlider.SetValue(singleshot.nbballes, singleshot.nbinit);
         }
         else
-        {
             Debug.LogError("ERROR");
-        }
-            
-            
+
+
         //Debug.Log(singleshot.nbballes + "*/*/*/*/" + singleshot.nbinit);
 
         previousItemIndex = itemIndex;
-        
+
         if (Phv.IsMine)
         {
             Hashtable hash = new Hashtable {{"itemindex", itemIndex}};
@@ -345,20 +422,18 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        if (!Phv.IsMine && targetPlayer == Phv.Owner)
-        {
-            EquipItem((int) changedProps["itemindex"]);
-        }
+        if (!Phv.IsMine && targetPlayer == Phv.Owner) EquipItem((int) changedProps["itemindex"]);
     }
 
     private void ResetAnimator()
     {
-        animator.SetBool("isWalking",false);
-        animator.SetBool("IsRunning",false);
-        animator.SetBool("IsLeftWalk",false);
-        animator.SetBool("IsRightWalk",false);
-        animator.SetBool("IsDance",false);
+        animator.SetBool("isWalking", false);
+        animator.SetBool("IsRunning", false);
+        animator.SetBool("IsLeftWalk", false);
+        animator.SetBool("IsRightWalk", false);
+        animator.SetBool("IsDance", false);
     }
+
 
     private void Crouch()
     {
@@ -441,23 +516,18 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
     {
         return PlayerOnlyLook;
     }
+
     public void SetOnlyLook(bool onlyLook)
     {
         PlayerOnlyLook = onlyLook;
         ResetAnimator();
         rb.velocity = Vector3.zero;
     }
-    
-    public void SetTeam(int Team)
-    {
-        team = Team;
-    }
 
-    public int GetTeam()
-    {
-        return team;
-    }
-    
+    public void SetTeam(int Team) => team = Team;
+
+    public int GetTeam() => team;
+
     void FixedUpdate()
     {
         if (PlayerOnlyLook)
@@ -465,17 +535,99 @@ public class PlayerController : MonoBehaviourPunCallbacks,IDamageable
             rb.velocity = Vector3.zero;
             // we do not want the player to move if the player stopped
         }
+
         if (!Phv.IsMine || PauseMenu.GameIsPaused || PlayerOnlyLook)
             return;
-
+        
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
     }
-     
-     public void TakeDamage(float damage) // juste sur le shooter
-     {
-         Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage);
-     }
+
+    public void TakeDamage(float damage) // juste sur le shooter
+        =>
+            Phv.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+
+    IEnumerator Respawn(float respawnWait)
+    {
+        canRespawn = false;
+        // overflow protection for respawn
+
+        SetRenderers(false);
+
+        currentHealth = 100;
+        PlayerManager.scores[(team + 1) % 2] += 1;
+        PlayerManager.UpdateScores();
+        if (oresHolded != 0)
+        {
+            SendChatMessage("System",
+                lastShooter.name + " killed " + name);
+            RemoveOres();
+        }
+
+        GetComponent<PlayerController>().enabled = false;
+        Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
+        transform.position = spawn.position;
+        transform.rotation = spawn.rotation;
+        GetComponent<PlayerController>().enabled = true;
+
+        SendChatMessage("System",
+            lastShooter.name + " killed " + name);
+
+        yield return new WaitForSeconds(respawnWait);
+
+        currentHealth = 100;
+        // just in case someone manages to shoot the player when waiting
+
+        _progressBarPro.SetValue(100f, 100f);
+
+        SetRenderers(true);
+        canRespawn = true;
+    }
+
+    void SetRenderers(bool state)
+    {
+        foreach (var renderer in visuals) renderer.enabled = state;
+    }
+
+    public void SendChatMessage(string sender, string message)
+    {
+        Phv.RPC("SendChat", RpcTarget.All, sender, message);
+    }
+
+
+    [PunRPC]
+    void RPC_TakeDamage(float damage)
+    {
+        if (!Phv.IsMine)
+            return;
+
+        currentHealth -= damage;
+        _progressBarPro.SetValue(currentHealth, 100f);
+        if (currentHealth <= 0 && canRespawn)
+        {
+            StartCoroutine(Respawn(respawnTime));
+        }
+    }
+
+    [PunRPC]
+    void SendChat(string sender, string message)
+    {
+        ChatMessage m = new ChatMessage(sender, message);
+
+        GameManager.chatMessages.Insert(0, m);
+        if (GameManager.chatMessages.Count > 8)
+        {
+            GameManager.chatMessages.RemoveAt(GameManager.chatMessages.Count - 1);
+        }
+
+        Chat.chatMessages = GameManager.chatMessages;
+        // responsible for the synchronisation of all messages
+    }
+   
     
+    
+   
+    
+
      IEnumerator Respawn(float respawnWait)
      {
          canRespawn = false;

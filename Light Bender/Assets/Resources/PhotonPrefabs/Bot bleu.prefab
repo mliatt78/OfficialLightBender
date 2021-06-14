@@ -1719,6 +1719,7 @@ MonoBehaviour:
   enemyTeam: RedS
   currentHealth: 100
   lastShooter: {fileID: 0}
+  respawnTime: 5
   items:
   - {fileID: 5262229306368699999}
   team: 0
