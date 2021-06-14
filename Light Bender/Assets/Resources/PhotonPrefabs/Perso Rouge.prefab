@@ -8446,6 +8446,13 @@ MonoBehaviour:
   PlayerOnlyLook: 0
   currentHealth: 100
   chat: {fileID: 0}
+  up: {fileID: 0}
+  left: {fileID: 0}
+  down: {fileID: 0}
+  right: {fileID: 0}
+  jump: {fileID: 0}
+  keyBinderScript: {fileID: 19092704400007352, guid: 8ed1564b1a5ee5a46a67ee3ea7b94e55,
+    type: 3}
 --- !u!114 &7906576035142789250
 MonoBehaviour:
   m_ObjectHideFlags: 0
