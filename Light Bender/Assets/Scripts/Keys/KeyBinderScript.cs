@@ -48,6 +48,9 @@ public class KeyBinderScript : MonoBehaviour
     {
         for (int i = 0; i < keyButtons.Count && i < keyNames.Count; i++)
         {
+            //Debug.Log("keyButtons[i]: "+keyButtons[i]);
+            //Debug.Log("keyNames[i]: "+keyNames[i]);
+            //Debug.Log("keys[keyNames[i]]: "+keys[keyNames[i]]);
             keyButtons[i].buttonText = keys[keyNames[i]].ToString();
             keyButtons[i].UpdateUI();
         }
