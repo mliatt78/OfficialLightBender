@@ -23,7 +23,7 @@ public class Chat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.T) && !isChatting)
+        if (Input.GetKeyUp(GameManager.instance.keys["Chat"]) && !isChatting)
         {
             isChatting = true;
             chatInput = "";

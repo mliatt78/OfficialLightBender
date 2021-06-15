@@ -54,7 +54,7 @@ namespace EnemyAI
             {
                 EquipItem(0);
                 SingleShotAI = (SingleShotAI) items[0];
-                SingleShotAI.AiOwner = this;
+                SingleShotAI = (SingleShotAI) items[0];
             }
             NextWalkPoint();
             visuals = GetComponentsInChildren<Renderer>();
