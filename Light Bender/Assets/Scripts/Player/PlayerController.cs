@@ -15,8 +15,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] float mouseSensivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
 
     [SerializeField] float respawnTime;
-    
-    [SerializeField]  Item[] items;
+
+    [SerializeField] List<Item> items;
     
     [SerializeField] ProgressBarPro _progressBarPro;
 
@@ -74,6 +74,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     public float currentHealth = maxHealth;
 
     private SingleShot singleshot;
+
+    private Grenade grenade;
     
     public Chat chat;
     
@@ -148,6 +150,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     void Update()
     {
+        
         //Debug.Log(PauseMenu.GameIsPaused + "  <>  " + Phv.IsMine );
         if (!Phv.IsMine || PauseMenu.GameIsPaused)
             return;
@@ -163,8 +166,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         Jump();
         CheckCrouchProne();
 
-        for (int i = 0; i < items.Length; i++)
+        for (int i = 0; i < items.Count; i++)
         {
+            Debug.Log("Items count : " + items.Count);
             if (Input.GetKeyDown((i + 1).ToString()))
             {
                 EquipItem(i);
@@ -174,7 +178,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
         if (Input.GetAxisRaw("Mouse ScrollWheel") < 0f)
         {
-            if (itemIndex >= items.Length - 1)
+            if (itemIndex >= items.Count - 1)
             {
                 EquipItem(0);
                 Debug.Log("Equip item");
@@ -186,19 +190,29 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         }
         else if (Input.GetAxisRaw("Mouse ScrollWheel") > 0f)
         {
-            if (itemIndex <= items.Length - 1)
+            if (itemIndex <= items.Count - 1)
             {
-                EquipItem(items.Length - 1);
+                EquipItem(items.Count - 1);
             }
             else
             {
                 EquipItem(itemIndex - 1);
             }
         }
-
+        
         if (Input.GetKey(GameManager.instance.keys["Shoot"]))
+
         {
             items[itemIndex].Use();
+            if (items[itemIndex] is Grenade)
+            {
+                Debug.Log("Item index : " + itemIndex);
+                //Debug.Log("I use the grenade 2 ");
+                items.RemoveAt(itemIndex);
+                previousItemIndex = (itemIndex - 2 < 0 ? 0 : itemIndex - 2); 
+                EquipItem(itemIndex - 1);
+                Debug.Log("Item bomb ");
+            }
         }
         
 
@@ -206,19 +220,24 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         {
             Die();
         }*/
+
         if (Input.GetKeyDown(GameManager.instance.keys["Lock"]))
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
+
         if (Input.GetKeyDown(GameManager.instance.keys["Unlock"]))
+
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
 
+
         if (Input.GetKeyDown(GameManager.instance.keys["Reload"]))
+
         {
             StartCoroutine(singleshot.Reload(singleshot.secondsToReload));
         }
@@ -391,6 +410,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         {
             singleshot = (SingleShot) items[itemIndex];
             munitionsSlider.SetValue(singleshot.nbballes, singleshot.nbinit);
+        }
+        else if (items[itemIndex] is Grenade)
+        {
+            grenade = (Grenade) items[itemIndex];
         }
         else
             Debug.LogError("ERROR");
