@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,7 +26,7 @@ public class PauseMenu : MonoBehaviourPunCallbacks
         Time.timeScale = 1f;
         GameIsPaused = false;
         KEYS.SetActive(false);
-        Debug.Log("Resume");
+        //Debug.Log("Resume");
     }
 
     void Pause()
@@ -50,14 +49,14 @@ public class PauseMenu : MonoBehaviourPunCallbacks
     }
 
    IEnumerator DisconnectAndLoad()
-    {
+   {
         GameIsPaused = false;
         isleft = true;
         PhotonNetwork.Disconnect();
         while (PhotonNetwork.IsConnected)
             yield return null;
         SceneManager.LoadScene(2);
-    }
+   }
    
    /*public void LeaveRoom() // local player leaves
    {
@@ -84,10 +83,5 @@ public class PauseMenu : MonoBehaviourPunCallbacks
    {
        pauseMenuUI.SetActive(false);
        KEYS.SetActive(true);
-       
-       
    }
-   
-
-    
 }

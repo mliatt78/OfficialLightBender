@@ -12,9 +12,9 @@ public class RoomListItem : MonoBehaviour
     {
         info = _info;
         text.text = info.Name;
-        Debug.Log(info.Name);
-        Debug.Log(text.text);
-        Debug.Log(_info);
+        //Debug.Log(info.Name);
+        //Debug.Log(text.text);
+        //Debug.Log(_info);
     }
 
     public void OnClick() // quand tu cliques tu rejoins la room
