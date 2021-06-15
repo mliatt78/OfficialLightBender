@@ -1,10 +1,5 @@
 using System.Collections;
-
 using System.Collections.Generic;
-using Michsky.UI.ModernUIPack;
-
-using System.Runtime.CompilerServices;
-
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -14,11 +9,9 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 {
     [SerializeField] GameObject cameraHolder;
-
-
+    
     [SerializeField] CapsuleCollider capsuleCollider;
     
-
     [SerializeField] float mouseSensivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
 
     [SerializeField] float respawnTime;
@@ -135,18 +128,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             if (items[itemIndex] is SingleShot)
             {
                 singleshot = (SingleShot) items[itemIndex];
-                singleshot.PlayerOwner = this;
                 //Debug.Log("Name " + items[itemIndex].name);
                 //Debug.Log(singleshot.nbballes + " :::: " + singleshot.nbinit);
             }
 
-            
-
             visuals = GetComponentsInChildren<Renderer>();
             team = (int) PhotonNetwork.LocalPlayer.CustomProperties["Team"];
             Debug.Log("Instantiation is finished");
-           
-            
         }
         else
         {
@@ -165,13 +153,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             return;
         
         Look();
-        
-        if (!PlayerOnlyLook)
+
+        if (PlayerOnlyLook)
         {
-            Move();
-            Jump();
-            CheckCrouchProne();
+            return;
         }
+        
+        Move();
+        Jump();
+        CheckCrouchProne();
 
         for (int i = 0; i < items.Length; i++)
         {
@@ -206,7 +196,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             }
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetKey(GameManager.instance.keys["Shoot"]))
         {
             items[itemIndex].Use();
         }
@@ -216,19 +206,19 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         {
             Die();
         }*/
-        if (Input.GetKeyDown("1"))
+        if (Input.GetKeyDown(GameManager.instance.keys["Lock"]))
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
-        if (Input.GetKeyDown("2"))
+        if (Input.GetKeyDown(GameManager.instance.keys["Unlock"]))
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
 
-        if (Input.GetKeyDown("r"))
+        if (Input.GetKeyDown(GameManager.instance.keys["Reload"]))
         {
             StartCoroutine(singleshot.Reload(singleshot.secondsToReload));
         }
@@ -287,7 +277,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         //Debug.Log(moveDir.x + " : " + moveDir.y +" : " + moveDir.z + " ");
 
         moveAmount = Vector3.SmoothDamp(moveAmount,
-            moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed),
+            moveDir * (Input.GetKey(GameManager.instance.keys["Sprint"]) ? sprintSpeed : walkSpeed),
             ref smoothMoveVelocity, smoothTime);
 
 
@@ -295,7 +285,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         bool pressedwalk = Input.GetKey(GameManager.instance.keys["Up"]);
 
         bool isRunning = animator.GetBool("IsRunning");
-        bool pressedrun = Input.GetKey(KeyCode.LeftShift);
+        bool pressedrun = Input.GetKey(GameManager.instance.keys["Sprint"]);
 
         bool isLeft = animator.GetBool("IsLeftWalk");
         bool isRight = animator.GetBool("IsRightWalk");
@@ -303,7 +293,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         bool pressedright = Input.GetKey(GameManager.instance.keys["Right"]);
 
         bool isDance = animator.GetBool("IsDance");
-        bool presseddance = Input.GetKey("l");
+        bool presseddance = Input.GetKey(GameManager.instance.keys["Dance"]);
         ;
         //Debug.Log("Movement");
 
@@ -376,7 +366,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && grounded)
+        if (Input.GetKeyDown(GameManager.instance.keys["Jump"]) && grounded)
         {
             UnCrouchOrProne();
             rb.AddForce(transform.up * jumpForce);
