@@ -28,9 +28,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static int RedLayer;
 
     public static bool isFocused = true;
+    
+    public static int[] scores = {0,0};
 
     public static List<ChatMessage> chatMessages = new List<ChatMessage>();
-    
     public  Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>(); 
     
     private void Start()
