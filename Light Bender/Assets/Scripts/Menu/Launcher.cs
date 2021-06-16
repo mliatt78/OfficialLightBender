@@ -19,6 +19,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] GameObject StartGamebutton;
     public AudioSource AudioSource;
 
+    public string nickname;
+
 
     public bool isFocused;
     private void Awake()
@@ -45,11 +47,16 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
+    public void ChooseNickName(string input)
+    {
+        PhotonNetwork.NickName = input;
+    }
+
     public override void OnJoinedLobby()
     {
         MenuManager.Instance.OpenMenu("Mainmenu");
         Debug.Log("Joined Lobby");
-        PhotonNetwork.NickName = "Player" + Random.Range(0, 1000).ToString("0000"); // donne un nom random au joueur de 0 a 1000
+        ///PhotonNetwork.NickName = "Player" + Random.Range(0, 1000).ToString("0000"); // donne un nom random au joueur de 0 a 1000 
     }
 
     public void CreateRoom()
@@ -107,6 +114,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.JoinRoom(info.Name);
         MenuManager.Instance.OpenMenu("loading");
+        Debug.Log("username" + PhotonNetwork.NickName);
     }
 
     public override void OnLeftRoom()

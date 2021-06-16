@@ -679,6 +679,36 @@ Transform:
   m_Father: {fileID: 5250719147726571917}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1416706244510968869
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7620516505322317038}
+  m_Layer: 12
+  m_Name: Handle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &7620516505322317038
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416706244510968869}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5956955735349403720}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1451410173049111367
 GameObject:
   m_ObjectHideFlags: 0
@@ -1004,6 +1034,7 @@ Transform:
   m_Children:
   - {fileID: 3600071318002362879}
   - {fileID: 8575731142849662963}
+  - {fileID: 5956955735349403720}
   m_Father: {fileID: 2630229678668284454}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8436,6 +8467,7 @@ MonoBehaviour:
   items:
   - {fileID: 3404314541941351947}
   - {fileID: 7473042220427253011}
+  - {fileID: 6413398402243658240}
   _progressBarPro: {fileID: 1404397881411044694}
   munitionsSlider: {fileID: 7800652883027205043}
   munitionObject: {fileID: 8512814894333804659}
@@ -8659,7 +8691,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 1
+  m_Depth: 1.5
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4096
@@ -8874,7 +8906,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.01
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 64.1
   orthographic: 0
@@ -8882,7 +8914,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1843
+    m_Bits: 28471
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -13993,6 +14025,83 @@ RectTransform:
   m_AnchoredPosition: {x: -75.999756, y: 41.000015}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 1, y: 0}
+--- !u!1 &8657812062447035779
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5956955735349403720}
+  - component: {fileID: 6413398402243658240}
+  - component: {fileID: 591343313505326770}
+  m_Layer: 12
+  m_Name: Grenade
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5956955735349403720
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8657812062447035779}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.04321292, z: 0.030438662}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7620516505322317038}
+  m_Father: {fileID: 2628569650800534551}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6413398402243658240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8657812062447035779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02460ab158d316d42a47b662ac88adf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iteminfo: {fileID: 11400000, guid: 7aaff4107b00b794a8e2a2474c06d239, type: 2}
+  itemGameObject: {fileID: 1416706244510968869}
+  delay: 3
+  explosion: {fileID: 3317965397864451794, guid: c7f64ac17f9e9c24c993c9646bc439ce,
+    type: 3}
+  blastradius: 15
+  explosionforce: 100
+  throwforce: 15
+  grenadeprefab: {fileID: 105938, guid: 0ff9f6f67aab0354ebdffc6837c43365, type: 3}
+  numberofgrenades: 1
+--- !u!114 &591343313505326770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8657812062447035779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 2
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &8767651824122504269
 GameObject:
   m_ObjectHideFlags: 0
@@ -14765,15 +14874,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1766401d10a80043ac8e421b25df96e, type: 3}
---- !u!4 &8595757714105781109 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d1766401d10a80043ac8e421b25df96e,
-    type: 3}
-  m_PrefabInstance: {fileID: 8124772334690380958}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8935586644516999631 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d1766401d10a80043ac8e421b25df96e,
+    type: 3}
+  m_PrefabInstance: {fileID: 8124772334690380958}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8595757714105781109 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d1766401d10a80043ac8e421b25df96e,
     type: 3}
   m_PrefabInstance: {fileID: 8124772334690380958}
   m_PrefabAsset: {fileID: 0}
