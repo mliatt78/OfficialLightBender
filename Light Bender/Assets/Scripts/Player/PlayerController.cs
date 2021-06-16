@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] GameObject cameraHolder;
     
     [SerializeField] CapsuleCollider capsuleCollider;
+    [SerializeField] SkinnedMeshRenderer playerRenderer;
     
     [SerializeField] float mouseSensivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
 
@@ -31,11 +33,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     int oresHolded;
     public bool hasOre => oresHolded != 0;
-
-    public bool IsLocal => isLocal;
+    
     public bool isLocal;
 
     private bool canRespawn = true;
+    private bool DetectCollisions = true;
+    private bool isFreezed = false;
 
     private bool isCrouching,isProning;
 
@@ -44,8 +47,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     private float heightCollider;
 
     private float baseWalkSpeed, baseSprintSpeed;
-
-
+    
     float verticalLookRotation;
     bool grounded;
     Vector3 smoothMoveVelocity;
@@ -67,6 +69,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     Renderer[] visuals;
     
     int team;
+    int ID;
 
     public bool PlayerOnlyLook;
 
@@ -74,11 +77,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     public float currentHealth = maxHealth;
 
     private SingleShot singleshot;
-
     private Grenade grenade;
     
     public Chat chat;
-    
     
     void Awake()
     {
@@ -91,20 +92,17 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         heightCollider = capsuleCollider.height;
         capsuleColliderCenter = capsuleCollider.center;
         capsuleColliderDirection = capsuleCollider.direction;
-        
+
         //playerManager = PhotonView.Find((int)Phv.InstantiationData[0]).GetComponent<PlayerManager>();
 
-        if (!PlayerManager.players.Contains(this)) PlayerManager.players.Add(this);
-
-
+        if (!PlayerManager.players.Contains(this)) 
+            PlayerManager.players.Add(this);
+        
 
         // playerController is instantiated on each machine in the room. 
         // by doing this, it will locally, on each machine in the room 
         // (PhotonNetwork.Instantiate() creates the object for all machines)
         // add the object to the players. 
-
-        // just have to test it out, but it SHOULD work
-
 
         // DEBUG
         /*Debug.Log("Displaying PlayerManager.players on machine of player "+name+":");
@@ -169,7 +167,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
         for (int i = 0; i < items.Count; i++)
         {
-            Debug.Log("Items count : " + items.Count);
+            //Debug.Log("Items count : " + items.Count);
             if (Input.GetKeyDown((i + 1).ToString()))
             {
                 EquipItem(i);
@@ -243,6 +241,20 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             StartCoroutine(singleshot.Reload(singleshot.secondsToReload));
         }
     }
+    
+    void FixedUpdate()
+    {
+        if (PlayerOnlyLook)
+        {
+            rb.velocity = Vector3.zero;
+            // we do not want the player to move if the player stopped
+        }
+
+        if (!Phv.IsMine || PauseMenu.GameIsPaused || PlayerOnlyLook)
+            return;
+        
+        rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
+    }
 
     /*public bool GetInputRaw(Dictionary<string, KeyCode> dict,string keycode)
     {
@@ -291,10 +303,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void Move()
     {
         //Debug.Log("Movement activated");
+        //Debug.Log(moveDir.x + " : " + moveDir.y +" : " + moveDir.z + " ");
 
         Vector3 moveDir = CustomGetAxisRaw(GameManager.instance.keys);
-        
-        //Debug.Log(moveDir.x + " : " + moveDir.y +" : " + moveDir.z + " ");
 
         moveAmount = Vector3.SmoothDamp(moveAmount,
             moveDir * (Input.GetKey(GameManager.instance.keys["Sprint"]) ? sprintSpeed : walkSpeed),
@@ -475,6 +486,20 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         animator.SetBool("IsDance", false);
     }
 
+    private void SetCollisionState(bool state)
+    {
+        rb.detectCollisions = state;
+        capsuleCollider.enabled = state;
+        DetectCollisions = state;
+    }
+
+    private void SetFreezeState(bool state)
+    {
+        rb.constraints = (state ? RigidbodyConstraints.FreezeAll 
+            : RigidbodyConstraints.FreezeRotation);
+        isFreezed = state;
+    }
+
     void CheckCrouchProne()
     {
         if (Input.GetKeyDown(GameManager.instance.keys["Prone"]))
@@ -559,20 +584,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     public int GetTeam() => team;
 
-    void FixedUpdate()
-    {
-        if (PlayerOnlyLook)
-        {
-            rb.velocity = Vector3.zero;
-            // we do not want the player to move if the player stopped
-        }
-
-        if (!Phv.IsMine || PauseMenu.GameIsPaused || PlayerOnlyLook)
-            return;
-        
-        rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
-    }
-
     public void TakeDamage(float damage) // juste sur le shooter
         =>
             Phv.RPC("RPC_TakeDamage", RpcTarget.All, damage);
@@ -585,8 +596,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          SetRenderers(false);
 
          currentHealth = 100;
-         PlayerManager.scores[(team+1)%2] += 1;
-         PlayerManager.UpdateScores();
+         GameManager.scores[(team+1)%2] += 1;
+         //PlayerManager.UpdateScores();
+         // TODO
+         
          if (hasOre)
          {
              RemoveOres();
@@ -598,6 +611,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          SendChatMessage("System",
              lastShooter.name +" killed " + name);
          
+         SetCollisionState(false);
+         SetFreezeState(true);
+         
          yield return new WaitForSeconds(respawnWait);
 
          currentHealth = 100; 
@@ -607,6 +623,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          transform.position = spawn.position;
          transform.rotation = spawn.rotation;
          //GetComponent<PlayerController>().enabled = true;
+         
+         SetCollisionState(true);
+         SetFreezeState(false);
 
          SetRenderers(true);
          canRespawn = true;
@@ -624,7 +643,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
      {
          Phv.RPC("SendChat",RpcTarget.All,sender,message);
      }
-
 
      [PunRPC]
      void RPC_TakeDamage(float damage)
