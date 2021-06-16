@@ -78,6 +78,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     private Grenade grenade;
     
     public Chat chat;
+
+    public GameObject launchbutton;
+
     
     
     void Awake()
@@ -133,6 +136,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
                 //Debug.Log("Name " + items[itemIndex].name);
                 //Debug.Log(singleshot.nbballes + " :::: " + singleshot.nbinit);
             }
+            
 
             visuals = GetComponentsInChildren<Renderer>();
             team = (int) PhotonNetwork.LocalPlayer.CustomProperties["Team"];
@@ -145,6 +149,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             Debug.Log("Owner name of phv: " + Phv.Owner.NickName);
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
+        }
+
+        Debug.Log("IsMasterClient " + PhotonNetwork.IsMasterClient +" IsLobby : " + GameManager.instance.IsLobby );
+
+        if (PhotonNetwork.IsMasterClient && GameManager.instance.IsLobby)
+        {
+            Debug.Log("Set Active is True");
+            GameManager.instance.settingsbutton.SetActive(true);
+            launchbutton.SetActive(true);
         }
     }
 
@@ -650,8 +663,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          {
              GameManager.chatMessages.RemoveAt(GameManager.chatMessages.Count - 1);
          }
-
          Chat.chatMessages = GameManager.chatMessages;
          // responsible for the synchronisation of all messages
+     }
+     
+     public void StartGame()
+     {
+         Debug.Log("Start Game");
+         PlayerManager.localPlayerInstance = null;
+         PhotonNetwork.LoadLevel(2) ; // index de la scene
+         
      }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -18,11 +19,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] GameObject PlayerListItemPrefab;
     [SerializeField] GameObject StartGamebutton;
     public AudioSource AudioSource;
-
-    public string nickname;
-
-
+    
     public bool isFocused;
+
+    private bool isTeam = false;
     private void Awake()
     {
         Instance = this;
@@ -56,7 +56,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         MenuManager.Instance.OpenMenu("Mainmenu");
         Debug.Log("Joined Lobby");
-        ///PhotonNetwork.NickName = "Player" + Random.Range(0, 1000).ToString("0000"); // donne un nom random au joueur de 0 a 1000 
+        // PhotonNetwork.NickName = "Player" + Random.Range(0, 1000).ToString("0000"); // donne un nom random au joueur de 0 a 1000 
     }
 
     public void CreateRoom()
@@ -69,10 +69,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("Loading");
     }
 
-    public override void OnMasterClientSwitched(Player newMasterClient)
+   /*- public override void OnMasterClientSwitched(Player newMasterClient)
     {
         StartGamebutton.SetActive(PhotonNetwork.IsMasterClient); // switch de master quand le precedent est parti
-    }
+    }*/
     public override void OnJoinedRoom()
     {
         MenuManager.Instance.OpenMenu("room");
@@ -88,8 +88,6 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().Setup(players[i]);
         }
-
-        StartGamebutton.SetActive(PhotonNetwork.IsMasterClient);
     }
     
 
@@ -98,8 +96,8 @@ public class Launcher : MonoBehaviourPunCallbacks
         errorText.text = "Room Creation Failed" + message;
         MenuManager.Instance.OpenMenu("error");
     }
-
-    public void StartGame()
+    
+    public void StartLobby()
     {
         Debug.Log("Start Game");
         PhotonNetwork.LoadLevel(1) ; // index de la scene
@@ -122,6 +120,11 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("Mainmenu");
     }
 
+    public void Update()
+    {
+        StartGamebutton.SetActive(isTeam);
+    }
+
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         foreach (Transform trans in roomListContent)
@@ -135,6 +138,8 @@ public class Launcher : MonoBehaviourPunCallbacks
                 continue;
             Instantiate(roomListItemPrefab,roomListContent).GetComponent<RoomListItem>().Setup(roomList[i]);
         }
+        StartGamebutton.SetActive(isTeam);
+        
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -159,7 +164,9 @@ public class Launcher : MonoBehaviourPunCallbacks
             };
             PhotonNetwork.SetPlayerCustomProperties(playerProps);
         }
+        isTeam = true;
     }
+    
 
     public void PlaySoundButton()
     {
