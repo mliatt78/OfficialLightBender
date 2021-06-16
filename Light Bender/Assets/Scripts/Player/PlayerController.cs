@@ -137,6 +137,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             visuals = GetComponentsInChildren<Renderer>();
             team = (int) PhotonNetwork.LocalPlayer.CustomProperties["Team"];
             Debug.Log("Instantiation is finished");
+            GameManager.instance.currentweapon = 0;
         }
         else
         {
@@ -310,6 +311,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         bool isRight = animator.GetBool("IsRightWalk");
         bool pressedleft = Input.GetKey(GameManager.instance.keys["Left"]);
         bool pressedright = Input.GetKey(GameManager.instance.keys["Right"]);
+        
+        bool pressedcrouch = Input.GetKey(GameManager.instance.keys["Crouch"]);
+        bool iscrouch = animator.GetBool("IsCrouch");
+        
+        bool pressedprone = Input.GetKey(GameManager.instance.keys["Prone"]);
+        bool isprone = animator.GetBool("IsProne");
+        
+        
 
         bool isDance = animator.GetBool("IsDance");
         bool presseddance = Input.GetKey(GameManager.instance.keys["Dance"]);
@@ -371,6 +380,27 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         {
             animator.SetBool("IsDance", false);
         }
+        
+        
+        if (!iscrouch && pressedcrouch)
+        {
+            animator.SetBool("IsCrouch", true);
+        }
+        if (iscrouch && !pressedcrouch)
+        {
+            animator.SetBool("IsCrouch", false);
+        }
+        
+        
+        if (!isprone && pressedprone)
+        {
+            animator.SetBool("IsProne", true);
+            
+        }
+        if (isprone && !pressedprone)
+        {
+            animator.SetBool("IsProne", false);
+        }
     }
 
     void Look()
@@ -397,6 +427,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             return;
 
         itemIndex = _index;
+        GameManager.instance.currentweapon = itemIndex;
 
         items[itemIndex].itemGameObject.SetActive(true);
 

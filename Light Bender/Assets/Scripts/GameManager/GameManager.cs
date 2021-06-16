@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static int RedLayer;
 
     public static bool isFocused = true;
+    public int currentweapon;
 
     public static List<ChatMessage> chatMessages = new List<ChatMessage>();
     
