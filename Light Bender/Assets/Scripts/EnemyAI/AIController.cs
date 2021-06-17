@@ -54,7 +54,7 @@ namespace EnemyAI
             {
                 EquipItem(0);
                 SingleShotAI = (SingleShotAI) items[0];
-                SingleShotAI.AiOwner = this;
+                SingleShotAI = (SingleShotAI) items[0];
             }
             NextWalkPoint();
             visuals = GetComponentsInChildren<Renderer>();
@@ -168,15 +168,17 @@ namespace EnemyAI
                 renderer.enabled = state;
             }
         }
-        
+
         IEnumerator Respawn(float respawnWaitTime)
         {
             canRespawn = false;
             SetRenderers(false);
             currentHealth = 100;
-            PlayerManager.scores[(team+1)%2] += 1;
+            GameManager.scores[(team+1)%2] += 1;
             //Debug.Log((team+1)%2);
-            PlayerManager.UpdateScores();
+            //PlayerManager.UpdateScores();
+            // TODO
+            
             GetComponent<AIController>().enabled = false;
             Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
             transform.position = spawn.position;

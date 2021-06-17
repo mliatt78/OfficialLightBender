@@ -35,7 +35,7 @@ public class Scope : MonoBehaviour
 
    private void Update()
    {
-      if (Input.GetMouseButtonDown(1))
+      if (Input.GetMouseButtonDown(1) && GameManager.instance.currentweapon == 0)
       {
          if (!Phv.IsMine || PauseMenu.GameIsPaused || !canScope)
             return;

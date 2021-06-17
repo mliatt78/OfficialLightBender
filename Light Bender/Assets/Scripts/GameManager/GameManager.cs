@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Michsky.UI.ModernUIPack;
 using Photon.Pun;
 using UnityEngine;
 using Random = System.Random;
@@ -30,8 +29,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public static bool isFocused = true;
 
-    public static List<ChatMessage> chatMessages = new List<ChatMessage>();
+    public int currentweapon;
+
     
+    public static int[] scores = {0,0};
+
+
+    public static List<ChatMessage> chatMessages = new List<ChatMessage>();
     public  Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>(); 
     
     private void Start()
@@ -114,6 +118,15 @@ public class GameManager : MonoBehaviourPunCallbacks
             keys.Add("Left", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Left","A")));
             keys.Add("Right", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Right","D")));
             keys.Add("Jump", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Jump","Space")));
+            keys.Add("Shoot", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Shoot","Mouse0")));
+            keys.Add("Reload", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Reload","R")));
+            keys.Add("Sprint", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Sprint","LeftShift")));
+            keys.Add("Crouch", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Crouch","C")));
+            keys.Add("Prone", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Prone","V")));
+            keys.Add("Dance", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Dance","L")));
+            keys.Add("Lock", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Lock","1")));
+            keys.Add("Unlock", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Unlock","2")));
+            keys.Add("Chat", (KeyCode) System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Chat","T")));
         }
         else if (instance != this)
             Destroy(gameObject);

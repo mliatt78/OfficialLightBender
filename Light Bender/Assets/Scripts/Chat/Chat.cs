@@ -23,7 +23,7 @@ public class Chat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.T) && !isChatting)
+        if (Input.GetKeyUp(GameManager.instance.keys["Chat"]) && !isChatting)
         {
             isChatting = true;
             chatInput = "";
@@ -45,7 +45,7 @@ public class Chat : MonoBehaviour
         {
             playerController.PlayerOnlyLook = false;
         
-            GUI.Label(new Rect(5, Screen.height - minHeightOnScreen, 200, 25), "Press 'T' to chat");
+            GUI.Label(new Rect(5, Screen.height - minHeightOnScreen, 200, 25), "Press '"+GameManager.instance.keys["Chat"]+"' to chat");
         }
         else
         {
