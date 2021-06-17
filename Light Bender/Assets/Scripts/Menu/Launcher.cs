@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class Launcher : MonoBehaviourPunCallbacks
@@ -100,7 +101,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public void StartLobby()
     {
         Debug.Log("Start Game");
-        PhotonNetwork.LoadLevel(1) ; // index de la scene
+        PhotonNetwork.LoadLevel(1); // index de la scene
     }
     public void LeaveRoom() // leave room
     {
