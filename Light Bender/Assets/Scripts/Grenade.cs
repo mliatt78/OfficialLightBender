@@ -20,11 +20,7 @@ public class Grenade : Item
      
      public float throwforce = 40f;
 
-     public GameObject grenadeprefab;
-
-
-     private GameObject grenadethown;
-
+    
      public int numberofgrenades;
     
     // Start is called before the first frame update
@@ -47,48 +43,41 @@ public class Grenade : Item
         {
             numberofgrenades -= 1;
             Debug.Log("I use the grenade");
-            ThrowGrenade();
+            GameObject grenade = PhotonNetwork.Instantiate("Grenade_03", transform.position, transform.rotation);
+            Rigidbody rb = grenade.GetComponent<Rigidbody>();
+            rb.AddForce(transform.forward * throwforce,ForceMode.VelocityChange);
             yield return new WaitForSeconds (delays);
             if (!hasExploded)
             {
                 Debug.Log("Begin Explosion");
-                Explode();
+                Instantiate(explosion, grenade.transform.position, grenade.transform.rotation);
+                Pv.RPC("RPC_Explode",RpcTarget.All,grenade.name);
+                Debug.Log("BOOM !!!");
                 hasExploded = true;
             }
         }
     }
     
-    void Explode()
-    {
-        Instantiate(explosion, grenadethown.transform.position, grenadethown.transform.rotation);
-        Pv.RPC("RPC_Explode",RpcTarget.All);
-        Debug.Log("BOOM !!!");
-    }
+   
     [PunRPC]
-    void RPC_Explode()
+    void RPC_Explode(string name)
     {
-        Collider[] colliders = Physics.OverlapSphere(grenadethown.transform.position, blastradius);
-
+        GameObject grenade = GameObject.Find(name);
+        Debug.Log("grenade exists" + grenade is null);
+        Collider[] colliders = Physics.OverlapSphere(grenade.transform.position, blastradius);
         foreach (Collider nearbyobject in colliders)
         {
             Rigidbody rb = nearbyobject.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.AddExplosionForce(explosionforce,grenadethown.transform.position,blastradius);
+                rb.AddExplosionForce(explosionforce,grenade.transform.position,blastradius);
                 IDamageable damageableOfCollider = nearbyobject.gameObject.GetComponent<IDamageable>();
                 damageableOfCollider?.TakeDamage(((GunInfo) iteminfo).damage);
             }
         }
-        Destroy(gameObject);
+        // Destroy(gameObject);
     }
-
-    void ThrowGrenade()
-    {
-        GameObject grenade = Instantiate(grenadeprefab, transform.position, transform.rotation);
-        Rigidbody rb = grenade.GetComponent<Rigidbody>();
-        grenadethown = grenade;
-        rb.AddForce(transform.forward * throwforce,ForceMode.VelocityChange);
-    }
+    
     
 
     
