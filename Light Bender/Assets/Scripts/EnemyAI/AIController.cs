@@ -82,10 +82,16 @@ namespace EnemyAI
             foreach (var player in enemies)
             {
                 Vector3 distance = player.transform.position - agent.destination;
-                if (distance.magnitude < distanceToNearest)
+                if (distance.magnitude < distanceToNearest)  
                 {
-                    Nearest = player;
-                    distanceToNearest = distance.magnitude;
+                    transform.LookAt(player.transform);
+                    RaycastHit rch = new RaycastHit();
+                    Physics.Raycast(transform.position, transform.forward, out rch);
+                    if (rch.rigidbody == player.GetComponent<Rigidbody>())
+                    {
+                        Nearest = player;
+                        distanceToNearest = distance.magnitude;
+                    }
                 }
             }
 
