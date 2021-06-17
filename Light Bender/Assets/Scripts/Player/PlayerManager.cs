@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
+   
      public static PhotonView Phv;
      public static GameObject localPlayerInstance;
     // GameObject controller;

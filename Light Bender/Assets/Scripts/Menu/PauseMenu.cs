@@ -55,7 +55,7 @@ public class PauseMenu : MonoBehaviourPunCallbacks
         PhotonNetwork.Disconnect();
         while (PhotonNetwork.IsConnected)
             yield return null;
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(3);
    }
    
    /*public void LeaveRoom() // local player leaves
