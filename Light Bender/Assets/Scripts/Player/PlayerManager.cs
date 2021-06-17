@@ -19,8 +19,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public static List<AIController> bots = new List<AIController>();
     public static List<AIController> blueBots = new List<AIController>();
     public static List<AIController> redBots = new List<AIController>();
-    
-    public static int[] scores = {0,0};
 
     void Awake()
     {
@@ -66,9 +64,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         //Debug.Log(players.Count);
         for (int i = 0; i < players.Count; i++)
         {
-            players[i].blueScoreText.text = scores[0].ToString();
-            players[i].redScoreText.text = scores[1].ToString();
-            Debug.Log("Score : " + scores[0] + " -- " + scores[1]);
+            players[i].blueScoreText.text = GameManager.scores[0].ToString();
+            players[i].redScoreText.text = GameManager.scores[1].ToString();
+            //Debug.Log("Score : " + GameManager.scores[0] + " -- " + GameManager.scores[1]);
         }
     }
 
@@ -76,7 +74,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         for (int i = 0; i < players.Count; i++)
         {
-            if (players[i].IsLocal)
+            if (players[i].isLocal)
             {
                 return players[i];
             }

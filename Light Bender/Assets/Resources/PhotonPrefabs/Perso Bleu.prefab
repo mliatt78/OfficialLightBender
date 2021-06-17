@@ -8458,6 +8458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraHolder: {fileID: 1728960968149508185}
   capsuleCollider: {fileID: 7482682730635467916}
+  playerRenderer: {fileID: 8722604848764279095}
   mouseSensivity: 3
   sprintSpeed: 6
   walkSpeed: 3
