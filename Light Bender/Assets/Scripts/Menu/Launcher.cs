@@ -70,10 +70,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("Loading");
     }
 
-   /*- public override void OnMasterClientSwitched(Player newMasterClient)
+    public override void OnMasterClientSwitched(Player newMasterClient)
     {
         StartGamebutton.SetActive(PhotonNetwork.IsMasterClient); // switch de master quand le precedent est parti
-    }*/
+    }
     public override void OnJoinedRoom()
     {
         MenuManager.Instance.OpenMenu("room");

@@ -13,6 +13,8 @@ public class Chat : MonoBehaviour
     bool isChatting;
     string chatInput = "";
 
+   //public int nbmessages = 20;
+
     [SerializeField] int minHeightOnScreen = 90;
     [SerializeField] int maxLengthMessage = 60;
     [SerializeField] GUIStyle chatBoxStyle;
