@@ -31,16 +31,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public int currentweapon;
 
-    
-    public  Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>();
-
     public bool IsLobby = false;
-
-    
     public GameObject settingsbutton;
-    
-
-    public static int[] scores = {0,0};
+    public int[] scores = {0,0};
 
 
     public static List<ChatMessage> chatMessages = new List<ChatMessage>();

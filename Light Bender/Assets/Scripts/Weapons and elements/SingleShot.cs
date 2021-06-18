@@ -85,17 +85,7 @@ public class SingleShot : GUN
                }
                
                IDamageable damageableOfCollider = hit.collider.gameObject.GetComponent<IDamageable>();
-               damageableOfCollider?.TakeDamage(((GunInfo) iteminfo).damage);
-               if (hit.collider.gameObject.GetComponent<PlayerController>() != null)
-               {
-                  hit.collider.gameObject.GetComponent<PlayerController>().lastShooter = PlayerOwner.gameObject;
-               }
-               else if (hit.collider.gameObject.GetComponent<AIController>() != null)
-               {
-                  hit.collider.gameObject.GetComponent<AIController>().lastShooter = PlayerOwner.gameObject;
-               }
-
-               //Debug.Log(((GunInfo) iteminfo).damage + " DOMMAGES");
+               damageableOfCollider?.TakeDamage(((GunInfo) iteminfo).damage, PlayerOwner.gameObject.name);
                if (hit.rigidbody != null)
                {
                   hit.rigidbody.AddForce(-hit.normal * impactforce);

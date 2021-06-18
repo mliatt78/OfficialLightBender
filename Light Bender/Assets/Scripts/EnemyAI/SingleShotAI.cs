@@ -76,15 +76,15 @@ public class SingleShotAI : GUN
                   Destroy(bulletImpact, 2f);
                   bulletImpact.transform.SetParent(bimp[0].transform);
                }
-               hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage);
-               if (hit.collider.gameObject.GetComponent<PlayerController>() != null)
+               hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage, AiOwner.gameObject.name);
+               /*if (hit.collider.gameObject.GetComponent<PlayerController>() != null)
                {
                   hit.collider.gameObject.GetComponent<PlayerController>().lastShooter = AiOwner.gameObject;
                }
                else if (hit.collider.gameObject.GetComponent<AIController>() != null)
                {
                   hit.collider.gameObject.GetComponent<AIController>().lastShooter = AiOwner.gameObject;
-               }
+               }*/
                
                //Debug.Log(((GunInfo) iteminfo).damage + " DAMAGE");
                if (hit.rigidbody != null)

@@ -31,11 +31,12 @@ namespace Zones
             {
                 if (playersNear[i].hasOre && playersNear[i].GetTeam() == team)
                 {
-                    GameManager.scores[playersNear[i].GetTeam()] += (5 * playersNear[i].GetOresBeingHeld());
-                    //PlayerManager.UpdateScores();
-                    //TODO
+                    GameManager.instance.scores[playersNear[i].GetTeam()] += (5 * playersNear[i].GetOresBeingHeld());
+                    playersNear[i].SendScores();
+                    playersNear[i].SendChatMessage("System",
+                        playersNear[i].name + " brought its ores back to his base!");
                     playersNear[i].RemoveOres();
-                    Debug.Log(playersNear[i].name + " brought its ores back to his base!");
+                    //Debug.Log(playersNear[i].name + " brought its ores back to his base!");
                 }
             }
         }
@@ -65,7 +66,6 @@ namespace Zones
             }
         }
         
-
         public void AddPlayerNear(PlayerController player)
         {
             //if (player.gameObject.CompareTag("Player"))
