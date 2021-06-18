@@ -20,6 +20,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public static List<AIController> blueBots = new List<AIController>();
     public static List<AIController> redBots = new List<AIController>();
 
+    public static PlayerManager instance;
+
     void Awake()
     {
         Phv = GetComponent<PhotonView>();
@@ -48,14 +50,22 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         Debug.Log("Bots List: ");
         Debug.Log(TempPrintListController(blueBots));
         Debug.Log(TempPrintListController(redBots));
-        */        
-        
+        */
+        if (instance)
+            Destroy(gameObject);
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+           
         if (Phv.IsMine)
         {
             localPlayerInstance = gameObject;
+            //now dont destroy!!
+            DontDestroyOnLoad(gameObject);
         }
-        //now dont destroy!!
-        DontDestroyOnLoad(gameObject);
+
     }
     
     public static void UpdateScores()
