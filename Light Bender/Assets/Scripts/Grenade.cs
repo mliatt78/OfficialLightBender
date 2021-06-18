@@ -1,11 +1,9 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
 public class Grenade : Item
 {
-
     public float delay = 8f;
     
     private bool hasExploded;
@@ -19,8 +17,11 @@ public class Grenade : Item
      public float explosionforce = 100f;
      
      public float throwforce = 40f;
-
-    
+     
+     public GameObject grenadeprefab;
+     public GameObject grenadeOwner;
+     
+     private GameObject grenadethown;
      public int numberofgrenades;
     
     // Start is called before the first frame update
@@ -72,7 +73,7 @@ public class Grenade : Item
             {
                 rb.AddExplosionForce(explosionforce,grenade.transform.position,blastradius);
                 IDamageable damageableOfCollider = nearbyobject.gameObject.GetComponent<IDamageable>();
-                damageableOfCollider?.TakeDamage(((GunInfo) iteminfo).damage);
+                damageableOfCollider?.TakeDamage(((GunInfo) iteminfo).damage, grenadeOwner.gameObject.name);
             }
         }
         // Destroy(gameObject);

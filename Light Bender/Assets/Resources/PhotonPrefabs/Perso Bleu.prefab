@@ -8475,7 +8475,7 @@ MonoBehaviour:
   health: {fileID: 6176230217681043126}
   isLocal: 0
   Phv: {fileID: 0}
-  lastShooter: {fileID: 0}
+  lastShooterName: null
   blueScoreText: {fileID: 7125306167137377844}
   redScoreText: {fileID: 7669746290670977083}
   PlayerOnlyLook: 0
@@ -14086,6 +14086,8 @@ MonoBehaviour:
   blastradius: 15
   explosionforce: 100
   throwforce: 15
+  grenadeprefab: {fileID: 105938, guid: 0ff9f6f67aab0354ebdffc6837c43365, type: 3}
+  grenadeOwner: {fileID: 7316499710202688552}
   numberofgrenades: 1
 --- !u!114 &591343313505326770
 MonoBehaviour:
