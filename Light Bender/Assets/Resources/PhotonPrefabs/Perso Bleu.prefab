@@ -454,8 +454,8 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 321043427970439332, guid: 475027e394f7a524889ac4d3f50debc7, type: 3}
-  - {fileID: 6731146002191872453, guid: 475027e394f7a524889ac4d3f50debc7, type: 3}
+  - {fileID: 2100000, guid: 2b023ae8ba3aabd49ab8983ba3640bc1, type: 2}
+  - {fileID: 2100000, guid: 2b023ae8ba3aabd49ab8983ba3640bc1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1817,8 +1817,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4014504712900300806}
-  m_LocalRotation: {x: -0, y: 0.0176789, z: -0, w: 0.9998437}
-  m_LocalPosition: {x: -0.38, y: -0, z: 0.209}
+  m_LocalRotation: {x: -0, y: 0.017732475, z: -0, w: 0.99984276}
+  m_LocalPosition: {x: -0.11, y: -0.03, z: 0.12}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children:
   - {fileID: 2161053746111618558}
@@ -8702,7 +8702,7 @@ Camera:
   m_Depth: 1.5
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 6144
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -8711,7 +8711,7 @@ Camera:
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
+  m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
 --- !u!1 &7390682927559103035
@@ -8922,7 +8922,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 28471
+    m_Bits: 26423
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -14157,7 +14157,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5255478394033126659
 Transform:
   m_ObjectHideFlags: 0

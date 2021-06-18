@@ -84,6 +84,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     public GameObject launchbutton;
 
+    public static bool CanJump = true;
+    
+    public  static int nbmessages = 20;
+    
+
     
     void Awake()
     {
@@ -153,18 +158,23 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         }
 
         Debug.Log("IsMasterClient " + PhotonNetwork.IsMasterClient +" IsLobby : " + GameManager.instance.IsLobby );
-
-        if (PhotonNetwork.IsMasterClient && GameManager.instance.IsLobby)
-        {
-            Debug.Log("Set Active is True");
-            GameManager.instance.settingsbutton.SetActive(true);
-            launchbutton.SetActive(true);
-        }
     }
 
 
     void Update()
     {
+//        Debug.Log(PauseMenu.GameIsPaused);
+        if (GameManager.instance.IsLobby && PauseMenu.GameIsPaused)
+        {
+            GameManager.instance.settingsbutton.SetActive(true);
+            launchbutton.SetActive(false);
+        }
+        if (!PauseMenu.GameIsPaused && PhotonNetwork.IsMasterClient && GameManager.instance.IsLobby)
+        {
+            Debug.Log("Set Active is True");
+            GameManager.instance.settingsbutton.SetActive(false);
+            launchbutton.SetActive(true);
+        }
         
         //Debug.Log(PauseMenu.GameIsPaused + "  <>  " + Phv.IsMine );
         if (!Phv.IsMine || PauseMenu.GameIsPaused)
@@ -178,12 +188,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         }
         
         Move();
-        Jump();
+        if(CanJump)
+            Jump();
         CheckCrouchProne();
 
         for (int i = 0; i < items.Count; i++)
         {
-            //Debug.Log("Items count : " + items.Count);
+
             if (Input.GetKeyDown((i + 1).ToString()))
             {
                 EquipItem(i);
@@ -712,7 +723,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          ChatMessage m = new ChatMessage(sender,message);
 
          GameManager.chatMessages.Insert(0, m);
-         if(GameManager.chatMessages.Count > 8)
+         if(GameManager.chatMessages.Count > nbmessages)
          {
              GameManager.chatMessages.RemoveAt(GameManager.chatMessages.Count - 1);
          }
@@ -726,5 +737,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          PlayerManager.localPlayerInstance = null;
          PhotonNetwork.LoadLevel(2) ; // index de la scene
          
+     }
+     
+     public override void OnMasterClientSwitched(Player newMasterClient)
+     {
+         launchbutton.SetActive(PhotonNetwork.IsMasterClient); // switch de master quand le precedent est parti
      }
 }
