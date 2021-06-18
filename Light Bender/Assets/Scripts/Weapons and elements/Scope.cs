@@ -47,7 +47,6 @@ public class Scope : MonoBehaviour
          else
             OnUnscoped();
       }
-
    }
 
    IEnumerator OnScoped(float scopeWait)

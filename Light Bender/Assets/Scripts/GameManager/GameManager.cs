@@ -32,6 +32,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     public int currentweapon;
 
     
+    public  Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>();
+
+    public bool IsLobby = false;
+
+    
+    public GameObject settingsbutton;
+    
+
     public static int[] scores = {0,0};
 
 
@@ -40,11 +48,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     
     private void Start()
     {
+
+        Debug.Log("start in GameManager");
         BlueLayer = LayerMask.NameToLayer("BlueL");
         RedLayer = LayerMask.NameToLayer("RedL");
         //check that we dont have a local instance before we instantiate the prefab
         if (PlayerManager.localPlayerInstance == null)
         {
+            Debug.Log("PhotonNetwork.IsMasterClient  :  " + PhotonNetwork.IsMasterClient);
             if (PhotonNetwork.IsMasterClient)
             {
                 int redbotsCount = redbots;
@@ -86,12 +97,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Transform spawn = SpawnManager.instance.blueTeamSpawns[BS].transform;
                 player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bluePlayerPrefab.name), spawn.position, spawn.rotation);
                 BS++;
+                Debug.Log("Player is Istanciate");
             }
             else
             {
                 //now for the red team
                 Transform spawn = SpawnManager.instance.redTeamSpawns[RS].transform;
                 player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position, spawn.rotation);
+                Debug.Log("Player is Istanciate");
                 RS++;
             }
         
@@ -109,7 +122,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     }
      void Awake()
-    {
+     {
+         Debug.Log("Awake");
         if (instance == null)
         {
             instance = this;
