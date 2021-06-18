@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static Random rand = new Random();
     [SerializeField] GameObject map;
 
+    int RS; 
+    int BS;
 
     public int redbots;
     public int bluebots;
@@ -40,28 +42,26 @@ public class GameManager : MonoBehaviourPunCallbacks
     
 
     public void ApplySettings()
-
     {
         bluebots = SettingsForPlay.NbBots;
         redbots = SettingsForPlay.NbBots;
         PlayerController.CanJump = SettingsForPlay.Jump;
         PlayerController.nbmessages = SettingsForPlay.NbMessages;
-        RoomOptions options = new RoomOptions();
-        options.MaxPlayers = SettingsForPlay.NbPlayers;
+      //  RoomOptions options = new RoomOptions();
+      //  options.MaxPlayers = SettingsForPlay.NbPlayers;
     }
 
     private void Start()
     {
-        ApplySettings();
-        // Debug.Log("start in GameManager");
+        // ApplySettings();
+        Debug.Log("start in GameManager");
         BlueLayer = LayerMask.NameToLayer("BlueL");
         RedLayer = LayerMask.NameToLayer("RedL");
         //check that we dont have a local instance before we instantiate the prefab
         if (PlayerManager.localPlayerInstance == null)
         {
-            Debug.Log("PhotonNetwork.IsMasterClient  :  " + PhotonNetwork.IsMasterClient);
-            int RS = 0;
-            int BS = 0;
+            Debug.Log("localPlayerInstance is null");
+//            Debug.Log("PhotonNetwork.IsMasterClient  :  " + PhotonNetwork.IsMasterClient);
             if (PhotonNetwork.IsMasterClient)
             {
                 int redbotsCount = redbots;
@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bluePlayerPrefab.name), spawn.position,
                     spawn.rotation);
                 BS++;
-                Debug.Log("Player is Istanciate");
+               // Debug.Log("Player is Istanciate");
             }
             else
             {
@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Transform spawn = SpawnManager.instance.redTeamSpawns[RS].transform;
                 player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position,
                     spawn.rotation);
-                Debug.Log("Player is Istanciate");
+              //  Debug.Log("Player is Istanciate");
                 RS++;
             }
 
@@ -128,11 +128,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             PlayerManager.players.Add(playerController);
         }
+        else
+            Destroy(gameObject);
     }
 
     void Awake()
     {
-        Debug.Log("Awake");
+       //Debug.Log("Awake");
         if (instance == null)
         {
             instance = this;

@@ -2,7 +2,6 @@
 using Photon.Pun;
 using UnityEngine;
 
-// source : https://sharpcoderblog.com/blog/pun-2-adding-room-chat
 
 public class Chat : MonoBehaviour
 {

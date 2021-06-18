@@ -37,8 +37,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
        
         if (scene.buildIndex == 1 || scene.buildIndex == 2) // on check si la scene est la deuxieme cad l'entree en jeu
-        {
-            Debug.Log("onSceneLoaded");
+        {  Debug.Log("onSceneLoaded ROOM MANaGER ");
             PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero,
                 Quaternion.identity);
         }

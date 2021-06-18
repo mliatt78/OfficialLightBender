@@ -1,8 +1,6 @@
-using System;
+
 using System.Collections;
 using System.Collections.Generic;
-using EnemyAI;
-using JetBrains.Annotations;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -124,10 +122,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     void Start()
     {
-        //Debug.Log("Starting");
+        Debug.Log("Starting");
         if (Phv.IsMine)
         {
-            //Debug.Log("Phv is mine");
             EquipItem(0);
             animator = GetComponent<Animator>();
             health.SetActive(true);
@@ -144,38 +141,36 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
             visuals = GetComponentsInChildren<Renderer>();
             team = (int) PhotonNetwork.LocalPlayer.CustomProperties["Team"];
-            Debug.Log("Instantiation is finished");
+            //            Debug.Log("Instantiation is finished");
             GameManager.instance.currentweapon = 0;
         }
         else
         {
-            Debug.Log("Destroy component");
-            Debug.Log("Owner name of phv: " + Phv.Owner.NickName);
+           Debug.Log("Destroy component");
+           // Debug.Log("Owner name of phv: " + Phv.Owner.NickName);
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
             blueScoreText.gameObject.SetActive(false);
             redScoreText.gameObject.SetActive(false);
         }
 
-        Debug.Log("IsMasterClient " + PhotonNetwork.IsMasterClient +" IsLobby : " + GameManager.instance.IsLobby );
+        //        Debug.Log("IsMasterClient " + PhotonNetwork.IsMasterClient +" IsLobby : " + GameManager.instance.IsLobby );
     }
 
 
     void Update()
     {
-//        Debug.Log(PauseMenu.GameIsPaused);
-        if (GameManager.instance.IsLobby && PauseMenu.GameIsPaused)
+        if (!PauseMenu.GameIsPaused && PhotonNetwork.IsMasterClient && GameManager.instance.IsLobby)
+        {
+            GameManager.instance.settingsbutton.SetActive(false);
+            launchbutton.SetActive(true);
+        }
+        if (GameManager.instance.IsLobby && PhotonNetwork.IsMasterClient && PauseMenu.GameIsPaused)
         {
             GameManager.instance.settingsbutton.SetActive(true);
             launchbutton.SetActive(false);
         }
-        if (!PauseMenu.GameIsPaused && PhotonNetwork.IsMasterClient && GameManager.instance.IsLobby)
-        {
-            Debug.Log("Set Active is True");
-            GameManager.instance.settingsbutton.SetActive(false);
-            launchbutton.SetActive(true);
-        }
-        
+
         //Debug.Log(PauseMenu.GameIsPaused + "  <>  " + Phv.IsMine );
         if (!Phv.IsMine || PauseMenu.GameIsPaused)
             return;
@@ -736,7 +731,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          Debug.Log("Start Game");
          PlayerManager.localPlayerInstance = null;
          PhotonNetwork.LoadLevel(2) ; // index de la scene
-         
      }
      
      public override void OnMasterClientSwitched(Player newMasterClient)

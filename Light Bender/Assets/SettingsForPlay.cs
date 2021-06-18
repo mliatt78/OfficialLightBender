@@ -7,7 +7,7 @@ using UnityEngine;
 public class SettingsForPlay : MonoBehaviour
 {
     public static byte NbPlayers = 10;
-    public  static int NbBots = 2;
+    public  static int NbBots = 3;
     public  static int NbMessages = 10;
     public static bool Activezones = true;
     public static bool Jump = true;
@@ -21,7 +21,7 @@ public class SettingsForPlay : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-//            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else if (instance != this)
         {
