@@ -64,7 +64,7 @@ public class Grenade : Item
     void RPC_Explode(string name)
     {
         GameObject grenade = GameObject.Find(name);
-        Debug.Log("grenade exists" + grenade is null);
+//        Debug.Log("grenade exists" + grenade is null);
         Collider[] colliders = Physics.OverlapSphere(grenade.transform.position, blastradius);
         foreach (Collider nearbyobject in colliders)
         {

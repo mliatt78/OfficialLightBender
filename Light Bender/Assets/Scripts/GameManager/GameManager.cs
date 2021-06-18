@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static Random rand = new Random();
     [SerializeField] GameObject map;
 
+    int RS;
+    int BS;
 
     public int redbots;
     public int bluebots;
@@ -28,7 +30,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static int RedLayer;
 
     public static bool isFocused = true;
-    
+
     public int currentweapon;
 
     public bool IsLobby = false;
@@ -37,8 +39,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
     public static List<ChatMessage> chatMessages = new List<ChatMessage>();
-    public  Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>(); 
-    
+    public  Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>();
+
 
     public void ApplySettings()
     {
@@ -46,18 +48,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         redbots = SettingsForPlay.NbBots;
         PlayerController.CanJump = SettingsForPlay.Jump;
         PlayerController.nbmessages = SettingsForPlay.NbMessages;
-        RoomOptions options = new RoomOptions();
-        options.MaxPlayers = SettingsForPlay.NbPlayers;
+      //  RoomOptions options = new RoomOptions();
+      //  options.MaxPlayers = SettingsForPlay.NbPlayers;
     }
 
     private void Start()
     {
-        ApplySettings();
-        // Debug.Log("start in GameManager");
+        // ApplySettings();
+        Debug.Log("start in GameManager");
         BlueLayer = LayerMask.NameToLayer("BlueL");
         RedLayer = LayerMask.NameToLayer("RedL");
         PauseMenu.isleft = false;
-        
+
         //check that we dont have a local instance before we instantiate the prefab
         if (PlayerManager.localPlayerInstance == null)
         {
@@ -75,7 +77,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                     else
                         redbotsCount--;
                 }
-                
+
                 for (int i = bluebotsCount; i > 0; i--)
                 {
                     //get a spawn for the correct team
@@ -130,8 +132,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             PlayerManager.players.Add(playerController);
         }
+        else
+            Destroy(gameObject);
     }
-    
+
     void Awake()
     {
         //Debug.Log("Awake");
