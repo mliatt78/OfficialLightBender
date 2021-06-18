@@ -8478,6 +8478,7 @@ MonoBehaviour:
   lastShooterName: null
   blueScoreText: {fileID: 7125306167137377844}
   redScoreText: {fileID: 7669746290670977083}
+  timerText: {fileID: 3825484951855265767}
   PlayerOnlyLook: 0
   currentHealth: 100
   chat: {fileID: 0}

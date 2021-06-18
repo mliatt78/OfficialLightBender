@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.IO;
 using Photon.Pun;
 using Photon.Realtime;
@@ -40,7 +41,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     
 
     public void ApplySettings()
-
     {
         bluebots = SettingsForPlay.NbBots;
         redbots = SettingsForPlay.NbBots;
@@ -56,10 +56,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         // Debug.Log("start in GameManager");
         BlueLayer = LayerMask.NameToLayer("BlueL");
         RedLayer = LayerMask.NameToLayer("RedL");
+        PauseMenu.isleft = false;
+        
         //check that we dont have a local instance before we instantiate the prefab
         if (PlayerManager.localPlayerInstance == null)
         {
-            Debug.Log("PhotonNetwork.IsMasterClient  :  " + PhotonNetwork.IsMasterClient);
+            //Debug.Log("PhotonNetwork.IsMasterClient  :  " + PhotonNetwork.IsMasterClient);
             int RS = 0;
             int BS = 0;
             if (PhotonNetwork.IsMasterClient)
@@ -105,7 +107,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bluePlayerPrefab.name), spawn.position,
                     spawn.rotation);
                 BS++;
-                Debug.Log("Player is Istanciate");
+                //Debug.Log("Player is Instanciate");
             }
             else
             {
@@ -113,7 +115,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Transform spawn = SpawnManager.instance.redTeamSpawns[RS].transform;
                 player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position,
                     spawn.rotation);
-                Debug.Log("Player is Istanciate");
+                //Debug.Log("Player is Istanciate");
                 RS++;
             }
 
@@ -129,10 +131,10 @@ public class GameManager : MonoBehaviourPunCallbacks
             PlayerManager.players.Add(playerController);
         }
     }
-
+    
     void Awake()
     {
-        Debug.Log("Awake");
+        //Debug.Log("Awake");
         if (instance == null)
         {
             instance = this;

@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     public TextMeshProUGUI blueScoreText;
     public TextMeshProUGUI redScoreText;
+    public TextMeshProUGUI timerText;
 
     Renderer[] visuals;
     
@@ -132,7 +133,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             animator = GetComponent<Animator>();
             health.SetActive(true);
             munitionObject.SetActive(true);
-            PauseMenu.isleft = true;
 
             if (items[itemIndex] is SingleShot)
             {
@@ -156,8 +156,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             blueScoreText.gameObject.SetActive(false);
             redScoreText.gameObject.SetActive(false);
         }
-
-        Debug.Log("IsMasterClient " + PhotonNetwork.IsMasterClient +" IsLobby : " + GameManager.instance.IsLobby );
     }
 
 
@@ -175,7 +173,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             GameManager.instance.settingsbutton.SetActive(false);
             launchbutton.SetActive(true);
         }
-        
         //Debug.Log(PauseMenu.GameIsPaused + "  <>  " + Phv.IsMine );
         if (!Phv.IsMine || PauseMenu.GameIsPaused)
             return;
