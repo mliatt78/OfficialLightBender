@@ -1,4 +1,4 @@
-using System;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     PlayerManager playerManager;
 
-    public GameObject lastShooter;
+    public string lastShooterName = "null";
 
     public TextMeshProUGUI blueScoreText;
     public TextMeshProUGUI redScoreText;
@@ -69,7 +69,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     Renderer[] visuals;
     
     int team;
-    int ID;
 
     public bool PlayerOnlyLook;
 
@@ -80,6 +79,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     private Grenade grenade;
     
     public Chat chat;
+
+    public GameObject launchbutton;
+
+    public static bool CanJump = true;
+    
+    public  static int nbmessages = 20;
+    
+
     
     void Awake()
     {
@@ -115,10 +122,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     void Start()
     {
-        //Debug.Log("Starting");
+        Debug.Log("Starting");
         if (Phv.IsMine)
         {
-            //Debug.Log("Phv is mine");
             EquipItem(0);
             animator = GetComponent<Animator>();
             health.SetActive(true);
@@ -131,25 +137,40 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
                 //Debug.Log("Name " + items[itemIndex].name);
                 //Debug.Log(singleshot.nbballes + " :::: " + singleshot.nbinit);
             }
+            
 
             visuals = GetComponentsInChildren<Renderer>();
             team = (int) PhotonNetwork.LocalPlayer.CustomProperties["Team"];
-            Debug.Log("Instantiation is finished");
+            //            Debug.Log("Instantiation is finished");
             GameManager.instance.currentweapon = 0;
         }
         else
         {
-            Debug.Log("Destroy component");
-            Debug.Log("Owner name of phv: " + Phv.Owner.NickName);
+           Debug.Log("Destroy component");
+           // Debug.Log("Owner name of phv: " + Phv.Owner.NickName);
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
+            blueScoreText.gameObject.SetActive(false);
+            redScoreText.gameObject.SetActive(false);
         }
+
+        //        Debug.Log("IsMasterClient " + PhotonNetwork.IsMasterClient +" IsLobby : " + GameManager.instance.IsLobby );
     }
 
 
     void Update()
     {
-        
+        if (!PauseMenu.GameIsPaused && PhotonNetwork.IsMasterClient && GameManager.instance.IsLobby)
+        {
+            GameManager.instance.settingsbutton.SetActive(false);
+            launchbutton.SetActive(true);
+        }
+        if (GameManager.instance.IsLobby && PhotonNetwork.IsMasterClient && PauseMenu.GameIsPaused)
+        {
+            GameManager.instance.settingsbutton.SetActive(true);
+            launchbutton.SetActive(false);
+        }
+
         //Debug.Log(PauseMenu.GameIsPaused + "  <>  " + Phv.IsMine );
         if (!Phv.IsMine || PauseMenu.GameIsPaused)
             return;
@@ -162,12 +183,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         }
         
         Move();
-        Jump();
+        if(CanJump)
+            Jump();
         CheckCrouchProne();
 
         for (int i = 0; i < items.Count; i++)
         {
-            //Debug.Log("Items count : " + items.Count);
+
             if (Input.GetKeyDown((i + 1).ToString()))
             {
                 EquipItem(i);
@@ -391,19 +413,27 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         {
             animator.SetBool("IsDance", false);
         }
-        
-        
-        if (!iscrouch && pressedcrouch)
+
+
+        if (pressedcrouch)
+        {
+            animator.SetBool("IsCrouch", !iscrouch);
+        }
+        /*if (!iscrouch && pressedcrouch)
         {
             animator.SetBool("IsCrouch", true);
         }
         if (iscrouch && !pressedcrouch)
         {
             animator.SetBool("IsCrouch", false);
+        }*/
+
+
+        if (pressedprone)
+        {
+            animator.SetBool("IsProne",!isprone);
         }
-        
-        
-        if (!isprone && pressedprone)
+        /*if (!isprone && pressedprone)
         {
             animator.SetBool("IsProne", true);
             
@@ -411,7 +441,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if (isprone && !pressedprone)
         {
             animator.SetBool("IsProne", false);
-        }
+        }*/
     }
 
     void Look()
@@ -474,7 +504,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        if (!Phv.IsMine && targetPlayer == Phv.Owner) EquipItem((int) changedProps["itemindex"]);
+        if (!Phv.IsMine && targetPlayer == Phv.Owner) 
+            EquipItem((int) changedProps["itemindex"]);
     }
 
     private void ResetAnimator()
@@ -498,6 +529,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         rb.constraints = (state ? RigidbodyConstraints.FreezeAll 
             : RigidbodyConstraints.FreezeRotation);
         isFreezed = state;
+    }
+
+    public void SetScoresText(PlayerController player)
+    {
+        player.blueScoreText.text = GameManager.instance.scores[0].ToString();
+        player.redScoreText.text = GameManager.instance.scores[1].ToString();
     }
 
     void CheckCrouchProne()
@@ -524,10 +561,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
                 UnCrouchOrProne();
             }
         }
-        
     }
-
-
+    
     private void Crouch()
     {
         capsuleCollider.height = 1f;
@@ -584,11 +619,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     public int GetTeam() => team;
 
-    public void TakeDamage(float damage) // juste sur le shooter
-        =>
-            Phv.RPC("RPC_TakeDamage", RpcTarget.All, damage);
-    
-     IEnumerator Respawn(float respawnWait)
+    IEnumerator Respawn(float respawnWait)
      {
          canRespawn = false;
          // overflow protection for respawn
@@ -596,10 +627,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          SetRenderers(false);
 
          currentHealth = 100;
-         GameManager.scores[(team+1)%2] += 1;
-         //PlayerManager.UpdateScores();
-         // TODO
-         
+         GameManager.instance.scores[(team+1)%2] += 1;
+         SendScores();
+
          if (hasOre)
          {
              RemoveOres();
@@ -609,7 +639,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
 
          SendChatMessage("System",
-             lastShooter.name +" killed " + name);
+             lastShooterName +" killed " + name);
          
          SetCollisionState(false);
          SetFreezeState(true);
@@ -628,6 +658,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          SetFreezeState(false);
 
          SetRenderers(true);
+
+         lastShooterName = "null";
          canRespawn = true;
      }
 
@@ -639,19 +671,41 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          }
      }
 
+
+     public void SendScores()
+     {
+         Phv.RPC("RPC_SendScores",RpcTarget.All,GameManager.instance.scores[0],GameManager.instance.scores[1]);
+         SetScoresText(PlayerManager.GetLocalPlayer());
+     }
+
+     public void TakeDamage(float damage, string lastShooterName) // juste sur le shooter
+     {
+         this.lastShooterName = lastShooterName;
+         Phv.RPC("RPC_TakeDamage", RpcTarget.All, damage, lastShooterName);
+     }
+
      public void SendChatMessage(string sender, string message)
      {
          Phv.RPC("SendChat",RpcTarget.All,sender,message);
      }
 
      [PunRPC]
-     void RPC_TakeDamage(float damage)
+     void RPC_SendScores(int blueScore, int redScore)
+     {
+         GameManager.instance.scores[0] = blueScore;
+         GameManager.instance.scores[1] = redScore;
+         SetScoresText(PlayerManager.GetLocalPlayer());
+     }
+     
+     [PunRPC]
+     void RPC_TakeDamage(float damage, string lastShooterName)
      {
          if (!Phv.IsMine)
              return;
 
          currentHealth -= damage;
          _progressBarPro.SetValue(currentHealth,100f);
+         this.lastShooterName = lastShooterName; 
          if (currentHealth <= 0 && canRespawn)
          {
              StartCoroutine(Respawn(respawnTime));
@@ -664,12 +718,23 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          ChatMessage m = new ChatMessage(sender,message);
 
          GameManager.chatMessages.Insert(0, m);
-         if(GameManager.chatMessages.Count > 8)
+         if(GameManager.chatMessages.Count > nbmessages)
          {
              GameManager.chatMessages.RemoveAt(GameManager.chatMessages.Count - 1);
          }
-
          Chat.chatMessages = GameManager.chatMessages;
          // responsible for the synchronisation of all messages
+     }
+     
+     public void StartGame()
+     {
+         Debug.Log("Start Game");
+         PlayerManager.localPlayerInstance = null;
+         PhotonNetwork.LoadLevel(2) ; // index de la scene
+     }
+     
+     public override void OnMasterClientSwitched(Player newMasterClient)
+     {
+         launchbutton.SetActive(PhotonNetwork.IsMasterClient); // switch de master quand le precedent est parti
      }
 }

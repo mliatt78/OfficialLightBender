@@ -2,7 +2,6 @@
 using Photon.Pun;
 using UnityEngine;
 
-// source : https://sharpcoderblog.com/blog/pun-2-adding-room-chat
 
 public class Chat : MonoBehaviour
 {
@@ -13,7 +12,9 @@ public class Chat : MonoBehaviour
     bool isChatting;
     string chatInput = "";
 
-    [SerializeField] int minHeightOnScreen = 75;
+   //public int nbmessages = 20;
+
+    [SerializeField] int minHeightOnScreen = 90;
     [SerializeField] int maxLengthMessage = 60;
     [SerializeField] GUIStyle chatBoxStyle;
 

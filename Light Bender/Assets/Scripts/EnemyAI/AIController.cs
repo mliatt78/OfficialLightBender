@@ -21,7 +21,7 @@ namespace EnemyAI
         public const float maxHealth = 100f;
         public float currentHealth = maxHealth;
 
-        public GameObject lastShooter;
+        public string lastShooterName = "null";
         
         private bool alreadyAttacked;
         private int framesUntilAttack = 60;
@@ -53,7 +53,6 @@ namespace EnemyAI
             if (Phv.IsMine)
             {
                 EquipItem(0);
-                SingleShotAI = (SingleShotAI) items[0];
                 SingleShotAI = (SingleShotAI) items[0];
             }
             NextWalkPoint();
@@ -174,9 +173,10 @@ namespace EnemyAI
             canRespawn = false;
             SetRenderers(false);
             currentHealth = 100;
-            GameManager.scores[(team+1)%2] += 1;
+            GameManager.instance.scores[(team+1)%2] += 1;
             //Debug.Log((team+1)%2);
-            //PlayerManager.UpdateScores();
+            SendScores();
+            
             // TODO
             
             GetComponent<AIController>().enabled = false;
@@ -186,18 +186,33 @@ namespace EnemyAI
             GetComponent<AIController>().enabled = true;
             
             SendChatMessage("System",
-                lastShooter.name +" killed " + name);
+                lastShooterName +" killed " + name);
             
             yield return new WaitForSeconds(respawnWaitTime);     
             
             
             SetRenderers(true);
+
+            lastShooterName = "null";
             canRespawn = true;
         }
-
-        public void TakeDamage(float damage)
+        
+        public void SetScoresText(PlayerController player)
         {
-            Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage);
+            player.blueScoreText.text = GameManager.instance.scores[0].ToString();
+            player.redScoreText.text = GameManager.instance.scores[1].ToString();
+        }
+
+        public void TakeDamage(float damage, string lastShooterName)
+        {
+            this.lastShooterName = lastShooterName;
+            Phv.RPC("RPC_TakeDamage", RpcTarget.All,damage,lastShooterName);
+        }
+        
+        public void SendScores()
+        {
+            Phv.RPC("RPC_SendScores",RpcTarget.Others,GameManager.instance.scores[0],GameManager.instance.scores[1]);
+            SetScoresText(PlayerManager.GetLocalPlayer());
         }
 
         private void SendChatMessage(string sender, string message)
@@ -205,13 +220,23 @@ namespace EnemyAI
             Phv.RPC("SendChat",RpcTarget.All,sender,message);
         }
         
+        
         [PunRPC]
-        void RPC_TakeDamage(float damage)
+        void RPC_SendScores(int blueScore, int redScore)
+        {
+            GameManager.instance.scores[0] = blueScore;
+            GameManager.instance.scores[1] = redScore;
+            SetScoresText(PlayerManager.GetLocalPlayer());
+        }
+        
+        [PunRPC]
+        void RPC_TakeDamage(float damage, string lastShooterName)
         {
             if (!Phv.IsMine)
                 return;
 
             currentHealth -= damage;
+            this.lastShooterName = lastShooterName;
 
             if (currentHealth <= 0 && canRespawn)
             {

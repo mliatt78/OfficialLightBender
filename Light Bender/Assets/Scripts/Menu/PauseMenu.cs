@@ -9,6 +9,7 @@ public class PauseMenu : MonoBehaviourPunCallbacks
     public GameObject pauseMenuUI;
     public AudioSource audioSource;
     public GameObject KEYS;
+    public GameObject settings;
 
     public static bool isleft = false;
     void Update()
@@ -26,6 +27,8 @@ public class PauseMenu : MonoBehaviourPunCallbacks
         Time.timeScale = 1f;
         GameIsPaused = false;
         KEYS.SetActive(false);
+        if(GameManager.instance.IsLobby)
+            settings.SetActive(false);
         //Debug.Log("Resume");
     }
 
@@ -55,7 +58,7 @@ public class PauseMenu : MonoBehaviourPunCallbacks
         PhotonNetwork.Disconnect();
         while (PhotonNetwork.IsConnected)
             yield return null;
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(3);
    }
    
    /*public void LeaveRoom() // local player leaves
@@ -83,5 +86,11 @@ public class PauseMenu : MonoBehaviourPunCallbacks
    {
        pauseMenuUI.SetActive(false);
        KEYS.SetActive(true);
+   }
+
+   public void OpenSettings()
+   {
+       pauseMenuUI.SetActive(false);
+       settings.SetActive(true);
    }
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
+   
      public static PhotonView Phv;
      public static GameObject localPlayerInstance;
     // GameObject controller;
@@ -18,6 +19,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public static List<AIController> bots = new List<AIController>();
     public static List<AIController> blueBots = new List<AIController>();
     public static List<AIController> redBots = new List<AIController>();
+
+    public static PlayerManager instance;
 
     void Awake()
     {
@@ -47,24 +50,31 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         Debug.Log("Bots List: ");
         Debug.Log(TempPrintListController(blueBots));
         Debug.Log(TempPrintListController(redBots));
-        */        
-        
+        */
+        if (instance)
+            Destroy(gameObject);
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+           
         if (Phv.IsMine)
         {
             localPlayerInstance = gameObject;
+            //now dont destroy!!
+            DontDestroyOnLoad(gameObject);
         }
-        //now dont destroy!!
-        DontDestroyOnLoad(gameObject);
+
     }
-    
     
     public static void UpdateScores()
     {
         //Debug.Log(players.Count);
         for (int i = 0; i < players.Count; i++)
         {
-            players[i].blueScoreText.text = GameManager.scores[0].ToString();
-            players[i].redScoreText.text = GameManager.scores[1].ToString();
+            players[i].blueScoreText.text = GameManager.instance.scores[0].ToString();
+            players[i].redScoreText.text = GameManager.instance.scores[1].ToString();
             //Debug.Log("Score : " + GameManager.scores[0] + " -- " + GameManager.scores[1]);
         }
     }
