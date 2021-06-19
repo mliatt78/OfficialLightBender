@@ -11913,8 +11913,8 @@ MonoBehaviour:
   RedBot: {fileID: 202613296942019824, guid: a301e49410a64aa4e871d5732cbdfd44, type: 3}
   BlueBot: {fileID: 6311783988096348168, guid: e735355ce89a52d4582cf56d62f9b65b, type: 3}
   map: {fileID: 1602658149}
-  redbots: 2
-  bluebots: 2
+  redbots: 5
+  bluebots: 5
   currentweapon: 0
   IsLobby: 1
   settingsbutton: {fileID: 1663057909}

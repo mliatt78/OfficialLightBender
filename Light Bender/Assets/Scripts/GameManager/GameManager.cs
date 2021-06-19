@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static List<ChatMessage> chatMessages = new List<ChatMessage>();
     public  Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>();
 
+    private bool charcreated = false;
 
     public void ApplySettings()
     {
@@ -55,17 +56,18 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         // ApplySettings();
-        Debug.Log("start in GameManager");
+        if(!IsLobby && !charcreated)
+            PlayerManager.localPlayerInstance = null;
         BlueLayer = LayerMask.NameToLayer("BlueL");
         RedLayer = LayerMask.NameToLayer("RedL");
         PauseMenu.isleft = false;
 
         //check that we dont have a local instance before we instantiate the prefab
+        Debug.Log("ICI CA DOIT ETRE LANCE EEEEEEEE");
+        Debug.Log("localPlayerInstance is null or NOTTTTT : " + PlayerManager.localPlayerInstance == null);
         if (PlayerManager.localPlayerInstance == null)
         {
-            //Debug.Log("PhotonNetwork.IsMasterClient  :  " + PhotonNetwork.IsMasterClient);
-            int RS = 0;
-            int BS = 0;
+            //  Debug.Log("PhotonNetwork.IsMasterClient  :  " + PhotonNetwork.IsMasterClient);
             if (PhotonNetwork.IsMasterClient)
             {
                 int redbotsCount = redbots;
@@ -82,7 +84,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 {
                     //get a spawn for the correct team
                     Transform spawn = SpawnManager.instance.blueTeamSpawns[BS].transform;
-                    GameObject bot = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", BlueBot.name),
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", BlueBot.name),
                         spawn.position, spawn.rotation);
                     BS++;
                 }
@@ -96,6 +98,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                     RS++;
                 }
             }
+            
 
             //instantiate the correct player based on the team
             int team = (int) PhotonNetwork.LocalPlayer.CustomProperties["Team"];
@@ -108,6 +111,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Transform spawn = SpawnManager.instance.blueTeamSpawns[BS].transform;
                 player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bluePlayerPrefab.name), spawn.position,
                     spawn.rotation);
+                charcreated = true;
                 BS++;
                 //Debug.Log("Player is Instanciate");
             }
@@ -117,7 +121,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Transform spawn = SpawnManager.instance.redTeamSpawns[RS].transform;
                 player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position,
                     spawn.rotation);
-                //Debug.Log("Player is Istanciate");
+                charcreated = true;
+              //  Debug.Log("Player is Istanciate");
                 RS++;
             }
 
@@ -132,8 +137,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             PlayerManager.players.Add(playerController);
         }
-        else
-            Destroy(gameObject);
     }
 
     void Awake()
@@ -149,8 +152,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             keys.Add("Jump", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Jump", "Space")));
             keys.Add("Shoot", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Shoot", "Mouse0")));
             keys.Add("Reload", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Reload", "R")));
-            keys.Add("Sprint",
-                (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Sprint", "LeftShift")));
+            keys.Add("Sprint", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Sprint", "LeftShift")));
             keys.Add("Crouch", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Crouch", "C")));
             keys.Add("Prone", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Prone", "V")));
             keys.Add("Dance", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Dance", "L")));
@@ -173,7 +175,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             //renderers[i].material = material;
             render.material = material;
         }
-
         // change all renderers' material
     }
 
