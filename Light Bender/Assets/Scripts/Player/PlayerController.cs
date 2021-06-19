@@ -10,16 +10,16 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 {
     [SerializeField] GameObject cameraHolder;
-    
+
     [SerializeField] CapsuleCollider capsuleCollider;
     [SerializeField] SkinnedMeshRenderer playerRenderer;
-    
+
     [SerializeField] float mouseSensivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
 
     [SerializeField] float respawnTime;
 
     [SerializeField] List<Item> items;
-    
+
     [SerializeField] ProgressBarPro _progressBarPro;
 
     [SerializeField] ProgressBarPro munitionsSlider;
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     int oresHolded;
     public bool hasOre => oresHolded != 0;
-    
+
     public bool isLocal;
 
     private bool canRespawn = true;
@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     private float heightCollider;
 
     private float baseWalkSpeed, baseSprintSpeed;
-    
+
     float verticalLookRotation;
     bool grounded;
     Vector3 smoothMoveVelocity;
@@ -64,9 +64,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     public TextMeshProUGUI blueScoreText;
     public TextMeshProUGUI redScoreText;
+    public TextMeshProUGUI timerText;
 
     Renderer[] visuals;
-    
+
     int team;
 
     public bool PlayerOnlyLook;
@@ -76,17 +77,17 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     private SingleShot singleshot;
     private Grenade grenade;
-    
+
     public Chat chat;
 
     public GameObject launchbutton;
 
     public static bool CanJump = true;
-    
-    public  static int nbmessages = 20;
-    
 
-    
+    public  static int nbmessages = 20;
+
+
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -94,21 +95,21 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
         baseWalkSpeed = walkSpeed;
         baseSprintSpeed = sprintSpeed;
-        
+
         heightCollider = capsuleCollider.height;
         capsuleColliderCenter = capsuleCollider.center;
         capsuleColliderDirection = capsuleCollider.direction;
 
         //playerManager = PhotonView.Find((int)Phv.InstantiationData[0]).GetComponent<PlayerManager>();
 
-        if (!PlayerManager.players.Contains(this)) 
+        if (!PlayerManager.players.Contains(this))
             PlayerManager.players.Add(this);
-        
 
-        // playerController is instantiated on each machine in the room. 
-        // by doing this, it will locally, on each machine in the room 
+
+        // playerController is instantiated on each machine in the room.
+        // by doing this, it will locally, on each machine in the room
         // (PhotonNetwork.Instantiate() creates the object for all machines)
-        // add the object to the players. 
+        // add the object to the players.
 
         // DEBUG
         /*Debug.Log("Displaying PlayerManager.players on machine of player "+name+":");
@@ -128,7 +129,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             animator = GetComponent<Animator>();
             health.SetActive(true);
             munitionObject.SetActive(true);
-            PauseMenu.isleft = true;
 
             if (items[itemIndex] is SingleShot)
             {
@@ -136,6 +136,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
                 //Debug.Log("Name " + items[itemIndex].name);
                 //Debug.Log(singleshot.nbballes + " :::: " + singleshot.nbinit);
             }
+
             visuals = GetComponentsInChildren<Renderer>();
             team = (int) PhotonNetwork.LocalPlayer.CustomProperties["Team"];
             //            Debug.Log("Instantiation is finished");
@@ -151,7 +152,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             redScoreText.gameObject.SetActive(false);
         }
 
-        //        Debug.Log("IsMasterClient " + PhotonNetwork.IsMasterClient +" IsLobby : " + GameManager.instance.IsLobby );
+        // Debug.Log("IsMasterClient " + PhotonNetwork.IsMasterClient +" IsLobby : " + GameManager.instance.IsLobby );
     }
 
 
@@ -171,14 +172,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         //Debug.Log(PauseMenu.GameIsPaused + "  <>  " + Phv.IsMine );
         if (!Phv.IsMine || PauseMenu.GameIsPaused)
             return;
-        
+
         Look();
 
         if (PlayerOnlyLook)
         {
             return;
         }
-        
+
         Move();
         if(CanJump)
             Jump();
@@ -217,7 +218,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
                 EquipItem(itemIndex - 1);
             }
         }
-        
+
         if (Input.GetKey(GameManager.instance.keys["Shoot"]))
 
         {
@@ -227,12 +228,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
                 Debug.Log("Item index : " + itemIndex);
                 //Debug.Log("I use the grenade 2 ");
                 items.RemoveAt(itemIndex);
-                previousItemIndex = (itemIndex - 2 < 0 ? 0 : itemIndex - 2); 
+                previousItemIndex = (itemIndex - 2 < 0 ? 0 : itemIndex - 2);
                 EquipItem(itemIndex - 1);
                 Debug.Log("Item bomb ");
             }
         }
-        
+
 
         /*if (transform.position.y < -10f)
         {
@@ -260,7 +261,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             StartCoroutine(singleshot.Reload(singleshot.secondsToReload));
         }
     }
-    
+
     void FixedUpdate()
     {
         if (PlayerOnlyLook)
@@ -271,7 +272,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
         if (!Phv.IsMine || PauseMenu.GameIsPaused || PlayerOnlyLook)
             return;
-        
+
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
     }
 
@@ -341,14 +342,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         bool isRight = animator.GetBool("IsRightWalk");
         bool pressedleft = Input.GetKey(GameManager.instance.keys["Left"]);
         bool pressedright = Input.GetKey(GameManager.instance.keys["Right"]);
-        
+
         bool pressedcrouch = Input.GetKey(GameManager.instance.keys["Crouch"]);
         bool iscrouch = animator.GetBool("IsCrouch");
-        
+
         bool pressedprone = Input.GetKey(GameManager.instance.keys["Prone"]);
         bool isprone = animator.GetBool("IsProne");
-        
-        
+
+
 
         bool isDance = animator.GetBool("IsDance");
         bool presseddance = Input.GetKey(GameManager.instance.keys["Dance"]);
@@ -433,7 +434,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         /*if (!isprone && pressedprone)
         {
             animator.SetBool("IsProne", true);
-            
+
         }
         if (isprone && !pressedprone)
         {
@@ -501,7 +502,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        if (!Phv.IsMine && targetPlayer == Phv.Owner) 
+        if (!Phv.IsMine && targetPlayer == Phv.Owner)
             EquipItem((int) changedProps["itemindex"]);
     }
 
@@ -523,7 +524,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     private void SetFreezeState(bool state)
     {
-        rb.constraints = (state ? RigidbodyConstraints.FreezeAll 
+        rb.constraints = (state ? RigidbodyConstraints.FreezeAll
             : RigidbodyConstraints.FreezeRotation);
         isFreezed = state;
     }
@@ -559,7 +560,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             }
         }
     }
-    
+
     private void Crouch()
     {
         capsuleCollider.height = 1f;
@@ -572,7 +573,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
         isCrouching = true;
     }
-    
+
     private void Prone()
     {
         capsuleCollider.direction = 2; // z-axis
@@ -620,7 +621,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
      {
          canRespawn = false;
          // overflow protection for respawn
-         
+
          SetRenderers(false);
 
          currentHealth = 100;
@@ -631,26 +632,26 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          {
              RemoveOres();
          }
-         
+
          //GetComponent<PlayerController>().enabled = false;
          Transform spawn = SpawnManager.instance.GetTeamSpawn(team);
 
          SendChatMessage("System",
              lastShooterName +" killed " + name);
-         
+
          SetCollisionState(false);
          SetFreezeState(true);
-         
+
          yield return new WaitForSeconds(respawnWait);
 
-         currentHealth = 100; 
+         currentHealth = 100;
          // just in case someone manages to shoot the player when waiting
          _progressBarPro.SetValue(100f,100f);
-         
+
          transform.position = spawn.position;
          transform.rotation = spawn.rotation;
          //GetComponent<PlayerController>().enabled = true;
-         
+
          SetCollisionState(true);
          SetFreezeState(false);
 
@@ -693,7 +694,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          GameManager.instance.scores[1] = redScore;
          SetScoresText(PlayerManager.GetLocalPlayer());
      }
-     
+
      [PunRPC]
      void RPC_TakeDamage(float damage, string lastShooterName)
      {
@@ -702,13 +703,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
          currentHealth -= damage;
          _progressBarPro.SetValue(currentHealth,100f);
-         this.lastShooterName = lastShooterName; 
+         this.lastShooterName = lastShooterName;
          if (currentHealth <= 0 && canRespawn)
          {
              StartCoroutine(Respawn(respawnTime));
          }
      }
-     
+
      [PunRPC]
      void SendChat(string sender, string message)
      {
@@ -722,13 +723,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
          Chat.chatMessages = GameManager.chatMessages;
          // responsible for the synchronisation of all messages
      }
-     
+
      public void StartGame()
      {
          Debug.Log("Start Game");
          PhotonNetwork.LoadLevel(2) ; // index de la scene
      }
-     
+
      public override void OnMasterClientSwitched(Player newMasterClient)
      {
          launchbutton.SetActive(PhotonNetwork.IsMasterClient && GameManager.instance.IsLobby); // switch de master quand le precedent est parti
