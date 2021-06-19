@@ -58,8 +58,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     public PhotonView Phv;
 
     private Animator animator;
-
-    PlayerManager playerManager;
+    
 
     public string lastShooterName = "null";
 
@@ -137,8 +136,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
                 //Debug.Log("Name " + items[itemIndex].name);
                 //Debug.Log(singleshot.nbballes + " :::: " + singleshot.nbinit);
             }
-            
-
             visuals = GetComponentsInChildren<Renderer>();
             team = (int) PhotonNetwork.LocalPlayer.CustomProperties["Team"];
             //            Debug.Log("Instantiation is finished");
@@ -729,12 +726,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
      public void StartGame()
      {
          Debug.Log("Start Game");
-         PlayerManager.localPlayerInstance = null;
          PhotonNetwork.LoadLevel(2) ; // index de la scene
      }
      
      public override void OnMasterClientSwitched(Player newMasterClient)
      {
-         launchbutton.SetActive(PhotonNetwork.IsMasterClient); // switch de master quand le precedent est parti
+         launchbutton.SetActive(PhotonNetwork.IsMasterClient && GameManager.instance.IsLobby); // switch de master quand le precedent est parti
      }
 }
