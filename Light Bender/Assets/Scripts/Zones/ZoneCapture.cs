@@ -283,7 +283,7 @@ namespace Zones
                 playersTeam[player.GetTeam()].Add(player);
                 // add to bluePlayers or redPlayers
                 
-                Debug.Log("Test on getting other players' timer");
+                //Debug.Log("Test on getting other players' timer");
 
                 // TODO
                 // get timers of other players, if there's one
@@ -298,8 +298,8 @@ namespace Zones
                  */
                 
                 
-                Debug.Log("players Count as of now : "+PlayerManager.players.Count);
-                Debug.Log("playersNear Count as of now : "+playersNear.Count);
+                //Debug.Log("players Count as of now : "+PlayerManager.players.Count);
+                //Debug.Log("playersNear Count as of now : "+playersNear.Count);
                 
                 DisplayTimeForPlayers(bluePlayersNear,redPlayersNear);
                 // show timer

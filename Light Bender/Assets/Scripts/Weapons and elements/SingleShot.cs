@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class SingleShot : GUN
 {
-   public PlayerController PlayerOwner;
+    public PlayerController PlayerOwner;
    
-   public float firerate = 15;
-   public LayerMask ignoreLayerMask;
-   public Transform gunTransform;
+    public float firerate = 15;
+    public LayerMask ignoreLayerMask;
+    public Transform gunTransform;
 
-   private float nexttimetofire = 0;
+    private float nexttimetofire = 0;
 
-   public ParticleSystem particleSystem;
+    public ParticleSystem particleSystem;
 
-   public float impactforce = 60;
+    public float impactforce = 60;
    
     PhotonView Phv;
     
@@ -46,13 +46,11 @@ public class SingleShot : GUN
 
    void Shoot()
    {
-      Debug.Log("Owner Name in SingleShot: "+Phv.Controller.NickName);
-      //TODO
+      //Debug.Log("Owner Name in SingleShot: "+Phv.Controller.NickName);
       Phv.RPC("RPC_Shoot",RpcTarget.All);
    }
    
-
-  public IEnumerator Reload(float secondsToWait)
+   public IEnumerator Reload(float secondsToWait)
    {
       yield return new WaitForSeconds(secondsToWait);
       nbballes = nbinit;

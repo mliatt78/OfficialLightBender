@@ -7,9 +7,8 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
-   
-     public static PhotonView Phv;
-     public static GameObject localPlayerInstance;
+    public static PhotonView Phv;
+    public static GameObject localPlayerInstance;
     // GameObject controller;
     
     public static List<PlayerController> players = new List<PlayerController>();
@@ -57,7 +56,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             //now dont destroy!!
             DontDestroyOnLoad(gameObject);
         }
-
     }
     
     public static void UpdateScores()

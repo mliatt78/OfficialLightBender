@@ -61,8 +61,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         PauseMenu.isleft = false;
 
         //check that we dont have a local instance before we instantiate the prefab
-        Debug.Log("ICI CA DOIT ETRE LANCE EEEEEEEE");
-        Debug.Log("localPlayerInstance is null or NOTTTTT : " + PlayerManager.localPlayerInstance == null);
+        //Debug.Log("ICI CA DOIT ETRE LANCE EEEEEEEE");
+        //Debug.Log("localPlayerInstance is null or NOTTTTT : " + PlayerManager.localPlayerInstance == null);
         if (PlayerManager.localPlayerInstance == null)
         {
             //  Debug.Log("PhotonNetwork.IsMasterClient  :  " + PhotonNetwork.IsMasterClient);

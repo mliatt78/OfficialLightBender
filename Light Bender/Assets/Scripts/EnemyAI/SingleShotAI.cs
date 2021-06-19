@@ -28,14 +28,11 @@ public class SingleShotAI : GUN
 
    void Awake()
    {
-    Pv = GetComponent<PhotonView>();
-    GunInfo gunProperties = (GunInfo) iteminfo;
-    nbinit = gunProperties.nbinit;
-    nbballes = nbinit;
-    secondsToReload = gunProperties.secondsToReload;
-
-    BotWaitReloadTime = 2; 
-    // bots have to wait the time to reload the gun + 2 seconds to reload
+       Pv = GetComponent<PhotonView>();
+       GunInfo gunProperties = (GunInfo) iteminfo;
+       nbinit = gunProperties.nbinit;
+       nbballes = nbinit;
+       secondsToReload = gunProperties.secondsToReload;
    }
    public override void Use()
    {
@@ -44,8 +41,7 @@ public class SingleShotAI : GUN
 
    void Shoot()
    {
-      Debug.Log("Owner Name in SingleShotAI: "+Pv.Controller.NickName);
-      //TODO
+      //Debug.Log("Owner Name in SingleShotAI: "+Pv.Controller.NickName);
       Pv.RPC("RPC_Shoot",RpcTarget.All);
    }
 

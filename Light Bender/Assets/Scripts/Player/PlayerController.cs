@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] GameObject cameraHolder;
 
     [SerializeField] CapsuleCollider capsuleCollider;
-    [SerializeField] SkinnedMeshRenderer playerRenderer;
+    [SerializeField] Canvas playerCanvas;
 
     [SerializeField] float mouseSensivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
 
@@ -146,8 +146,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             Debug.Log("Owner name of phv: " + Phv.Owner.NickName);
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
-            blueScoreText.gameObject.SetActive(false);
-            redScoreText.gameObject.SetActive(false);
+            playerCanvas.gameObject.SetActive(false);
+            //blueScoreText.gameObject.SetActive(false);
+            //redScoreText.gameObject.SetActive(false);
         }
 
         // Debug.Log("IsMasterClient " + PhotonNetwork.IsMasterClient +" IsLobby : " + GameManager.instance.IsLobby );
