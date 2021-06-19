@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using System.IO;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 using Random = System.Random;
 
@@ -45,12 +43,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void ApplySettings()
     {
-        bluebots = SettingsForPlay.NbBots;
-        redbots = SettingsForPlay.NbBots;
+        bluebots = SettingsForPlay.NbBots/2;
+        redbots = (SettingsForPlay.NbBots % 2 == 1 ? SettingsForPlay.NbBots/2 + 1 : SettingsForPlay.NbBots/2);
         PlayerController.CanJump = SettingsForPlay.Jump;
         PlayerController.nbmessages = SettingsForPlay.NbMessages;
-      //  RoomOptions options = new RoomOptions();
-      //  options.MaxPlayers = SettingsForPlay.NbPlayers;
+        //RoomOptions options = new RoomOptions();
+        //options.MaxPlayers = SettingsForPlay.NbPlayers;
     }
 
     private void Start()

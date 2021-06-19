@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using EnemyAI;
 using Photon.Pun;
 using UnityEngine;
 
@@ -17,7 +16,7 @@ public class SingleShot : GUN
 
    public float impactforce = 60;
    
-    PhotonView Pv;
+    PhotonView Phv;
     
     [SerializeField]  ProgressBarPro munitionsSlider;
 
@@ -32,7 +31,7 @@ public class SingleShot : GUN
     
     void Awake()
     {
-       Pv = GetComponent<PhotonView>();
+       Phv = GetComponent<PhotonView>();
        GunInfo weaponProperties = (GunInfo) iteminfo;
        nbinit = weaponProperties.nbinit;
        nbballes = nbinit;
@@ -47,7 +46,9 @@ public class SingleShot : GUN
 
    void Shoot()
    {
-      Pv.RPC("RPC_Shoot",RpcTarget.All);
+      Debug.Log("Owner Name in SingleShot: "+Phv.Controller.NickName);
+      //TODO
+      Phv.RPC("RPC_Shoot",RpcTarget.All);
    }
    
 

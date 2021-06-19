@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -122,7 +121,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     void Start()
     {
-        Debug.Log("Starting");
         if (Phv.IsMine)
         {
             EquipItem(0);
@@ -139,13 +137,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
             visuals = GetComponentsInChildren<Renderer>();
             team = (int) PhotonNetwork.LocalPlayer.CustomProperties["Team"];
-            //            Debug.Log("Instantiation is finished");
+            // Debug.Log("Instantiation is finished");
             GameManager.instance.currentweapon = 0;
         }
         else
         {
-           Debug.Log("Destroy component");
-           // Debug.Log("Owner name of phv: " + Phv.Owner.NickName);
+            Debug.Log("Destroy component");
+            Debug.Log("Owner name of phv: " + Phv.Owner.NickName);
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
             blueScoreText.gameObject.SetActive(false);
@@ -234,12 +232,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             }
         }
 
-
-        /*if (transform.position.y < -10f)
-        {
-            Die();
-        }*/
-
         if (Input.GetKeyDown(GameManager.instance.keys["Lock"]))
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -275,22 +267,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
     }
-
-    /*public bool GetInputRaw(Dictionary<string, KeyCode> dict,string keycode)
-    {
-        foreach (var input in dict)
-            if (Input.GetKey(input.Value) && keycode == input.Key)
-                return true;
-        return false;
-    }
-
-    public int CustomGetAxisRaw(bool inputX, bool inputY)
-    {
-        int ret = 0;
-        ret += (inputX ? 1 : 0);
-        ret += (inputY ? -1 : 0);
-        return ret;
-    }*/
 
     public Vector3 CustomGetAxisRaw(Dictionary<string, KeyCode> dict)
     {
@@ -417,29 +393,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         {
             animator.SetBool("IsCrouch", !iscrouch);
         }
-        /*if (!iscrouch && pressedcrouch)
-        {
-            animator.SetBool("IsCrouch", true);
-        }
-        if (iscrouch && !pressedcrouch)
-        {
-            animator.SetBool("IsCrouch", false);
-        }*/
-
 
         if (pressedprone)
         {
             animator.SetBool("IsProne",!isprone);
         }
-        /*if (!isprone && pressedprone)
-        {
-            animator.SetBool("IsProne", true);
-
-        }
-        if (isprone && !pressedprone)
-        {
-            animator.SetBool("IsProne", false);
-        }*/
     }
 
     void Look()
@@ -513,6 +471,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         animator.SetBool("IsLeftWalk", false);
         animator.SetBool("IsRightWalk", false);
         animator.SetBool("IsDance", false);
+        animator.SetBool("IsCrouching",false);
+        animator.SetBool("IsProning",false);
     }
 
     private void SetCollisionState(bool state)
@@ -668,8 +628,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
              renderer.enabled = state;
          }
      }
-
-
+     
      public void SendScores()
      {
          Phv.RPC("RPC_SendScores",RpcTarget.All,GameManager.instance.scores[0],GameManager.instance.scores[1]);
@@ -726,7 +685,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
      public void StartGame()
      {
-         Debug.Log("Start Game");
+         //Debug.Log("Start Game");
          PhotonNetwork.LoadLevel(2) ; // index de la scene
      }
 
