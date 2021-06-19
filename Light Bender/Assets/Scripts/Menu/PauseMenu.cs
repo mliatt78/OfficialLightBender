@@ -60,22 +60,6 @@ public class PauseMenu : MonoBehaviourPunCallbacks
             yield return null;
         SceneManager.LoadScene(3);
    }
-   
-   /*public void LeaveRoom() // local player leaves
-   {
-      // PhotonNetwork.Destroy(RoomManager.Instance.photonView);
-      PhotonNetwork.Disconnect();
-      while(PhotonNetwork.IsConnected)
-          Debug.Log("say hi");
-      
-      PhotonNetwork.LeaveLobby();
-   }
-   public override void OnLeftRoom()
-   {
-      // PlayerManager.players.Remove(PlayerManager.GetLocalPlayer());
-       SceneManager.LoadScene(2);
-       base.OnLeftRoom();
-   }*/
 
    public void PlayButtonSound()
    {
