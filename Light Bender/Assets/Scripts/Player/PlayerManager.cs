@@ -16,7 +16,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public static List<PlayerController> bluePlayers = new List<PlayerController>();
     public static List<PlayerController> redPlayers = new List<PlayerController>();
     
-    public static List<AIController> bots = new List<AIController>();
+   // public static List<AIController> bots = new List<AIController>();
     public static List<AIController> blueBots = new List<AIController>();
     public static List<AIController> redBots = new List<AIController>();
 
@@ -38,7 +38,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         (bluePlayers, blueBots) = SeparateBotsPlayers(blueAll);
         (redPlayers, redBots) = SeparateBotsPlayers(redAll);
         players = bluePlayers.Concat(redPlayers).ToList();
-        bots = blueBots.Concat(redBots).ToList();
+       // bots = blueBots.Concat(redBots).ToList();
         
         /*
         Debug.Log("Temp lists :");
@@ -51,14 +51,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         Debug.Log(TempPrintListController(blueBots));
         Debug.Log(TempPrintListController(redBots));
         */
-        if (instance)
-            Destroy(gameObject);
-        else
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-           
         if (Phv.IsMine)
         {
             localPlayerInstance = gameObject;
