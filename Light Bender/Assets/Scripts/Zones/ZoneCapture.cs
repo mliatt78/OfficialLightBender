@@ -18,7 +18,7 @@ namespace Zones
         private double maxValueOre = 1500;
         private double[] blueTimers = new double[2];
         private double[] redTimers = new double[2]; 
-        private double[][] Timers = new double[2][];
+        private double[,] Timers = new double[2,2];
 
         public float Radius = 5;
         public bool playerNear;
@@ -26,7 +26,6 @@ namespace Zones
         // Update is called once per frame
         void Update()
         {
-           
             if (this == null)
             {
                 Debug.LogError("Cannot update time on a timer with no zones assigned !");
@@ -36,124 +35,17 @@ namespace Zones
             {
                 return;
             }
-            
+
             CheckIfPlayersInZone();
             CheckIfPlayersLeave();
             
             if (playerNear)
             {
-                (int teamTryingControl, int playersTryControl) = GetTeamAndPlayersTryControl(bluePlayersNear, redPlayersNear);
-                Debug.Log("number of playersTryControl: "+playersTryControl);
-                if (playersTryControl != 0)
-                { // if there are the same number of blue and red players, then do nothing
-                    
-                    double factor = 1 + 0.5 * (playersTryControl - 1);
-                    double timeValue = (Time.deltaTime * 100 * factor);
-                    // 1x --> 1 player, 1.5x --> 2 players, 2x --> 3 players and so on
-                    if (teamTryingControl == controlled)
-                    {
-                        if (Timers[teamTryingControl][0] == 0)
-                        { // timer Capture at 0, then timer Ore
-                            if (Timers[teamTryingControl][1] == 0)
-                            { // timer Ore at 0
-                                int randInt = GameManager.rand.Next(playersTeam[teamTryingControl].Count);
-                                (playersTeam[teamTryingControl])[randInt].AddOre(1);
-                                int ores = playersTeam[teamTryingControl][randInt].GetOresBeingHeld();
-                                PlayerController oreGetter = playersTeam[teamTryingControl][randInt];
-                                string multipleOres = ores > 1 ? "s" : "";
-                                oreGetter.SendChatMessage(oreGetter.name,
-                                    "Got "+ores+" ore"+multipleOres+".");
-                                // should add a visual way to see that the player holds the ore
-                                Timers[teamTryingControl][1] += maxValueOre;
-                                // resets the timer Ore
-                            }
-                            else
-                            {
-                                Timers[teamTryingControl][1] = DecreaseTimer(Timers[teamTryingControl][1],
-                                    timeValue);
-                            }
-                        }
-                        else
-                        { // first fully bring timer Capture to 0
-                            Timers[teamTryingControl][0] = DecreaseTimer(Timers[teamTryingControl][0],
-                                timeValue);
-                            //Timers[TeamTryingControl][0] -= (int)(Time.deltaTime * 100 * factor);
-                        }
-                    }
-                    else
-                    { // 2 possibilities :
-                      // zone is neutral or
-                      // zone is controlled by enemy
-                        if ((teamTryingControl+1)%2 == controlled)
-                        { // zone controlled by enemy
-                            int teamEnemy = (teamTryingControl + 1) % 2;
-                            if (Timers[teamEnemy][0] < maxValue)
-                            { // zone to recapture
-                                Timers[teamEnemy][0] = IncreaseTimer(Timers[teamEnemy][0],
-                                        timeValue,maxValue);
-                            }
-                            else
-                            { // Timers[teamEnemy][0] == maxValue , so reset neutral
-                                Timers[0][1] = maxValueOre;
-                                Timers[1][1] = maxValueOre; 
-                                // reset ore timers
-
-                                Timers[0][0] = maxValue;
-                                Timers[1][0] = maxValue; 
-                                // reset capture timers, just to be sure. 
-
-                                controlled = -1;
-                            }
-                        }
-                        else
-                        { // zone is neutral
-                            //Debug.Log("Test step 0 : timer capture of own team "+Timers[TeamTryingControl][0]);
-                            if (Timers[teamTryingControl][0] == 0)
-                            { // zone was neutral and will be controlled by capturing team
-                                controlled = teamTryingControl;
-                                
-                                int randInt = GameManager.rand.Next(playersTeam[teamTryingControl].Count);
-                                (playersTeam[teamTryingControl])[randInt].AddOre(1);
-                                Debug.Log((playersTeam[teamTryingControl])[randInt].name + " has got an ore.");
-                            }
-                            else
-                            {
-                                //Debug.Log("Test step 1 : timer capture of enemy "+Timers[(TeamTryingControl+1)%2][0]);
-                                if (Timers[(teamTryingControl+1)%2][0] < maxValue)
-                                {
-                                    Timers[(teamTryingControl + 1) % 2][0] = IncreaseTimer(
-                                        Timers[(teamTryingControl + 1) % 2][0],
-                                        timeValue, maxValue);
-                                }
-                                else
-                                { // timer capture of enemy team is at max, so decrease own timer capture
-                                    Timers[teamTryingControl][0] = DecreaseTimer(Timers[teamTryingControl][0],
-                                        timeValue);
-                                }
-                            }
-                        }
-                        
-                    }
-                }
-
-
+                DecreaseTimers();
             }
             else
             {
-                double factor = 1.5;
-                // recharges 1.5x as fast
-                
-                // recharge timers
-                if (Timers[0][0] < maxValue)
-                {
-                    Timers[0][0] = IncreaseTimer(Timers[0][0],
-                        (Time.deltaTime * 100 * factor), maxValue);
-                }
-                else if (Timers[1][0] < maxValue)
-                {
-                    Timers[1][0] = IncreaseTimer(Timers[1][0],
-                        (Time.deltaTime * 100 * factor), maxValue);
-                }
+                RechargeTimers();
             }
 
             DisplayTimeForPlayers(bluePlayersNear,redPlayersNear);
@@ -165,6 +57,120 @@ namespace Zones
             
             
             
+        }
+
+        private void DecreaseTimers()
+        {
+            (int teamTryingControl, int playersTryControl) = GetTeamAndPlayersTryControl(bluePlayersNear, redPlayersNear);
+                //Debug.Log("number of playersTryControl: "+playersTryControl);
+                if (playersTryControl != 0)
+                { // if there are the same number of blue and red players, then do nothing
+                    double factor = 1 + 0.5 * (playersTryControl - 1);
+                    double timeValue = (Time.deltaTime * 100 * factor);
+                    // 1x --> 1 player, 1.5x --> 2 players, 2x --> 3 players and so on
+                    if (teamTryingControl == controlled)
+                    {
+                        if (Timers[teamTryingControl,0] == 0)
+                        { // timer Capture at 0, then timer Ore
+                            if (Timers[teamTryingControl,1] == 0)
+                            { // timer Ore at 0
+                                int randInt = GameManager.rand.Next(playersTeam[teamTryingControl].Count);
+                                (playersTeam[teamTryingControl])[randInt].AddOre(1);
+                                int ores = playersTeam[teamTryingControl][randInt].GetOresBeingHeld();
+                                PlayerController oreGetter = playersTeam[teamTryingControl][randInt];
+                                string multipleOres = ores > 1 ? "s" : "";
+                                oreGetter.SendChatMessage(oreGetter.name,
+                                    "Got "+ores+" ore"+multipleOres+".");
+                                // should add a visual way to see that the player holds the ore
+                                Timers[teamTryingControl,1] += maxValueOre;
+                                // resets the timer Ore
+                            }
+                            else
+                            {
+                                Timers[teamTryingControl,1] = DecreaseTimer(Timers[teamTryingControl,1],
+                                    timeValue);
+                            }
+                        }
+                        else
+                        { // first fully bring timer Capture to 0
+                            Timers[teamTryingControl,0] = DecreaseTimer(Timers[teamTryingControl,0],
+                                timeValue);
+                            //Timers[TeamTryingControl][0] -= (int)(Time.deltaTime * 100 * factor);
+                        }
+                    }
+                    else
+                    { // 2 possibilities :
+                      // zone is neutral or
+                      // zone is controlled by enemy
+                        if ((teamTryingControl+1)%2 == controlled)
+                        { // zone controlled by enemy
+                            int teamEnemy = (teamTryingControl + 1) % 2;
+                            if (Timers[teamEnemy,0] < maxValue)
+                            { // zone to recapture
+                                Timers[teamEnemy,0] = IncreaseTimer(Timers[teamEnemy,0],
+                                        timeValue,maxValue);
+                            }
+                            else
+                            { // Timers[teamEnemy][0] == maxValue , so reset neutral
+                                Timers[0,1] = maxValueOre;
+                                Timers[1,1] = maxValueOre; 
+                                // reset ore timers
+
+                                Timers[0,0] = maxValue;
+                                Timers[1,0] = maxValue; 
+                                // reset capture timers, just to be sure. 
+
+                                controlled = -1;
+                            }
+                        }
+                        else
+                        { // zone is neutral
+                            //Debug.Log("Test step 0 : timer capture of own team "+Timers[TeamTryingControl][0]);
+                            if (Timers[teamTryingControl,0] == 0)
+                            { // zone was neutral and will be controlled by capturing team
+                                controlled = teamTryingControl;
+                                
+                                int randInt = GameManager.rand.Next(playersTeam[teamTryingControl].Count);
+                                (playersTeam[teamTryingControl])[randInt].AddOre(1);
+                                //Debug.Log((playersTeam[teamTryingControl])[randInt].name + " has got an ore.");
+                            }
+                            else
+                            {
+                                //Debug.Log("Test step 1 : timer capture of enemy "+Timers[(TeamTryingControl+1)%2][0]);
+                                if (Timers[(teamTryingControl+1)%2,0] < maxValue)
+                                {
+                                    Timers[(teamTryingControl + 1) % 2,0] = IncreaseTimer(
+                                        Timers[(teamTryingControl + 1) % 2,0],
+                                        timeValue, maxValue);
+                                }
+                                else
+                                { // timer capture of enemy team is at max, so decrease own timer capture
+                                    Timers[teamTryingControl,0] = DecreaseTimer(Timers[teamTryingControl,0],
+                                        timeValue);
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+        }
+
+        private void RechargeTimers()
+        {
+            double factor = 1.5;
+            // recharges 1.5x as fast
+                
+            // recharge timers
+            if (Timers[0,0] < maxValue)
+            {
+                Timers[0,0] = IncreaseTimer(Timers[0,0],
+                    (Time.deltaTime * 100 * factor), maxValue);
+            }
+            else if (Timers[1,0] < maxValue)
+            {
+                Timers[1,0] = IncreaseTimer(Timers[1,0],
+                    (Time.deltaTime * 100 * factor), maxValue);
+            }
         }
 
         private void DisplayTimeForPlayers(List<PlayerController> bluePlayers,List<PlayerController> redPlayers)
@@ -196,19 +202,19 @@ namespace Zones
              - timer capture of said team is max value, in which case, we show the timer capture of the other team, which is either max value or lower.
              */
 
-            if (Timers[team][0] == 0)
+            if (Timers[team,0] == 0)
             {
-                return Timers[team][1]; 
+                return Timers[team,1]; 
                 // timer ore of team
             }
 
-            if (Timers[team][0] > 0 && Timers[team][0] < maxValue)
+            if (Timers[team,0] > 0 && Timers[team,0] < maxValue)
             {
-                return Timers[team][0];
+                return Timers[team,0];
                 // timer capture of team
             }
 
-            return Timers[(team + 1) % 2][0];
+            return Timers[(team + 1) % 2,0];
             // timer capture of other team
         }
 
@@ -219,7 +225,7 @@ namespace Zones
             
             for (int i = 0; i < playersOfTeam.Count; i++)
             {
-                playersOfTeam[i].transform.Find("Canvas").GetComponentsInChildren<TextMeshProUGUI>()[0].text =
+                playersOfTeam[i].timerText.text =
                     string.Format("{0:00}:{1:00}", seconds, centiseconds);
             }
         }
@@ -231,7 +237,6 @@ namespace Zones
             {
                 return 0;
             }
-
             return timer - decreaseValue;
         }
 
@@ -241,7 +246,6 @@ namespace Zones
             {
                 return maxTimerValue;
             }
-
             return timer + increaseValue;
         }
 
@@ -268,20 +272,18 @@ namespace Zones
                 }
             }
         }
-
-
+        
         private void AddPlayerNear(PlayerController player)
         {
-            //if (player.gameObject.CompareTag("Player"))
             if (!playersNear.Contains(player))
             {
                 Debug.Log("Successfully added a new player near");
-                player.transform.Find("Canvas").transform.Find("Timer").GetComponent<TextMeshProUGUI>().gameObject.SetActive(true);
+                player.timerText.gameObject.SetActive(true);
                 playersNear.Add(player);
                 playersTeam[player.GetTeam()].Add(player);
                 // add to bluePlayers or redPlayers
                 
-                Debug.Log("Test on getting other players' timer");
+                //Debug.Log("Test on getting other players' timer");
 
                 // TODO
                 // get timers of other players, if there's one
@@ -296,8 +298,8 @@ namespace Zones
                  */
                 
                 
-                Debug.Log("players Count as of now : "+PlayerManager.players.Count);
-                Debug.Log("playersNear Count as of now : "+playersNear.Count);
+                //Debug.Log("players Count as of now : "+PlayerManager.players.Count);
+                //Debug.Log("playersNear Count as of now : "+playersNear.Count);
                 
                 DisplayTimeForPlayers(bluePlayersNear,redPlayersNear);
                 // show timer
@@ -309,9 +311,8 @@ namespace Zones
         private void RemovePlayerNear(PlayerController player)
         {
             //if (player.gameObject.CompareTag("Player"))
-            TextMeshProUGUI timer = player.transform.Find("Canvas").transform.Find("Timer").GetComponent<TextMeshProUGUI>();
-            timer.text = "";
-            timer.gameObject.SetActive(false);
+            player.timerText.text = "";
+            player.timerText.gameObject.SetActive(false);
             // hide timer
             playersNear.Remove(player);
             playersTeam[player.GetTeam()].Remove(player);
@@ -330,9 +331,9 @@ namespace Zones
         private static (int team, int playersIncrementTimer) GetTeamAndPlayersTryControl(List<PlayerController> bluePlayers,
             List<PlayerController> redPlayers)
         {
-            Debug.Log("GetTeamAndPlayersTryControl ");
+            /*Debug.Log("GetTeamAndPlayersTryControl ");
             Debug.Log("redPlayersCount: " +redPlayers.Count);
-            Debug.Log("bluePlayersCount: "+bluePlayers.Count);
+            Debug.Log("bluePlayersCount: "+bluePlayers.Count);*/
             int team;
             int playersTimer;
             if (redPlayers.Count > bluePlayers.Count)
@@ -362,13 +363,20 @@ namespace Zones
             blueTimers[1] = maxValueOre;
             redTimers[0] = maxValue;
             redTimers[1] = maxValueOre;
-            
-            Timers[0] = blueTimers;
-            Timers[1] = redTimers;
+
+            for (int i = 0; i < blueTimers.Length; i++)
+            {
+                Timers[0, i] = blueTimers[i];
+            }
+
+            for (int i = 0; i < redTimers.Length; i++)
+            {
+                Timers[1, i] = redTimers[i];
+            }
         }
 
         [PunRPC]
-        private void RPC_SetTimers(double[][] timers)
+        private void RPC_SetTimers(double[,] timers)
         {
             Timers = timers;
         }

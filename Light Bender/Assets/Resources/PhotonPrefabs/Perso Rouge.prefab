@@ -2403,9 +2403,9 @@ RectTransform:
   m_Father: {fileID: 6017559426994174876}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -347}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 100}
   m_SizeDelta: {x: 200, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3779926499935661258
@@ -8973,7 +8973,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraHolder: {fileID: 1728960968149508185}
   capsuleCollider: {fileID: 3745653837150883550}
-  playerRenderer: {fileID: 8722604848764279095}
+  playerCanvas: {fileID: 6752388769541575861}
   mouseSensivity: 3
   sprintSpeed: 6
   walkSpeed: 3
@@ -8993,6 +8993,7 @@ MonoBehaviour:
   lastShooterName: null
   blueScoreText: {fileID: 2858101122115430589}
   redScoreText: {fileID: 1444356222235823986}
+  timerText: {fileID: 214167903887743306}
   PlayerOnlyLook: 0
   currentHealth: 100
   chat: {fileID: 0}

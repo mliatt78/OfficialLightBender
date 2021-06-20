@@ -17,26 +17,23 @@ public class SingleShotAI : GUN
 
    public float impactforce = 60;
    
-    PhotonView Pv;
+   PhotonView Pv;
 
-    public int nbballes;
-    public float secondsToReload;
-    public float BotWaitReloadTime;
+   public int nbballes;
+   public float secondsToReload;
+   public float BotWaitReloadTime;
 
-    private int nbinit;
+   private int nbinit;
 
-    
-    void Awake()
-    {
+
+   void Awake()
+   {
        Pv = GetComponent<PhotonView>();
        GunInfo gunProperties = (GunInfo) iteminfo;
        nbinit = gunProperties.nbinit;
        nbballes = nbinit;
        secondsToReload = gunProperties.secondsToReload;
-
-       BotWaitReloadTime = 2; 
-       // bots have to wait the time to reload the gun + 2 seconds to reload
-    }
+   }
    public override void Use()
    {
       Shoot();
@@ -44,6 +41,7 @@ public class SingleShotAI : GUN
 
    void Shoot()
    {
+      //Debug.Log("Owner Name in SingleShotAI: "+Pv.Controller.NickName);
       Pv.RPC("RPC_Shoot",RpcTarget.All);
    }
 
@@ -77,15 +75,7 @@ public class SingleShotAI : GUN
                   bulletImpact.transform.SetParent(bimp[0].transform);
                }
                hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo) iteminfo).damage, AiOwner.gameObject.name);
-               /*if (hit.collider.gameObject.GetComponent<PlayerController>() != null)
-               {
-                  hit.collider.gameObject.GetComponent<PlayerController>().lastShooter = AiOwner.gameObject;
-               }
-               else if (hit.collider.gameObject.GetComponent<AIController>() != null)
-               {
-                  hit.collider.gameObject.GetComponent<AIController>().lastShooter = AiOwner.gameObject;
-               }*/
-               
+
                //Debug.Log(((GunInfo) iteminfo).damage + " DAMAGE");
                if (hit.rigidbody != null)
                {

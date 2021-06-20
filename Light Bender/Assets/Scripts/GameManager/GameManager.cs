@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 using Random = System.Random;
 
@@ -19,7 +18,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static Random rand = new Random();
     [SerializeField] GameObject map;
 
-    int RS; 
+    int RS;
     int BS;
 
     public int redbots;
@@ -29,7 +28,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static int RedLayer;
 
     public static bool isFocused = true;
-    
+
     public int currentweapon;
 
     public bool IsLobby = false;
@@ -41,16 +40,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     public  Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>();
 
     private bool charcreated = false;
-    
 
     public void ApplySettings()
     {
-        bluebots = SettingsForPlay.NbBots;
-        redbots = SettingsForPlay.NbBots;
+        bluebots = SettingsForPlay.NbBots/2;
+        redbots = (SettingsForPlay.NbBots % 2 == 1 ? SettingsForPlay.NbBots/2 + 1 : SettingsForPlay.NbBots/2);
         PlayerController.CanJump = SettingsForPlay.Jump;
         PlayerController.nbmessages = SettingsForPlay.NbMessages;
-      //  RoomOptions options = new RoomOptions();
-      //  options.MaxPlayers = SettingsForPlay.NbPlayers;
+        //RoomOptions options = new RoomOptions();
+        //options.MaxPlayers = SettingsForPlay.NbPlayers;
     }
 
     private void Start()
@@ -60,12 +58,14 @@ public class GameManager : MonoBehaviourPunCallbacks
             PlayerManager.localPlayerInstance = null;
         BlueLayer = LayerMask.NameToLayer("BlueL");
         RedLayer = LayerMask.NameToLayer("RedL");
+        PauseMenu.isleft = false;
+
         //check that we dont have a local instance before we instantiate the prefab
-        Debug.Log("ICI CA DOIT ETRE LANCE EEEEEEEE");
-        Debug.Log("localPlayerInstance is null or NOTTTTT : " + PlayerManager.localPlayerInstance == null);
+        //Debug.Log("ICI CA DOIT ETRE LANCE EEEEEEEE");
+        //Debug.Log("localPlayerInstance is null or NOTTTTT : " + PlayerManager.localPlayerInstance == null);
         if (PlayerManager.localPlayerInstance == null)
         {
-            //            Debug.Log("PhotonNetwork.IsMasterClient  :  " + PhotonNetwork.IsMasterClient);
+            //  Debug.Log("PhotonNetwork.IsMasterClient  :  " + PhotonNetwork.IsMasterClient);
             if (PhotonNetwork.IsMasterClient)
             {
                 int redbotsCount = redbots;
@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                     else
                         redbotsCount--;
                 }
-                
+
                 for (int i = bluebotsCount; i > 0; i--)
                 {
                     //get a spawn for the correct team
@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                     spawn.rotation);
                 charcreated = true;
                 BS++;
-               // Debug.Log("Player is Istanciate");
+                //Debug.Log("Player is Instanciate");
             }
             else
             {
@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Awake()
     {
-       //Debug.Log("Awake");
+        //Debug.Log("Awake");
         if (instance == null)
         {
             instance = this;

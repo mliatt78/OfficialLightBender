@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DestroyClones : MonoBehaviour
 {
@@ -10,6 +8,4 @@ public class DestroyClones : MonoBehaviour
     {
         Destroy(gameObject, destructiontime);
     }
-
-   
 }

@@ -7,9 +7,8 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
-   
-     public static PhotonView Phv;
-     public static GameObject localPlayerInstance;
+    public static PhotonView Phv;
+    public static GameObject localPlayerInstance;
     // GameObject controller;
     
     public static List<PlayerController> players = new List<PlayerController>();
@@ -39,7 +38,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         (redPlayers, redBots) = SeparateBotsPlayers(redAll);
         players = bluePlayers.Concat(redPlayers).ToList();
        // bots = blueBots.Concat(redBots).ToList();
-        
+
         /*
         Debug.Log("Temp lists :");
         Debug.Log(TempPrintList(blueAll));
@@ -57,7 +56,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             //now dont destroy!!
             DontDestroyOnLoad(gameObject);
         }
-
     }
     
     public static void UpdateScores()
@@ -135,24 +133,5 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
 
         return (listPlayers, listBots);
-    }
-    
-    private static string TempPrintList(List<GameObject> list)
-    {
-        string ret = "";
-        for (int i = 0; i < list.Count; i++)
-        {
-            ret += list[i].name + " ";
-        }
-        return ret;
-    }
-    private static string TempPrintListController<T>(List<T> list)
-    {
-        string ret = "";
-        for (int i = 0; i < list.Count; i++)
-        {
-            ret += (list[i] as GameObject)?.name + " ";
-        }
-        return ret;
     }
 }
