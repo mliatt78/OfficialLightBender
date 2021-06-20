@@ -74,6 +74,13 @@ namespace EnemyAI
             }
         }
 
+        public void OnPhotonInstantiate(PhotonMessageInfo info)
+        {
+            object[] instantiationData = info.photonView.InstantiationData;
+
+            name = (string) instantiationData[0];
+        }
+
         (bool, GameObject) GetTarget()
         {
             float distanceToNearest = 5f;

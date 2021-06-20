@@ -11,7 +11,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         if (Instance) // regarde si un autre roommanager existe
         {
             Destroy(Instance); // il ne peut y en avoir qu'une ici
-            Debug.Log("hello");
+            //Debug.Log("hello");
            // return;
         }
         DontDestroyOnLoad(gameObject); // une seule room manager, donc on destroy pas
