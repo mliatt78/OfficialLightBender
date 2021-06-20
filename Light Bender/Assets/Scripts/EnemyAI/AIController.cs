@@ -95,7 +95,7 @@ namespace EnemyAI
                     Physics.Raycast(transform.position, transform.forward, out rch);
                     if (rch.rigidbody == player.GetComponent<Rigidbody>())
                     {
-                        Nearest = player;
+                        Nearest = player;   
                         distanceToNearest = distance.magnitude;
                     }
                 }
