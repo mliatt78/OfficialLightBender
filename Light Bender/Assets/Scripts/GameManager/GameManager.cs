@@ -110,11 +110,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                     //get a spawn for the correct team
                     Transform spawn = SpawnManager.instance.blueTeamSpawns[BS].transform;
                     int randInt = rand.Next(BotsNameList.Count);
-                    object[] NameBot = {BotsNameList[randInt]};
+                    string nameOfBot = BotsNameList[randInt];
+                    object[] NameBot = {nameOfBot};
                     BotsNameList.RemoveAt(randInt);
-                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", BlueBot.name),
+                    GameObject bot = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", BlueBot.name),
                         spawn.position, spawn.rotation, 0, NameBot);
-
+                    bot.name = nameOfBot;
                     BS++;
                 }
 
@@ -123,11 +124,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                     //get a spawn for the correct team
                     Transform spawn = SpawnManager.instance.redTeamSpawns[RS].transform;
                     int randInt = rand.Next(BotsNameList.Count);
-                    object[] NameBot = {BotsNameList[randInt]};
+                    string nameOfBot = BotsNameList[randInt];
+                    object[] NameBot = {nameOfBot};
                     BotsNameList.RemoveAt(randInt);
-                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", RedBot.name), 
+                    GameObject bot = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", RedBot.name), 
                         spawn.position, spawn.rotation, 0, NameBot);
-                    
+                    bot.name = nameOfBot;
                     RS++;
                 }
             }

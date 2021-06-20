@@ -24,7 +24,7 @@ namespace Zones
         [SerializeField] private double RechargeFactor;
 
         public float Radius = 5;
-        
+
 
         // Update is called once per frame
         void Update()
@@ -35,8 +35,8 @@ namespace Zones
             }
 
             CheckIfPlayersInZone();
-           CheckIfPlayersLeave();
-            
+            CheckIfPlayersLeave();
+
             if (playerNear)
             {
                 DecreaseTimers();
@@ -47,7 +47,7 @@ namespace Zones
             }
 
             DisplayTimeForPlayers(bluePlayersNear, redPlayersNear);
-            // this will be difficult. We need to show the timer which has been updated, however, 
+            // this will be difficult. We need to show the timer which has been updated, however,
             // if a red-player enters a blue-controlled zone with a blue player in it, the blue player should still see the ore timer freezed, while
             // the red player should see the capture timer freezed.
 
@@ -67,7 +67,7 @@ namespace Zones
                 // 1x --> 1 player, 1.5x --> 2 players, 2x --> 3 players and so on
                 double timeValue = PhotonNetwork.Time - PhotonTimeFrameBefore;
                 timeValue *= factor * 100;
-                
+
                 /*Debug.Log("PhotonNetwork.Time: "+PhotonNetwork.Time);
                 Debug.Log("PhotonTimeFrameBefore: "+PhotonTimeFrameBefore);
                 Debug.Log("TimeValue: "+timeValue);
@@ -123,7 +123,7 @@ namespace Zones
                         {
                             Debug.Log("Reset Timers");
                             //TimersInit();
-                            
+
                             Timers[0,0] = maxValue;
                             Timers[0,1] = maxValueOre;
                             Timers[1,0] = maxValue;
@@ -166,7 +166,7 @@ namespace Zones
 
             PhotonTimeFrameBefore = PhotonNetwork.Time;
 
-            /*Debug.Log("Timers: "+"[ [ "+Timers[0,0]+ ", "+Timers[0,1]+" ]" + 
+            /*Debug.Log("Timers: "+"[ [ "+Timers[0,0]+ ", "+Timers[0,1]+" ]" +
                       ", [ "+Timers[1,0]+", "+Timers[1,1]+" ] ]");*/
         }
 
@@ -179,7 +179,7 @@ namespace Zones
 
             //Debug.Log("Timers[0, 0] < maxValue: "+(Timers[0, 0] < maxValue));
             //Debug.Log("Timers[1, 0] < maxValue: "+(Timers[1, 0] < maxValue));
-            
+
             // recharge timers
             if (Timers[0, 0] < maxValue)
             {
@@ -248,7 +248,7 @@ namespace Zones
             Debug.Log("centiseconds of timer: "+centiseconds);
             */
             // TODO
-                        
+
             for (int i = 0; i < playersOfTeam.Count; i++)
             {
                 playersOfTeam[i].timerText.text =
@@ -306,7 +306,7 @@ namespace Zones
                 playersTeam[player.GetTeam()].Add(player);
 
                 PhotonTimeFrameBefore = PhotonNetwork.Time;
-                
+
                 // add to bluePlayers or redPlayers
 
                 //Debug.Log("Test on getting other players' timer");
@@ -372,8 +372,8 @@ namespace Zones
                 team = 0; // blue
                 playersTimer = bluePlayers.Count - redPlayers.Count;
             }
-            // if bluePlayers.count == redPlayers.count, then no matter the team, 
-            // playersIncrementTimer will be 0, so no change in timer, 
+            // if bluePlayers.count == redPlayers.count, then no matter the team,
+            // playersIncrementTimer will be 0, so no change in timer,
             // and that is what we want.
 
             return (team, playersTimer);
@@ -389,10 +389,8 @@ namespace Zones
 
             playersTeam[0] = bluePlayersNear;
             playersTeam[1] = redPlayersNear;
-            
+
             TimersInit();
         }
     }
 }
-    
-
