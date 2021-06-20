@@ -10492,9 +10492,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlled: -1
-  maxValue: 3000
-  Radius: 5
   playerNear: 0
+  playersNear: []
+  bluePlayersNear: []
+  redPlayersNear: []
+  maxValue: 3000
+  maxValueOre: 1500
+  RechargeFactor: 1.5
+  Radius: 5
 --- !u!135 &923330669
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -11916,6 +11921,27 @@ MonoBehaviour:
   redbots: 5
   bluebots: 5
   currentweapon: 0
+  BotsNameList:
+  - Lightning
+  - Shadow
+  - Mystery
+  - Death
+  - Hellfire
+  - Stormfury
+  - Earth
+  - Bracer
+  - Bolt
+  - Seeker
+  - Scyther
+  - Proto
+  - Sparky
+  - Silver
+  - Ratchet
+  - Screwie
+  - Scorcher
+  - Sentinel
+  - Exterminate
+  - Emperor
   IsLobby: 1
   settingsbutton: {fileID: 1663057909}
   scores: 0000000000000000
@@ -24436,9 +24462,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlled: -1
-  maxValue: 3000
-  Radius: 5
   playerNear: 0
+  playersNear: []
+  bluePlayersNear: []
+  redPlayersNear: []
+  maxValue: 3000
+  maxValueOre: 1500
+  RechargeFactor: 1.5
+  Radius: 5
 --- !u!135 &2127601462
 SphereCollider:
   m_ObjectHideFlags: 0
