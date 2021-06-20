@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExitGames.Client.Photon.StructWrapping;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -20,20 +22,33 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] GameObject PlayerListItemPrefab;
     [SerializeField] GameObject StartGamebutton;
     public AudioSource AudioSource;
+
+   
+    
     
     public bool isFocused;
 
     private bool isTeam = false;
-    private void Awake()
-    {
-        Instance = this;
-    }
 
+    private bool isAllTeam = false;
+    private void Awake() => Instance = this;
+
+    private void IsValid()
+    {
+        Player[] players = PhotonNetwork.PlayerList;
+        foreach (var player in players)
+        {
+            if (player.CustomProperties["ChoseTeam"] is "False")
+                return;
+        }
+        isAllTeam = true;
+
+    }
     // Start is called before the first frame update
     void Start() // tu te connectes au jeu
     {
-    
-       // if (!PhotonNetwork.IsConnected)
+        PlayerPrefs.SetString("ChoseTeam","False");
+        // if (!PhotonNetwork.IsConnected)
        // {
             Debug.Log("Connecting to Master");
             PhotonNetwork.ConnectUsingSettings();
@@ -50,7 +65,21 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void ChooseNickName(string input)
     {
+        if (String.IsNullOrEmpty(input))
+        {
+            input = "null";
+        }
         PhotonNetwork.NickName = input;
+        GameManager.LocalPlayerName = input;
+    }
+
+    public void OpenTitleMenu()
+    {
+        if (!String.IsNullOrEmpty(GameManager.LocalPlayerName) &&
+            GameManager.LocalPlayerName != "null")
+        {
+            MenuManager.Instance.OpenMenu("title");
+        }
     }
 
     public override void OnJoinedLobby()
@@ -123,7 +152,10 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void Update()
     {
-        StartGamebutton.SetActive(isTeam);
+        if (isTeam)
+            PlayerPrefs.SetString("ChooseTeam","True");
+        IsValid();
+        StartGamebutton.SetActive(isTeam && isAllTeam && PhotonNetwork.IsMasterClient);
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)

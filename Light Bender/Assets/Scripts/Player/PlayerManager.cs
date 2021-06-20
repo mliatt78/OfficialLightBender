@@ -24,6 +24,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     void Awake()
     {
         Phv = GetComponent<PhotonView>();
+        instance = this;
     }
     
     // Start is called before the first frame update
@@ -133,5 +134,30 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
 
         return (listPlayers, listBots);
+    }
+
+    public void RemovePlayer(string playerName)
+    {
+        Debug.Log("Trying to remove player");
+        Phv.RPC("RPC_RemovePlayer",RpcTarget.All,playerName);
+    }
+
+    [PunRPC]
+    void RPC_RemovePlayer(string playerName)
+    {
+        Debug.Log("RPC_RemovePlayer");
+        
+        bool found = false;
+        for (int i = 0; i < players.Count && !found; i++)
+        {
+            if (players[i].name == playerName)
+            {
+                players.RemoveAt(i);
+                found = true;
+            }
+        }
+        
+        Debug.Log("found the player to remove ? : "+found);
+        Debug.Log("Name of player to remove: "+playerName);
     }
 }
