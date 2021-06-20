@@ -269,6 +269,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
     }
 
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        object[] instantiationData = info.photonView.InstantiationData;
+
+        name = (string) instantiationData[0];
+        team = (int) instantiationData[1];
+    }
+
     public Vector3 CustomGetAxisRaw(Dictionary<string, KeyCode> dict)
     {
         Vector3 vect = Vector3.zero;

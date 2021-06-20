@@ -50,7 +50,21 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void ChooseNickName(string input)
     {
+        if (String.IsNullOrEmpty(input))
+        {
+            input = "null";
+        }
         PhotonNetwork.NickName = input;
+        GameManager.LocalPlayerName = input;
+    }
+
+    public void OpenTitleMenu()
+    {
+        if (!String.IsNullOrEmpty(GameManager.LocalPlayerName) &&
+            GameManager.LocalPlayerName != "null")
+        {
+            MenuManager.Instance.OpenMenu("title");
+        }
     }
 
     public override void OnJoinedLobby()

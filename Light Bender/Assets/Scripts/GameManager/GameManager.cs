@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Photon.Pun;
 using UnityEngine;
@@ -11,8 +12,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public GameObject RedBot;
     public GameObject BlueBot;
-
-
+    
     public static GameManager instance;
 
     public static Random rand = new Random();
@@ -30,6 +30,33 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static bool isFocused = true;
 
     public int currentweapon;
+    public static string LocalPlayerName = "null";
+
+    public static List<string> BotsNameListOriginal = new List<string>
+    {
+        "Lightning",
+        "Shadow",
+        "Mystery",
+        "Death",
+        "Hellfire",
+        "Stormfury",
+        "Earth",
+        "Bracer",
+        "Bolt",
+        "Seeker",
+        "Scyther",
+        "Proto",
+        "Sparky",
+        "Silver",
+        "Ratchet",
+        "Screwie",
+        "Scorcher",
+        "Sentinel",
+        "Exterminate",
+        "Emperor"
+    };
+
+    public List<string> BotsNameList = new List<string>(BotsNameListOriginal);
 
     public bool IsLobby = false;
     public GameObject settingsbutton;
@@ -82,8 +109,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                 {
                     //get a spawn for the correct team
                     Transform spawn = SpawnManager.instance.blueTeamSpawns[BS].transform;
+                    int randInt = rand.Next(BotsNameList.Count);
+                    object[] NameBot = {BotsNameList[randInt]};
+                    BotsNameList.RemoveAt(randInt);
                     PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", BlueBot.name),
-                        spawn.position, spawn.rotation);
+                        spawn.position, spawn.rotation, 0, NameBot);
+
                     BS++;
                 }
 
@@ -91,8 +122,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                 {
                     //get a spawn for the correct team
                     Transform spawn = SpawnManager.instance.redTeamSpawns[RS].transform;
-                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", RedBot.name), spawn.position,
-                        spawn.rotation);
+                    int randInt = rand.Next(BotsNameList.Count);
+                    object[] NameBot = {BotsNameList[randInt]};
+                    BotsNameList.RemoveAt(randInt);
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", RedBot.name), 
+                        spawn.position, spawn.rotation, 0, NameBot);
+                    
                     RS++;
                 }
             }
@@ -103,12 +138,18 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.Log($"Team number {team} is being instantiated");
             //instantiate the blue player if team is 0 and red if it is not
             GameObject player;
+            object[] playerData =
+            {
+                LocalPlayerName,
+                team
+            };
+            
             if (team == 0)
             {
                 //get a spawn for the correct team
                 Transform spawn = SpawnManager.instance.blueTeamSpawns[BS].transform;
                 player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bluePlayerPrefab.name), spawn.position,
-                    spawn.rotation);
+                    spawn.rotation , 0, playerData);
                 charcreated = true;
                 BS++;
                 //Debug.Log("Player is Instanciate");
@@ -118,12 +159,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                 //now for the red team
                 Transform spawn = SpawnManager.instance.redTeamSpawns[RS].transform;
                 player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", redPlayerPrefab.name), spawn.position,
-                    spawn.rotation);
+                    spawn.rotation , 0 , playerData);
                 charcreated = true;
               //  Debug.Log("Player is Istanciate");
                 RS++;
             }
 
+            PhotonNetwork.NickName = LocalPlayerName;
+            player.name = LocalPlayerName;
             PlayerController playerController = player.GetComponent<PlayerController>();
             playerController.SetTeam(team);
             playerController.isLocal = true;
@@ -132,7 +175,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             Chat chat = player.AddComponent<Chat>();
             playerController.chat = chat;
             playerController.chat.playerController = playerController;
-
+            
+            // PLAYER LIST
             PlayerManager.players.Add(playerController);
         }
     }
