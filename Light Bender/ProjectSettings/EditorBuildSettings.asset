@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Game.unity
     guid: cfa41d741f4fea746810e69040e52195
   - enabled: 1
+    path: Assets/Scenes/MenuWhenLeft2.unity
+    guid: da35da44e8cd3fc4b94cf236ca5faed8
+  - enabled: 1
     path: Assets/Scenes/MenuWhenLeft.unity
     guid: f4f8bdbc5a6535a4987a6fd00890322a
   m_configObjects: {}

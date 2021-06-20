@@ -37,7 +37,7 @@ namespace Zones
             }
 
             CheckIfPlayersInZone();
-            CheckIfPlayersLeave();
+           CheckIfPlayersLeave();
             
             if (playerNear)
             {
