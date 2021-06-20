@@ -14,45 +14,43 @@ public class SettingsForPlay : MonoBehaviour
     public  static SettingsForPlay instance;
 
     private int[] messages = {1,2,3,4,5,6,7,8};
-    private int[] plbt = {2,3,4,5,6,7,8,9,10};
+    private int[] plbt = {0,1,2,3,4,5,6,7,8,9,10};
  
-    void Awake ()
-    {        
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }        
-    }
-    
+   
     public void nbplayers(int Players)
     {
-        NbPlayers = (byte) plbt[Players];
+       PlayerPrefs.SetInt("NbPlayers",(byte) plbt[Players]);
+       PlayerPrefs.Save();
+      // NbPlayers = (byte) plbt[Players];
     }
 
     public void nbbots(int bots)
     {
-        NbBots = plbt[bots];
-        Debug.Log("Number of bots : " + NbBots );
+        PlayerPrefs.SetInt("Nbbots",plbt[bots]);
+        PlayerPrefs.Save();
+        Debug.Log("Nbbotes in SettingsForPlay : " + PlayerPrefs.GetInt("Nbbots"));
     }
     public void nbmessages(int number)
     {
-        NbMessages = messages[number];
-       // Debug.Log("Number of messages : " + NbMessages );
+        PlayerPrefs.SetInt("messages",messages[number]);
+        PlayerPrefs.Save();
+        Debug.Log("");
     }
 
     public void activecapturezones(bool ch)
     {
-        Activezones = ch;
+        PlayerPrefs.SetString("Zones",ch.ToString());
+        PlayerPrefs.Save();
+        Debug.Log("");
+     
     }
 
     public void jump(bool ch)
     {
-        Jump = ch;
+        PlayerPrefs.SetString("JumpActive",ch.ToString());
+        PlayerPrefs.Save();
+        Debug.Log("");
+       
     }
     
     

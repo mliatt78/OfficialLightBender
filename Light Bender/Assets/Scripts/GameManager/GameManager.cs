@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using Random = System.Random;
 
@@ -68,21 +71,35 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private bool charcreated = false;
 
+    public void BasicSettings()
+    {
+        PlayerPrefs.SetInt("NbPlayers",10);
+        PlayerPrefs.SetInt("Nbbots",8);
+        PlayerPrefs.SetInt("messages",8);
+        PlayerPrefs.SetString("Zones","True");
+        PlayerPrefs.Save();
+       // PlayerPrefs.SetString("JumpActive","True");
+    }
     public void ApplySettings()
     {
-        bluebots = SettingsForPlay.NbBots/2;
-        redbots = (SettingsForPlay.NbBots % 2 == 1 ? SettingsForPlay.NbBots/2 + 1 : SettingsForPlay.NbBots/2);
-        PlayerController.CanJump = SettingsForPlay.Jump;
-        PlayerController.nbmessages = SettingsForPlay.NbMessages;
-        //RoomOptions options = new RoomOptions();
-        //options.MaxPlayers = SettingsForPlay.NbPlayers;
+        bluebots = PlayerPrefs.GetInt(("Nbbots")) / 2;
+        redbots = (PlayerPrefs.GetInt(("Nbbots")) / 2 % 2 == 1 ? PlayerPrefs.GetInt(("Nbbots")) / 2 + 1 : PlayerPrefs.GetInt(("Nbbots")) / 2);
+        PlayerController.CanJump = PlayerPrefs.GetString("JumpActive") == "False";
+        PlayerController.nbmessages = PlayerPrefs.GetInt("messages");
+       /* RoomOptions options = new RoomOptions();
+        options.MaxPlayers = SettingsForPlay.NbPlayers;*/
     }
 
     private void Start()
     {
-        // ApplySettings();
+        if (IsLobby)
+            BasicSettings();
+        Debug.Log("Nbbots : " + PlayerPrefs.GetInt(("Nbbots")) / 2);
+        Debug.Log("Messages : " + PlayerPrefs.GetInt("messages") );
+        ApplySettings();
         if(!IsLobby && !charcreated)
             PlayerManager.localPlayerInstance = null;
+        
         BlueLayer = LayerMask.NameToLayer("BlueL");
         RedLayer = LayerMask.NameToLayer("RedL");
         PauseMenu.isleft = false;
@@ -191,7 +208,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             keys.Add("Down", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Down", "S")));
             keys.Add("Left", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left", "A")));
             keys.Add("Right", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right", "D")));
-            keys.Add("Jump", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Jump", "Space")));
+           keys.Add("Jump", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Jump", "Space")));
             keys.Add("Shoot", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Shoot", "Mouse0")));
             keys.Add("Reload", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Reload", "R")));
             keys.Add("Sprint", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Sprint", "LeftShift")));
