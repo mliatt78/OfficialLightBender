@@ -7,16 +7,15 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
-   
-     public static PhotonView Phv;
-     public static GameObject localPlayerInstance;
+    public static PhotonView Phv;
+    public static GameObject localPlayerInstance;
     // GameObject controller;
     
     public static List<PlayerController> players = new List<PlayerController>();
     public static List<PlayerController> bluePlayers = new List<PlayerController>();
     public static List<PlayerController> redPlayers = new List<PlayerController>();
     
-    public static List<AIController> bots = new List<AIController>();
+   // public static List<AIController> bots = new List<AIController>();
     public static List<AIController> blueBots = new List<AIController>();
     public static List<AIController> redBots = new List<AIController>();
 
@@ -25,6 +24,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     void Awake()
     {
         Phv = GetComponent<PhotonView>();
+        instance = this;
     }
     
     // Start is called before the first frame update
@@ -38,8 +38,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         (bluePlayers, blueBots) = SeparateBotsPlayers(blueAll);
         (redPlayers, redBots) = SeparateBotsPlayers(redAll);
         players = bluePlayers.Concat(redPlayers).ToList();
-        bots = blueBots.Concat(redBots).ToList();
-        
+       // bots = blueBots.Concat(redBots).ToList();
+
         /*
         Debug.Log("Temp lists :");
         Debug.Log(TempPrintList(blueAll));
@@ -51,21 +51,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         Debug.Log(TempPrintListController(blueBots));
         Debug.Log(TempPrintListController(redBots));
         */
-        if (instance)
-            Destroy(gameObject);
-        else
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-           
         if (Phv.IsMine)
         {
             localPlayerInstance = gameObject;
             //now dont destroy!!
             DontDestroyOnLoad(gameObject);
         }
-
     }
     
     public static void UpdateScores()
@@ -144,23 +135,29 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
         return (listPlayers, listBots);
     }
-    
-    private static string TempPrintList(List<GameObject> list)
+
+    public void RemovePlayer(string playerName)
     {
-        string ret = "";
-        for (int i = 0; i < list.Count; i++)
-        {
-            ret += list[i].name + " ";
-        }
-        return ret;
+        Debug.Log("Trying to remove player");
+        Phv.RPC("RPC_RemovePlayer",RpcTarget.All,playerName);
     }
-    private static string TempPrintListController<T>(List<T> list)
+
+    [PunRPC]
+    void RPC_RemovePlayer(string playerName)
     {
-        string ret = "";
-        for (int i = 0; i < list.Count; i++)
+        Debug.Log("RPC_RemovePlayer");
+        
+        bool found = false;
+        for (int i = 0; i < players.Count && !found; i++)
         {
-            ret += (list[i] as GameObject)?.name + " ";
+            if (players[i].name == playerName)
+            {
+                players.RemoveAt(i);
+                found = true;
+            }
         }
-        return ret;
+        
+        Debug.Log("found the player to remove ? : "+found);
+        Debug.Log("Name of player to remove: "+playerName);
     }
 }
