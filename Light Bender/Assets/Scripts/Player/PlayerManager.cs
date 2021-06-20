@@ -41,25 +41,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         // why start ? because we only want the list when all players are here,
         // not when the object is just created.
-        // players
-        List<GameObject> blueAll, redAll;
-        (blueAll, redAll) = SeparateTeams(gameObject.scene.GetRootGameObjects(),GameManager.BlueLayer, GameManager.RedLayer);
-        (bluePlayers, blueBots) = SeparateBotsPlayers(blueAll);
-        (redPlayers, redBots) = SeparateBotsPlayers(redAll);
-        players = bluePlayers.Concat(redPlayers).ToList();
-       // bots = blueBots.Concat(redBots).ToList();
-
-        /*
-        Debug.Log("Temp lists :");
-        Debug.Log(TempPrintList(blueAll));
-        Debug.Log(TempPrintList(redAll));
-        Debug.Log("Players List: ");
-        Debug.Log(TempPrintListController(bluePlayers));
-        Debug.Log(TempPrintListController(redPlayers));
-        Debug.Log("Bots List: ");
-        Debug.Log(TempPrintListController(blueBots));
-        Debug.Log(TempPrintListController(redBots));
-        */
+        UpdatePlayerList();
+        
         if (Phv.IsMine)
         {
             localPlayerInstance = gameObject;
@@ -77,6 +60,28 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             players[i].redScoreText.text = GameManager.instance.scores[1].ToString();
             //Debug.Log("Score : " + GameManager.scores[0] + " -- " + GameManager.scores[1]);
         }
+    }
+
+    public void UpdatePlayerList()
+    {
+        List<GameObject> blueAll, redAll;
+        (blueAll, redAll) = SeparateTeams(gameObject.scene.GetRootGameObjects(),GameManager.BlueLayer, GameManager.RedLayer);
+        (bluePlayers, blueBots) = SeparateBotsPlayers(blueAll);
+        (redPlayers, redBots) = SeparateBotsPlayers(redAll);
+        players = bluePlayers.Concat(redPlayers).ToList();
+        // bots = blueBots.Concat(redBots).ToList();
+
+        /*
+        Debug.Log("Temp lists :");
+        Debug.Log(TempPrintList(blueAll));
+        Debug.Log(TempPrintList(redAll));
+        Debug.Log("Players List: ");
+        Debug.Log(TempPrintListController(bluePlayers));
+        Debug.Log(TempPrintListController(redPlayers));
+        Debug.Log("Bots List: ");
+        Debug.Log(TempPrintListController(blueBots));
+        Debug.Log(TempPrintListController(redBots));
+        */
     }
 
     public static PlayerController GetLocalPlayer()
@@ -143,30 +148,5 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
 
         return (listPlayers, listBots);
-    }
-
-    public void RemovePlayer(string playerName)
-    {
-        Debug.Log("Trying to remove player");
-        Phv.RPC("RPC_RemovePlayer",RpcTarget.All,playerName);
-    }
-
-    [PunRPC]
-    void RPC_RemovePlayer(string playerName)
-    {
-        Debug.Log("RPC_RemovePlayer");
-        
-        bool found = false;
-        for (int i = 0; i < players.Count && !found; i++)
-        {
-            if (players[i].name == playerName)
-            {
-                players.RemoveAt(i);
-                found = true;
-            }
-        }
-        
-        Debug.Log("found the player to remove ? : "+found);
-        Debug.Log("Name of player to remove: "+playerName);
     }
 }
