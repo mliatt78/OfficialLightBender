@@ -26,7 +26,16 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         Phv = GetComponent<PhotonView>();
         instance = this;
     }
-    
+
+    private void Update()
+    {
+        List<GameObject> blueAll, redAll;
+        (blueAll, redAll) = SeparateTeams(gameObject.scene.GetRootGameObjects(),GameManager.BlueLayer, GameManager.RedLayer);
+        (bluePlayers, blueBots) = SeparateBotsPlayers(blueAll);
+        (redPlayers, redBots) = SeparateBotsPlayers(redAll);
+        players = bluePlayers.Concat(redPlayers).ToList();
+    }
+
     // Start is called before the first frame update
     void Start()
     {

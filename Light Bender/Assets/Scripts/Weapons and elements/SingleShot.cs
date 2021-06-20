@@ -27,6 +27,8 @@ public class SingleShot : GUN
     public int nbballes { get; set; }
    
     public AudioSource audioSource;
+    
+    public AudioSource reload;
 
     
     void Awake()
@@ -52,6 +54,7 @@ public class SingleShot : GUN
    
    public IEnumerator Reload(float secondsToWait)
    {
+      reload.Play();
       yield return new WaitForSeconds(secondsToWait);
       nbballes = nbinit;
       munitionsSlider.SetValue(nbballes,nbinit);
