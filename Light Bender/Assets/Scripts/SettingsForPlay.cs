@@ -52,6 +52,12 @@ public class SettingsForPlay : MonoBehaviour
         Debug.Log("");
        
     }
+
+    public void zones(bool ch)
+    {
+        PlayerPrefs.SetString("IsZones", ch.ToString());
+        PlayerPrefs.Save();
+    }
     
     
 }

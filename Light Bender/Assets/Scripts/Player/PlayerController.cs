@@ -666,7 +666,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
      [PunRPC]
      void RPC_TakeDamage(float damage, string lastShooterName)
      {
-         if (!Phv.IsMine)
+         if (!Phv.IsMine || GameManager.instance.IsLobby)
              return;
 
          currentHealth -= damage;
