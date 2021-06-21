@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
 
@@ -24,6 +26,17 @@ namespace Zones
         [SerializeField] private double RechargeFactor;
 
         public float Radius = 5;
+
+        private ExitGames.Client.Photon.Hashtable PrevTimers;
+        private PlayerController FirstPlayerInZone = null;
+        
+        public static string[] namesTimers =
+        {
+            "TimerCaptureTeam0",
+            "TimerOreTeam0",
+            "TimerCaptureTeam1",
+            "TimerOreTeam1"
+        };
 
 
         // Update is called once per frame
@@ -63,7 +76,12 @@ namespace Zones
         {
             (int teamTryingControl, int playersTryControl) =
                 GetTeamAndPlayersTryControl(bluePlayersNear, redPlayersNear);
-            //Debug.Log("number of playersTryControl: "+playersTryControl);
+            Debug.Log("number of playersTryControl: "+playersTryControl);
+            Debug.Log("playersTryControl > 0 ?: "+(playersTryControl > 0));
+            if (playersTryControl == 0)
+            {
+                Debug.Log("playerNear: "+playerNear);
+            }
             if (playersTryControl > 0)
             {
                 // if there are the same number of blue and red players, then do nothing
@@ -281,7 +299,7 @@ namespace Zones
             for (int i = 0; i < PlayerManager.players.Count; i++)
             {
                 float dist = Vector3.Distance(PlayerManager.players[i].transform.position, this.transform.position);
-                if (dist < Radius)
+                if (dist < Radius && !playersNear.Contains(PlayerManager.players[i]))
                 {
                     AddPlayerNear(PlayerManager.players[i]);
                 }
@@ -305,17 +323,33 @@ namespace Zones
             if (!playersNear.Contains(player))
             {
                 Debug.Log("Successfully added a new player near");
+
                 player.timerText.gameObject.SetActive(true);
+                bool noPlayersBefore = playersNear.Count == 0;
                 playersNear.Add(player);
                 playersTeam[player.GetTeam()].Add(player);
 
                 PhotonTimeFrameBefore = PhotonNetwork.Time;
-
+                
+                if (noPlayersBefore)
+                {
+                    if (!CustomPropertiesAlreadyAdded(namesTimers))
+                    {
+                        PrevTimers.Add("TimerCaptureTeam0",Timers[0,0]);
+                        PrevTimers.Add("TimerOreTeam0",Timers[0,1]);
+                        PrevTimers.Add("TimerCaptureTeam1",Timers[1,0]);
+                        PrevTimers.Add("TimerOreTeam1",Timers[1,1]);
+                        PhotonNetwork.CurrentRoom.SetCustomProperties(PrevTimers);
+                    }
+                }
+                else
+                {
+                    StartCoroutine(TryGetTimers());
+                }
+                
                 // add to bluePlayers or redPlayers
 
                 //Debug.Log("Test on getting other players' timer");
-
-                // TODO
 
                 //Debug.Log("players Count as of now : "+PlayerManager.players.Count);
                 //Debug.Log("playersNear Count as of now : "+playersNear.Count);
@@ -325,6 +359,45 @@ namespace Zones
             }
 
             SetPlayerNear(true);
+        }
+
+        private bool CustomPropertiesAlreadyAdded(string[] properties)
+        {
+            bool ValuesExist = true;
+            for (int i = 0; i < properties.Length && ValuesExist; i++)
+            {
+                ValuesExist = PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(properties[i]);
+            }
+            return ValuesExist;
+        }
+
+        private bool GetTimersFromNetwork()
+        {
+            bool ValuesExist = CustomPropertiesAlreadyAdded(namesTimers);
+            if (ValuesExist)
+            {
+                Timers[0, 0] =
+                    double.Parse(PhotonNetwork.CurrentRoom.CustomProperties["TimerCaptureTeam0"].ToString());
+                Timers[0, 1] =
+                    double.Parse(PhotonNetwork.CurrentRoom.CustomProperties["TimerOreTeam0"].ToString());
+                Timers[1, 0] =
+                    double.Parse(PhotonNetwork.CurrentRoom.CustomProperties["TimerCaptureTeam1"].ToString());
+                Timers[1, 1] =
+                    double.Parse(PhotonNetwork.CurrentRoom.CustomProperties["TimerOreTeam1"].ToString());
+            }
+            return ValuesExist;
+        }
+
+        IEnumerator TryGetTimers()
+        {
+            yield return new WaitForEndOfFrame();
+            Debug.Log("Trying to get timers");
+            bool success = GetTimersFromNetwork();
+            if (!success)
+            {
+                Debug.Log("Timers get failed, redo");
+                StartCoroutine(TryGetTimers());
+            }
         }
 
         private void RemovePlayerNear(PlayerController player)
@@ -386,6 +459,8 @@ namespace Zones
 
         private void Awake()
         {
+            PrevTimers = new ExitGames.Client.Photon.Hashtable();
+            
             playersNear = new List<PlayerController>();
             bluePlayersNear = new List<PlayerController>();
             redPlayersNear = new List<PlayerController>();
