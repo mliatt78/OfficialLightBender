@@ -12334,7 +12334,6 @@ Transform:
   - {fileID: 282453460}
   - {fileID: 1700336847}
   - {fileID: 2107784148}
-  - {fileID: 228391891}
   - {fileID: 270866333}
   - {fileID: 822702739}
   - {fileID: 1000867269}
@@ -12342,9 +12341,10 @@ Transform:
   - {fileID: 1928243128}
   - {fileID: 1641491134}
   - {fileID: 1369992538}
-  - {fileID: 1883400385}
+  - {fileID: 228391891}
   - {fileID: 1442512219}
   - {fileID: 107865078}
+  - {fileID: 1883400385}
   - {fileID: 225859743}
   - {fileID: 384061582}
   - {fileID: 2059830900}
@@ -17450,6 +17450,68 @@ Transform:
   m_Father: {fileID: 1991017591}
   m_RootOrder: 47
   m_LocalEulerAnglesHint: {x: 0, y: 2.536, z: 0}
+--- !u!1 &935315385
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 935315388}
+  - component: {fileID: 935315387}
+  - component: {fileID: 935315386}
+  m_Layer: 0
+  m_Name: Post-process Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &935315386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 935315385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedProfile: {fileID: 11400000, guid: 3e1f9e9094ec2b14f92fde4a2023d601, type: 2}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 1
+  priority: 0
+--- !u!65 &935315387
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 935315385}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &935315388
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 935315385}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 55.956615, y: 2.0731814, z: 39.507805}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &941566301
 GameObject:
   m_ObjectHideFlags: 0
@@ -19399,6 +19461,27 @@ MonoBehaviour:
   redbots: 5
   bluebots: 5
   currentweapon: 0
+  BotsNameList:
+  - Lightning
+  - Shadow
+  - Mystery
+  - Death
+  - Hellfire
+  - Stormfury
+  - Earth
+  - Bracer
+  - Bolt
+  - Seeker
+  - Scyther
+  - Proto
+  - Sparky
+  - Silver
+  - Ratchet
+  - Screwie
+  - Scorcher
+  - Sentinel
+  - Exterminate
+  - Emperor
   IsLobby: 0
   settingsbutton: {fileID: 870442182}
   scores: 0000000000000000
