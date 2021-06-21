@@ -77,17 +77,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         PlayerPrefs.SetInt("Nbbots",8);
         PlayerPrefs.SetInt("messages",8);
         PlayerPrefs.SetString("Zones","True");
+        PlayerPrefs.SetString("JumpActive","True");
         PlayerPrefs.Save();
-       // PlayerPrefs.SetString("JumpActive","True");
+       
     }
     public void ApplySettings()
     {
-        bluebots = PlayerPrefs.GetInt(("Nbbots")) / 2;
+        bluebots = (PlayerPrefs.GetInt(("Nbbots")) / 2 % 2 == 1 ? PlayerPrefs.GetInt(("Nbbots")) / 2 + 1 : PlayerPrefs.GetInt(("Nbbots")) / 2);
         redbots = (PlayerPrefs.GetInt(("Nbbots")) / 2 % 2 == 1 ? PlayerPrefs.GetInt(("Nbbots")) / 2 + 1 : PlayerPrefs.GetInt(("Nbbots")) / 2);
         PlayerController.CanJump = PlayerPrefs.GetString("JumpActive") == "False";
         PlayerController.nbmessages = PlayerPrefs.GetInt("messages");
-       /* RoomOptions options = new RoomOptions();
-        options.MaxPlayers = SettingsForPlay.NbPlayers;*/
+        RoomOptions options = new RoomOptions();
+        options.MaxPlayers = SettingsForPlay.NbPlayers;
     }
 
     private void Start()

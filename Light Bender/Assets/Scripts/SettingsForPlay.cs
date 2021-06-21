@@ -14,7 +14,7 @@ public class SettingsForPlay : MonoBehaviour
     public  static SettingsForPlay instance;
 
     private int[] messages = {1,2,3,4,5,6,7,8};
-    private int[] plbt = {0,1,2,3,4,5,6,7,8,9,10};
+    private int[] plbt = {0,2,3,4,5,6,7,8,9,10};
  
    
     public void nbplayers(int Players)
