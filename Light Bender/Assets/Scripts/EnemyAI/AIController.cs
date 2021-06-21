@@ -126,11 +126,7 @@ namespace EnemyAI
             }
             else
             {
-                Transform enemyTransform = enemy.transform;
-                Vector3 temp = enemyTransform.position;
-                temp.y = 0.5f;
-                enemyTransform.position = temp;
-                transform.LookAt(enemyTransform);
+                transform.LookAt(enemy.transform);
                 items[0].Use();
                 if (GameManager.rand.NextDouble() <= HitProbability)
                 {

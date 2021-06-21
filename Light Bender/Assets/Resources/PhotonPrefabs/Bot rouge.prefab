@@ -179,6 +179,7 @@ MonoBehaviour:
   enemyTeam: BlueS
   currentHealth: 100
   lastShooterName: 
+  HitProbability: 0.1
   respawnTime: 5
   items:
   - {fileID: 6620249896316005263}

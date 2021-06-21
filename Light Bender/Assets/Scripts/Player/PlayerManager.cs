@@ -10,11 +10,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public static PhotonView Phv;
     public static GameObject localPlayerInstance;
     // GameObject controller;
-    
+
     public static List<PlayerController> players = new List<PlayerController>();
     public static List<PlayerController> bluePlayers = new List<PlayerController>();
     public static List<PlayerController> redPlayers = new List<PlayerController>();
-    
+
    // public static List<AIController> bots = new List<AIController>();
     public static List<AIController> blueBots = new List<AIController>();
     public static List<AIController> redBots = new List<AIController>();
@@ -27,14 +27,15 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         instance = this;
     }
 
-   
+
     // Start is called before the first frame update
     void Start()
     {
         // why start ? because we only want the list when all players are here,
         // not when the object is just created.
         UpdatePlayerList();
-        
+        Debug.Log("PlayerManager.players count: "+players.Count);
+
         if (Phv.IsMine)
         {
             localPlayerInstance = gameObject;
@@ -42,7 +43,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             DontDestroyOnLoad(gameObject);
         }
     }
-    
+
     public static void UpdateScores()
     {
         //Debug.Log(players.Count);
@@ -85,11 +86,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                 return players[i];
             }
         }
-        
+
         Debug.LogError("GetLocalPLayer: No Local Player recognized!");
         return null;
     }
-    
+
     private (List<GameObject>,List<GameObject>) SeparateTeams(GameObject[] rootObjects, int layer1, int layer2)
     {
         List<GameObject> layer1Objects = new List<GameObject>();

@@ -637,7 +637,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
              renderer.enabled = state;
          }
      }
-     
+
      public void SendScores()
      {
          Phv.RPC("RPC_SendScores",RpcTarget.All,GameManager.instance.scores[0],GameManager.instance.scores[1]);
