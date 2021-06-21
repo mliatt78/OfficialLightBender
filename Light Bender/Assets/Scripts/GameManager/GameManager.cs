@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -64,6 +61,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public bool IsLobby = false;
     public GameObject settingsbutton;
     public int[] scores = {0,0};
+    public bool iszones = true;
 
 
     public static List<ChatMessage> chatMessages = new List<ChatMessage>();
@@ -78,6 +76,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         PlayerPrefs.SetInt("messages",8);
         PlayerPrefs.SetString("Zones","True");
         PlayerPrefs.SetString("JumpActive","True");
+        PlayerPrefs.SetString("IsZones","True");
         PlayerPrefs.Save();
        
     }
@@ -85,10 +84,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         bluebots = (PlayerPrefs.GetInt(("Nbbots")) / 2 % 2 == 1 ? PlayerPrefs.GetInt(("Nbbots")) / 2 + 1 : PlayerPrefs.GetInt(("Nbbots")) / 2);
         redbots = (PlayerPrefs.GetInt(("Nbbots")) / 2 % 2 == 1 ? PlayerPrefs.GetInt(("Nbbots")) / 2 + 1 : PlayerPrefs.GetInt(("Nbbots")) / 2);
-        PlayerController.CanJump = PlayerPrefs.GetString("JumpActive") == "False";
+        PlayerController.CanJump = PlayerPrefs.GetString("JumpActive") == "True";
         PlayerController.nbmessages = PlayerPrefs.GetInt("messages");
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = SettingsForPlay.NbPlayers;
+        iszones = PlayerPrefs.GetString("IsZones") == "True";
     }
 
     private void Start()

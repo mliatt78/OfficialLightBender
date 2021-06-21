@@ -425,7 +425,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2277353857522584085}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.724, y: -0.406, z: -0.562}
+  m_LocalPosition: {x: 0.351, y: -0.508, z: -0.496}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 527010073115270590}
@@ -1719,6 +1719,7 @@ MonoBehaviour:
   enemyTeam: RedS
   currentHealth: 100
   lastShooterName: 
+  HitProbability: 0.1
   respawnTime: 5
   items:
   - {fileID: 5262229306368699999}

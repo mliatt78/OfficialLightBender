@@ -17,7 +17,7 @@ namespace Zones
         // Update is called once per frame
         void Update()
         {
-            if (!PauseMenu.isleft)
+            if (!PauseMenu.isleft || !GameManager.instance.IsLobby || GameManager.instance.iszones)
             {
                 CheckIfPlayersInZone();
                 CheckIfPlayersLeave();

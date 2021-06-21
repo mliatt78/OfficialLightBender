@@ -26,6 +26,8 @@ namespace EnemyAI
         private bool alreadyAttacked;
         private int framesUntilAttack = 60;
 
+        public double HitProbability = 0.1;
+        
         private bool canRespawn = true;
 
         public float respawnTime = 5;
@@ -90,14 +92,8 @@ namespace EnemyAI
                 Vector3 distance = player.transform.position - agent.destination;
                 if (distance.magnitude < distanceToNearest)  
                 {
-                    transform.LookAt(player.transform);
-                    RaycastHit rch = new RaycastHit();
-                    Physics.Raycast(transform.position, transform.forward, out rch);
-                    if (rch.rigidbody == player.GetComponent<Rigidbody>())
-                    {
-                        Nearest = player;
-                        distanceToNearest = distance.magnitude;
-                    }
+                    Nearest = player;
+                    distanceToNearest = distance.magnitude;
                 }
             }
 
@@ -130,12 +126,19 @@ namespace EnemyAI
             }
             else
             {
-                Transform enemyTransform = enemy.transform;
-                Vector3 temp = enemyTransform.position;
-                temp.y = 0.5f;
-                enemyTransform.position = temp;
-                transform.LookAt(enemyTransform);
+                transform.LookAt(enemy.transform);
                 items[0].Use();
+                if (GameManager.rand.NextDouble() <= HitProbability)
+                {
+                    if (enemy.GetComponent<PlayerController>() != null)
+                    {
+                        enemy.GetComponent<PlayerController>().currentHealth -= 10;
+                    }
+                    else if (enemy.GetComponent<AIController>() != null)
+                    {
+                        enemy.GetComponent<AIController>().currentHealth -= 10;
+                    }
+                }
             }
         }
         
@@ -222,7 +225,7 @@ namespace EnemyAI
         
         public void SendScores()
         {
-            Phv.RPC("RPC_SendScores",RpcTarget.Others,GameManager.instance.scores[0],GameManager.instance.scores[1]);
+            Phv.RPC("RPC_SendScores",RpcTarget.All,GameManager.instance.scores[0],GameManager.instance.scores[1]);
             SetScoresText(PlayerManager.GetLocalPlayer());
         }
 
@@ -237,7 +240,7 @@ namespace EnemyAI
         {
             GameManager.instance.scores[0] = blueScore;
             GameManager.instance.scores[1] = redScore;
-            SetScoresText(PlayerManager.GetLocalPlayer());
+           //SetScoresText(PlayerManager.instance.GetLocalPlayer());
         }
         
         [PunRPC]

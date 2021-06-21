@@ -637,7 +637,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
              renderer.enabled = state;
          }
      }
-     
+
      public void SendScores()
      {
          Phv.RPC("RPC_SendScores",RpcTarget.All,GameManager.instance.scores[0],GameManager.instance.scores[1]);
@@ -666,7 +666,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
      [PunRPC]
      void RPC_TakeDamage(float damage, string lastShooterName)
      {
-         if (!Phv.IsMine)
+         if (!Phv.IsMine || GameManager.instance.IsLobby)
              return;
 
          currentHealth -= damage;
