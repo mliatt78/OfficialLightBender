@@ -41,8 +41,7 @@ public class PauseMenu : MonoBehaviourPunCallbacks
 
     public void Quit()
     {
-        PlayerManager.instance.RemovePlayer(PhotonNetwork.NickName);
-        
+        PlayerManager.instance.UpdatePlayerList();
         Application.Quit();
     }
 
@@ -57,7 +56,7 @@ public class PauseMenu : MonoBehaviourPunCallbacks
    {
         GameIsPaused = false;
         isleft = true;
-        PlayerManager.instance.RemovePlayer(PhotonNetwork.NickName);
+        PlayerManager.instance.UpdatePlayerList();
 
         PhotonNetwork.Disconnect();
         while (PhotonNetwork.IsConnected)

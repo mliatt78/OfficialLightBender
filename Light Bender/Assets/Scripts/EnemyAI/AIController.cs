@@ -77,7 +77,7 @@ namespace EnemyAI
         public void OnPhotonInstantiate(PhotonMessageInfo info)
         {
             object[] instantiationData = info.photonView.InstantiationData;
-
+            
             name = (string) instantiationData[0];
         }
 
@@ -95,7 +95,7 @@ namespace EnemyAI
                     Physics.Raycast(transform.position, transform.forward, out rch);
                     if (rch.rigidbody == player.GetComponent<Rigidbody>())
                     {
-                        Nearest = player;   
+                        Nearest = player;
                         distanceToNearest = distance.magnitude;
                     }
                 }
@@ -130,7 +130,11 @@ namespace EnemyAI
             }
             else
             {
-                transform.LookAt(enemy.transform);
+                Transform enemyTransform = enemy.transform;
+                Vector3 temp = enemyTransform.position;
+                temp.y = 0.5f;
+                enemyTransform.position = temp;
+                transform.LookAt(enemyTransform);
                 items[0].Use();
             }
         }
