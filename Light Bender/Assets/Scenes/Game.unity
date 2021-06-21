@@ -19428,6 +19428,7 @@ MonoBehaviour:
   IsLobby: 0
   settingsbutton: {fileID: 870442182}
   scores: 0000000000000000
+  iszones: 1
 --- !u!4 &1067247006
 Transform:
   m_ObjectHideFlags: 0

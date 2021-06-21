@@ -9031,7 +9031,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1271744752}
-        m_MethodName: activecapturezones
+        m_MethodName: zones
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11947,6 +11947,7 @@ MonoBehaviour:
   IsLobby: 1
   settingsbutton: {fileID: 1663057909}
   scores: 0000000000000000
+  iszones: 1
 --- !u!4 &1067247006
 Transform:
   m_ObjectHideFlags: 0
