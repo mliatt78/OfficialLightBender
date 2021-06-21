@@ -27,15 +27,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         instance = this;
     }
 
-    private void Update()
-    {
-        List<GameObject> blueAll, redAll;
-        (blueAll, redAll) = SeparateTeams(gameObject.scene.GetRootGameObjects(),GameManager.BlueLayer, GameManager.RedLayer);
-        (bluePlayers, blueBots) = SeparateBotsPlayers(blueAll);
-        (redPlayers, redBots) = SeparateBotsPlayers(redAll);
-        players = bluePlayers.Concat(redPlayers).ToList();
-    }
-
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -84,7 +76,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         */
     }
 
-    public static PlayerController GetLocalPlayer()
+    public  static PlayerController GetLocalPlayer()
     {
         for (int i = 0; i < players.Count; i++)
         {

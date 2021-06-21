@@ -229,7 +229,7 @@ namespace EnemyAI
         
         public void SendScores()
         {
-            Phv.RPC("RPC_SendScores",RpcTarget.Others,GameManager.instance.scores[0],GameManager.instance.scores[1]);
+            Phv.RPC("RPC_SendScores",RpcTarget.All,GameManager.instance.scores[0],GameManager.instance.scores[1]);
             SetScoresText(PlayerManager.GetLocalPlayer());
         }
 
@@ -244,7 +244,7 @@ namespace EnemyAI
         {
             GameManager.instance.scores[0] = blueScore;
             GameManager.instance.scores[1] = redScore;
-            SetScoresText(PlayerManager.GetLocalPlayer());
+           //SetScoresText(PlayerManager.instance.GetLocalPlayer());
         }
         
         [PunRPC]

@@ -2380,8 +2380,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1109397176}
   - {fileID: 1641634958}
+  - {fileID: 1109397176}
   m_Father: {fileID: 980306346}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9031,8 +9031,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1271744752}
-        m_MethodName: activecapturezones
-        m_Mode: 6
+        m_MethodName: zones
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11947,6 +11947,7 @@ MonoBehaviour:
   IsLobby: 1
   settingsbutton: {fileID: 1663057909}
   scores: 0000000000000000
+  iszones: 1
 --- !u!4 &1067247006
 Transform:
   m_ObjectHideFlags: 0
@@ -12937,7 +12938,7 @@ Transform:
   - {fileID: 1946065700}
   - {fileID: 1285709279}
   m_Father: {fileID: 209580375}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1125027850
 GameObject:
@@ -16908,7 +16909,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1271744752}
         m_MethodName: jump
-        m_Mode: 6
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -18514,7 +18515,7 @@ RectTransform:
   - {fileID: 781212639}
   - {fileID: 66159328}
   m_Father: {fileID: 209580375}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
