@@ -10,11 +10,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public static PhotonView Phv;
     public static GameObject localPlayerInstance;
     // GameObject controller;
-    
+
     public static List<PlayerController> players = new List<PlayerController>();
     public static List<PlayerController> bluePlayers = new List<PlayerController>();
     public static List<PlayerController> redPlayers = new List<PlayerController>();
-    
+
    // public static List<AIController> bots = new List<AIController>();
     public static List<AIController> blueBots = new List<AIController>();
     public static List<AIController> redBots = new List<AIController>();
@@ -26,19 +26,43 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         Phv = GetComponent<PhotonView>();
         instance = this;
     }
-    
+
+
     // Start is called before the first frame update
     void Start()
     {
         // why start ? because we only want the list when all players are here,
         // not when the object is just created.
-        // players
+        UpdatePlayerList();
+        Debug.Log("PlayerManager.players count: "+players.Count);
+
+        if (Phv.IsMine)
+        {
+            localPlayerInstance = gameObject;
+            //now dont destroy!!
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+
+    public static void UpdateScores()
+    {
+        //Debug.Log(players.Count);
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].blueScoreText.text = GameManager.instance.scores[0].ToString();
+            players[i].redScoreText.text = GameManager.instance.scores[1].ToString();
+            //Debug.Log("Score : " + GameManager.scores[0] + " -- " + GameManager.scores[1]);
+        }
+    }
+
+    public void UpdatePlayerList()
+    {
         List<GameObject> blueAll, redAll;
         (blueAll, redAll) = SeparateTeams(gameObject.scene.GetRootGameObjects(),GameManager.BlueLayer, GameManager.RedLayer);
         (bluePlayers, blueBots) = SeparateBotsPlayers(blueAll);
         (redPlayers, redBots) = SeparateBotsPlayers(redAll);
         players = bluePlayers.Concat(redPlayers).ToList();
-       // bots = blueBots.Concat(redBots).ToList();
+        // bots = blueBots.Concat(redBots).ToList();
 
         /*
         Debug.Log("Temp lists :");
@@ -51,26 +75,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         Debug.Log(TempPrintListController(blueBots));
         Debug.Log(TempPrintListController(redBots));
         */
-        if (Phv.IsMine)
-        {
-            localPlayerInstance = gameObject;
-            //now dont destroy!!
-            DontDestroyOnLoad(gameObject);
-        }
-    }
-    
-    public static void UpdateScores()
-    {
-        //Debug.Log(players.Count);
-        for (int i = 0; i < players.Count; i++)
-        {
-            players[i].blueScoreText.text = GameManager.instance.scores[0].ToString();
-            players[i].redScoreText.text = GameManager.instance.scores[1].ToString();
-            //Debug.Log("Score : " + GameManager.scores[0] + " -- " + GameManager.scores[1]);
-        }
     }
 
-    public static PlayerController GetLocalPlayer()
+    public  static PlayerController GetLocalPlayer()
     {
         for (int i = 0; i < players.Count; i++)
         {
@@ -79,11 +86,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                 return players[i];
             }
         }
-        
+
         Debug.LogError("GetLocalPLayer: No Local Player recognized!");
         return null;
     }
-    
+
     private (List<GameObject>,List<GameObject>) SeparateTeams(GameObject[] rootObjects, int layer1, int layer2)
     {
         List<GameObject> layer1Objects = new List<GameObject>();
@@ -134,30 +141,5 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
 
         return (listPlayers, listBots);
-    }
-
-    public void RemovePlayer(string playerName)
-    {
-        Debug.Log("Trying to remove player");
-        Phv.RPC("RPC_RemovePlayer",RpcTarget.All,playerName);
-    }
-
-    [PunRPC]
-    void RPC_RemovePlayer(string playerName)
-    {
-        Debug.Log("RPC_RemovePlayer");
-        
-        bool found = false;
-        for (int i = 0; i < players.Count && !found; i++)
-        {
-            if (players[i].name == playerName)
-            {
-                players.RemoveAt(i);
-                found = true;
-            }
-        }
-        
-        Debug.Log("found the player to remove ? : "+found);
-        Debug.Log("Name of player to remove: "+playerName);
     }
 }

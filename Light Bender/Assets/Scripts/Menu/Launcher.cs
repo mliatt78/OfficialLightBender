@@ -47,7 +47,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start() // tu te connectes au jeu
     {
+        
         PlayerPrefs.SetString("ChoseTeam","False");
+        PlayerPrefs.Save();
         // if (!PhotonNetwork.IsConnected)
        // {
             Debug.Log("Connecting to Master");
@@ -153,7 +155,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     public void Update()
     {
         if (isTeam)
+        {
             PlayerPrefs.SetString("ChooseTeam","True");
+            PlayerPrefs.Save();
+        }
         IsValid();
         StartGamebutton.SetActive(isTeam && isAllTeam && PhotonNetwork.IsMasterClient);
     }

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using Random = System.Random;
 
@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public bool IsLobby = false;
     public GameObject settingsbutton;
     public int[] scores = {0,0};
+    public bool iszones = true;
 
 
     public static List<ChatMessage> chatMessages = new List<ChatMessage>();
@@ -68,21 +69,38 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private bool charcreated = false;
 
+    public void BasicSettings()
+    {
+        PlayerPrefs.SetInt("NbPlayers",10);
+        PlayerPrefs.SetInt("Nbbots",8);
+        PlayerPrefs.SetInt("messages",8);
+        PlayerPrefs.SetString("Zones","True");
+        PlayerPrefs.SetString("JumpActive","True");
+        PlayerPrefs.SetString("IsZones","True");
+        PlayerPrefs.Save();
+       
+    }
     public void ApplySettings()
     {
-        bluebots = SettingsForPlay.NbBots/2;
-        redbots = (SettingsForPlay.NbBots % 2 == 1 ? SettingsForPlay.NbBots/2 + 1 : SettingsForPlay.NbBots/2);
-        PlayerController.CanJump = SettingsForPlay.Jump;
-        PlayerController.nbmessages = SettingsForPlay.NbMessages;
-        //RoomOptions options = new RoomOptions();
-        //options.MaxPlayers = SettingsForPlay.NbPlayers;
+        bluebots = (PlayerPrefs.GetInt(("Nbbots")) / 2 % 2 == 1 ? PlayerPrefs.GetInt(("Nbbots")) / 2 + 1 : PlayerPrefs.GetInt(("Nbbots")) / 2);
+        redbots = (PlayerPrefs.GetInt(("Nbbots")) / 2 % 2 == 1 ? PlayerPrefs.GetInt(("Nbbots")) / 2 + 1 : PlayerPrefs.GetInt(("Nbbots")) / 2);
+        PlayerController.CanJump = PlayerPrefs.GetString("JumpActive") == "True";
+        PlayerController.nbmessages = PlayerPrefs.GetInt("messages");
+        RoomOptions options = new RoomOptions();
+        options.MaxPlayers = SettingsForPlay.NbPlayers;
+        iszones = PlayerPrefs.GetString("IsZones") == "True";
     }
 
     private void Start()
     {
-        // ApplySettings();
+        if (IsLobby)
+            BasicSettings();
+        Debug.Log("Nbbots : " + PlayerPrefs.GetInt(("Nbbots")) / 2);
+        Debug.Log("Messages : " + PlayerPrefs.GetInt("messages") );
+        ApplySettings();
         if(!IsLobby && !charcreated)
             PlayerManager.localPlayerInstance = null;
+        
         BlueLayer = LayerMask.NameToLayer("BlueL");
         RedLayer = LayerMask.NameToLayer("RedL");
         PauseMenu.isleft = false;
@@ -110,11 +128,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                     //get a spawn for the correct team
                     Transform spawn = SpawnManager.instance.blueTeamSpawns[BS].transform;
                     int randInt = rand.Next(BotsNameList.Count);
-                    object[] NameBot = {BotsNameList[randInt]};
+                    string nameOfBot = BotsNameList[randInt];
+                    object[] NameBot = {nameOfBot};
                     BotsNameList.RemoveAt(randInt);
-                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", BlueBot.name),
+                    GameObject bot = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", BlueBot.name),
                         spawn.position, spawn.rotation, 0, NameBot);
-
+                    bot.name = nameOfBot;
                     BS++;
                 }
 
@@ -123,11 +142,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                     //get a spawn for the correct team
                     Transform spawn = SpawnManager.instance.redTeamSpawns[RS].transform;
                     int randInt = rand.Next(BotsNameList.Count);
-                    object[] NameBot = {BotsNameList[randInt]};
+                    string nameOfBot = BotsNameList[randInt];
+                    object[] NameBot = {nameOfBot};
                     BotsNameList.RemoveAt(randInt);
-                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", RedBot.name), 
+                    GameObject bot = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", RedBot.name), 
                         spawn.position, spawn.rotation, 0, NameBot);
-                    
+                    bot.name = nameOfBot;
                     RS++;
                 }
             }
@@ -191,7 +211,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             keys.Add("Down", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Down", "S")));
             keys.Add("Left", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left", "A")));
             keys.Add("Right", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right", "D")));
-            keys.Add("Jump", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Jump", "Space")));
+           keys.Add("Jump", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Jump", "Space")));
             keys.Add("Shoot", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Shoot", "Mouse0")));
             keys.Add("Reload", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Reload", "R")));
             keys.Add("Sprint", (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Sprint", "LeftShift")));

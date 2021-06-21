@@ -24,11 +24,16 @@ namespace EnemyAI
         public string lastShooterName = "null";
         
         private bool alreadyAttacked;
-        private int framesUntilAttack = 60;
+        private int framesUntilAttack = 0;
 
+        public double HitProbability = 0.1;
+        
         private bool canRespawn = true;
 
         public float respawnTime = 5;
+
+        public int timeUntilGetHelp = 60;
+        private GameObject target;
         
         // Weapons
         [SerializeField]  Item[] items;
@@ -67,17 +72,39 @@ namespace EnemyAI
                 NextWalkPoint();
             }
 
-            (bool InSight, GameObject target) = GetTarget();
+            bool InSight;
+            (InSight, target) = GetTarget();
             if (InSight)
             {
                 Attack(target);
+                agent.SetDestination(target.transform.position);
+                if (timeUntilGetHelp == 0)
+                {
+                    AICommunication.SendMessage(this);
+                    timeUntilGetHelp = 60;
+                }
+            }
+            else
+            {
+                AIController needsHelp;
+                if (team == 0)
+                    needsHelp = AICommunication.NeedsHelpBlue;
+                else
+                {
+                    needsHelp = AICommunication.NeedsHelpRed;
+                }
+                
+                if (needsHelp != null)
+                {
+                    agent.SetDestination(needsHelp.transform.position);
+                }
             }
         }
 
         public void OnPhotonInstantiate(PhotonMessageInfo info)
         {
             object[] instantiationData = info.photonView.InstantiationData;
-
+            
             name = (string) instantiationData[0];
         }
 
@@ -91,13 +118,8 @@ namespace EnemyAI
                 if (distance.magnitude < distanceToNearest)  
                 {
                     transform.LookAt(player.transform);
-                    RaycastHit rch = new RaycastHit();
-                    Physics.Raycast(transform.position, transform.forward, out rch);
-                    if (rch.rigidbody == player.GetComponent<Rigidbody>())
-                    {
-                        Nearest = player;   
-                        distanceToNearest = distance.magnitude;
-                    }
+                    Nearest = player;
+                    distanceToNearest = distance.magnitude;
                 }
             }
 
@@ -132,6 +154,18 @@ namespace EnemyAI
             {
                 transform.LookAt(enemy.transform);
                 items[0].Use();
+                if (GameManager.rand.NextDouble() <= HitProbability)
+                {
+                    if (enemy.GetComponent<PlayerController>() != null)
+                    {
+                        enemy.GetComponent<PlayerController>().currentHealth -= 10;
+                    }
+                    else if (enemy.GetComponent<AIController>() != null)
+                    {
+                        enemy.GetComponent<AIController>().currentHealth -= 10;
+                    }
+                }
+                framesUntilAttack = 60;
             }
         }
         
@@ -218,7 +252,7 @@ namespace EnemyAI
         
         public void SendScores()
         {
-            Phv.RPC("RPC_SendScores",RpcTarget.Others,GameManager.instance.scores[0],GameManager.instance.scores[1]);
+            Phv.RPC("RPC_SendScores",RpcTarget.All,GameManager.instance.scores[0],GameManager.instance.scores[1]);
             SetScoresText(PlayerManager.GetLocalPlayer());
         }
 
@@ -233,7 +267,7 @@ namespace EnemyAI
         {
             GameManager.instance.scores[0] = blueScore;
             GameManager.instance.scores[1] = redScore;
-            SetScoresText(PlayerManager.GetLocalPlayer());
+           //SetScoresText(PlayerManager.instance.GetLocalPlayer());
         }
         
         [PunRPC]
