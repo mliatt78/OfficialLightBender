@@ -24,13 +24,16 @@ namespace EnemyAI
         public string lastShooterName = "null";
         
         private bool alreadyAttacked;
-        private int framesUntilAttack = 60;
+        private int framesUntilAttack = 0;
 
         public double HitProbability = 0.1;
         
         private bool canRespawn = true;
 
         public float respawnTime = 5;
+
+        public int timeUntilGetHelp = 60;
+        private GameObject target;
         
         // Weapons
         [SerializeField]  Item[] items;
@@ -69,10 +72,32 @@ namespace EnemyAI
                 NextWalkPoint();
             }
 
-            (bool InSight, GameObject target) = GetTarget();
+            bool InSight;
+            (InSight, target) = GetTarget();
             if (InSight)
             {
                 Attack(target);
+                agent.SetDestination(target.transform.position);
+                if (timeUntilGetHelp == 0)
+                {
+                    AICommunication.SendMessage(this);
+                    timeUntilGetHelp = 60;
+                }
+            }
+            else
+            {
+                AIController needsHelp;
+                if (team == 0)
+                    needsHelp = AICommunication.NeedsHelpBlue;
+                else
+                {
+                    needsHelp = AICommunication.NeedsHelpRed;
+                }
+                
+                if (needsHelp != null)
+                {
+                    agent.SetDestination(needsHelp.transform.position);
+                }
             }
         }
 
@@ -92,6 +117,7 @@ namespace EnemyAI
                 Vector3 distance = player.transform.position - agent.destination;
                 if (distance.magnitude < distanceToNearest)  
                 {
+                    transform.LookAt(player.transform);
                     Nearest = player;
                     distanceToNearest = distance.magnitude;
                 }
@@ -139,6 +165,7 @@ namespace EnemyAI
                         enemy.GetComponent<AIController>().currentHealth -= 10;
                     }
                 }
+                framesUntilAttack = 60;
             }
         }
         
