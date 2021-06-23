@@ -17282,8 +17282,8 @@ MonoBehaviour:
   bluePlayersNear: []
   redPlayersNear: []
   maxValue: 3000
-  maxValueOre: 0
-  RechargeFactor: 0
+  maxValueOre: 1500
+  RechargeFactor: 1.5
   Radius: 5
 --- !u!135 &923330669
 SphereCollider:
@@ -38210,8 +38210,8 @@ MonoBehaviour:
   bluePlayersNear: []
   redPlayersNear: []
   maxValue: 3000
-  maxValueOre: 0
-  RechargeFactor: 0
+  maxValueOre: 1500
+  RechargeFactor: 1.5
   Radius: 5
 --- !u!135 &2127601462
 SphereCollider:

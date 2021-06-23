@@ -34,7 +34,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         // why start ? because we only want the list when all players are here,
         // not when the object is just created.
         UpdatePlayerList();
-        Debug.Log("PlayerManager.players count: "+players.Count);
 
         if (Phv.IsMine)
         {
