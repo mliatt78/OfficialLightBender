@@ -28,8 +28,7 @@ namespace Zones
         public float Radius = 5;
 
         private ExitGames.Client.Photon.Hashtable PrevTimers;
-        private PlayerController FirstPlayerInZone = null;
-        
+
         public static string[] namesTimers =
         {
             "TimerCaptureTeam0",
@@ -76,12 +75,12 @@ namespace Zones
         {
             (int teamTryingControl, int playersTryControl) =
                 GetTeamAndPlayersTryControl(bluePlayersNear, redPlayersNear);
-            Debug.Log("number of playersTryControl: "+playersTryControl);
+            /*Debug.Log("number of playersTryControl: "+playersTryControl);
             Debug.Log("playersTryControl > 0 ?: "+(playersTryControl > 0));
             if (playersTryControl == 0)
             {
                 Debug.Log("playerNear: "+playerNear);
-            }
+            }*/
             if (playersTryControl > 0)
             {
                 // if there are the same number of blue and red players, then do nothing
@@ -104,6 +103,7 @@ namespace Zones
                         {
                             // timer Ore at 0
                             int randInt = GameManager.rand.Next(playersTeam[teamTryingControl].Count);
+                            //Debug.Log("Timers[teamTryingControl, 1] <= 0: responsible for adding ore");
                             (playersTeam[teamTryingControl])[randInt].AddOre(1);
                             int ores = playersTeam[teamTryingControl][randInt].GetOresBeingHeld();
                             PlayerController oreGetter = playersTeam[teamTryingControl][randInt];
@@ -164,6 +164,7 @@ namespace Zones
                             controlled = teamTryingControl;
 
                             int randInt = GameManager.rand.Next(playersTeam[teamTryingControl].Count);
+                            //Debug.Log("Timers[teamTryingControl, 0] <= 0: responsible for adding ore");
                             (playersTeam[teamTryingControl])[randInt].AddOre(1);
                             //Debug.Log((playersTeam[teamTryingControl])[randInt].name + " has got an ore.");
                         }
